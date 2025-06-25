@@ -1,0 +1,48 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.->onDelete('cascade')->onUpdate('cascade');
+     */
+    public function up(): void
+    {
+        Schema::create('traitements', function (Blueprint $table) {
+            $table->id();
+            $table->string('action');
+            $table->text('commentaire')->nullable();
+            $table->date('date_action')->nullable();
+            
+
+            // Clés étrangères
+            $table->unsignedBigInteger('id_courrier')->nullable();
+            $table->unsignedBigInteger('id_utilisateur')->nullable();
+
+             // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
+            $table->foreign('id_courrier')
+                ->references('id')->on('courriers')
+                ->onDelete('set null')->onUpdate('cascade');
+
+            $table->foreign('id_utilisateur')
+                ->references('id')->on('users')
+                ->onDelete('set null')->onUpdate('cascade');
+
+
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('traitements');
+    }
+   
+};
