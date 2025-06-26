@@ -33,6 +33,9 @@
                 @endauth
 
                 </div>
+                <a class="bg-white text-red-600 p-2 rounded-md" href="{{ route('login') }}">
+                    login
+                </a>
             @endif
 
             <div class="max-w-7xl mx-auto p-6 lg:p-8">
