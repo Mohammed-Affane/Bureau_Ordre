@@ -4,8 +4,8 @@
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="p-6">
                     <div class="border-b border-gray-200 pb-4 mb-6">
-                        <h1 class="text-2xl font-semibold text-gray-900">Edit Role: {{ $role->name }}</h1>
-                        <p class="text-sm text-gray-500 mt-1">Update role details and permissions</p>
+                        <h1 class="text-2xl font-semibold text-gray-900">Modifier Role: {{ $role->name }}</h1>
+                        <p  class="text-sm text-gray-500 mt-1">Modifier details et permissions de role</p>
                     </div>
                     
                     <form action="{{ route('admin.roles.update', $role) }}" method="POST">
