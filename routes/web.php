@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,7 +42,8 @@ Route::middleware(['auth', 'role:chef_division'])->group(function () {
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
-   Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
     Route::get('couriers', fn () => view('admin.couriers'))->name('couriers');
     Route::get('reports', fn () => view('admin.reports'))->name('reports');
     Route::get('settings', fn () => view('admin.settings'))->name('settings');
