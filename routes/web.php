@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,7 +38,8 @@ Route::middleware(['auth', 'role:chef_division'])->group(function () {
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('users', fn () => view('admin.users'))->name('users');
+
+   Route::resource('users', UserController::class);
     Route::get('couriers', fn () => view('admin.couriers'))->name('couriers');
     Route::get('reports', fn () => view('admin.reports'))->name('reports');
     Route::get('settings', fn () => view('admin.settings'))->name('settings');
