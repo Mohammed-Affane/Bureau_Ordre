@@ -22,6 +22,7 @@
                                     $menuItems = [
                                         ['name' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'home'],
                                         ['name' => 'Utilisateurs', 'route' => 'admin.users.index', 'icon' => 'users'],
+                                        ['name' => 'Rôles', 'route' => 'admin.roles.index', 'icon' => 'user-shield'],
                                         ['name' => 'Courriers', 'route' => 'admin.couriers', 'icon' => 'mail'],
                                         ['name' => 'Rapports', 'route' => 'admin.reports', 'icon' => 'chart-bar'],
                                         ['name' => 'Paramètres', 'route' => 'admin.settings', 'icon' => 'cog'],
