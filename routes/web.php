@@ -47,7 +47,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 // BO Routes
 Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.bo'))->name('dashboard');
+    Route::get('dashboard', fn () => view('dashboards.bo.index'))->name('dashboard');
     Route::get('couriers/create', fn () => view('bo.couriers.create'))->name('couriers.create');
     Route::get('couriers', fn () => view('bo.couriers.index'))->name('couriers.index');
     Route::get('history', fn () => view('bo.history'))->name('history');
