@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Entite extends Model
 {
@@ -10,12 +11,12 @@ class Entite extends Model
  //  Tous les utilisateurs membres (via table utilisateur_entites)
     public function utilisateurs()
     {
-        return $this->belongsToMany(Utilisateur::class, 'utilisateur_entite', 'id_entite', 'id_utilisateur');
+        return $this->belongsToMany(User::class, 'utilisateur_entite', 'id_entite', 'id_utilisateur');
     }
 //  Chef de cette entité
     public function responsable()
     {
-        return $this->belongsTo(Utilisateur::class, 'responsable_id');
+        return $this->belongsTo(User::class, 'responsable_id');
     }
 //  Entité mère 
     public function parent()

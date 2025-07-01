@@ -26,6 +26,7 @@
                                         ['name' => 'Courriers', 'route' => 'admin.couriers', 'icon' => 'mail'],
                                         ['name' => 'Rapports', 'route' => 'admin.reports', 'icon' => 'chart-bar'],
                                         ['name' => 'Paramètres', 'route' => 'admin.settings', 'icon' => 'cog'],
+                                        ['name' => 'Entités', 'route' => 'admin.entites.index', 'icon' => 'building'],
                                     ];
                                     break;
                                 case 'bo':
