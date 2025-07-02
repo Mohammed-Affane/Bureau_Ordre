@@ -47,7 +47,15 @@
                            <select name="role" id="role" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                 <option value="" disabled selected>-- Sélectionner un rôle --</option>
                 @foreach ($roles as $role)
+                @if($role->name === 'chef_division')
+
+                    <option value="{{ $role->id }}">Division/Service</option>
+            
+                @else
                     <option value="{{ $role->id }}">{{ $role->name }}</option>
+
+                @endif
+
                 @endforeach
             </select>
                             @error('role')

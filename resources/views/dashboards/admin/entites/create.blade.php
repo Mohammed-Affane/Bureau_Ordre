@@ -45,7 +45,7 @@
                         <div class="mb-6">
                             <label for="responsable_id" class="block text-sm font-medium text-gray-700 mb-1">Responsable</label>
                             <select name="responsable_id" id="responsable_id" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="">Aucun</option>
+                                 <option value="" disabled selected>-- Sélectionner un Responsable --</option>
                                 @foreach($users ?? [] as $user)
                                     <option value="{{ $user->id }}" {{ old('responsable_id') == $user->id ? 'selected' : '' }}>{{ $user->nom_complet ?? $user->name }}</option>
                                 @endforeach

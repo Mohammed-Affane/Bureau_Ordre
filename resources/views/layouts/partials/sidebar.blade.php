@@ -32,8 +32,8 @@
                                 case 'bo':
                                     $menuItems = [
                                         ['name' => 'Dashboard', 'route' => 'bo.dashboard', 'icon' => 'home'],
-                                        ['name' => 'Nouveau Courrier', 'route' => 'bo.couriers.create', 'icon' => 'plus'],
-                                        ['name' => 'Courriers Reçus', 'route' => 'bo.couriers.index', 'icon' => 'inbox'],
+                                        ['name' => 'Nouveau Courrier', 'route' => 'bo.courriers.create', 'icon' => 'plus'],
+                                        ['name' => 'Courriers Reçus', 'route' => 'bo.courriers.index', 'icon' => 'inbox'],
                                         ['name' => 'Historique', 'route' => 'bo.history', 'icon' => 'clock'],
                                     ];
                                     break;

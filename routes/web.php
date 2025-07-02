@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\BO\CourrierController;
 use App\Http\Controllers\Admin\EntiteController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,9 +52,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 // BO Routes
 Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(function () {
+
+    Route::resource('courriers', CourrierController::class);
     Route::get('dashboard', fn () => view('dashboards.bo.index'))->name('dashboard');
-    Route::get('couriers/create', fn () => view('bo.couriers.create'))->name('couriers.create');
-    Route::get('couriers', fn () => view('bo.couriers.index'))->name('couriers.index');
+    // Route::get('couriers/create', fn () => view('bo.couriers.create'))->name('couriers.create');
+    // Route::get('couriers', fn () => view('bo.couriers.index'))->name('couriers.index');
     Route::get('history', fn () => view('bo.history'))->name('history');
 });
 
