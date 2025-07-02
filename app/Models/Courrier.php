@@ -8,17 +8,11 @@ class Courrier extends Model
 {
 
      protected $fillable = [
-        'reference_arrive',
-        'reference_BO',
-        'type_courrier',
-        'objet',
-        'date_reception',
-        'date_enregistrement',
-        'Nbr_piece',
-        'priorite',
-        'id_expediteur',
-        'id_agent_en_charge',
+        'reference_arrive', 'reference_BO', 'type_courrier',
+        'objet','date_reception','date_enregistrement','Nbr_piece',
+        'priorite','id_expediteur','id_agent_en_charge'
     ];
+
     
 // Expéditeur externe
     public function expediteur()

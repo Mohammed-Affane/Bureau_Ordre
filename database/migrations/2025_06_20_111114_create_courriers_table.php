@@ -21,6 +21,7 @@ return new class extends Migration
             // Infos principales
             $table->enum('type_courrier', ['arrive', 'depart', 'interne']);
             $table->text('objet');
+            $table->string('fichier_scan')->nullable();
             $table->date('date_reception')->nullable();
             $table->date('date_enregistrement');
             $table->integer('Nbr_piece')->default(1);
@@ -28,11 +29,17 @@ return new class extends Migration
 
             // Clés étrangères
             $table->unsignedBigInteger('id_expediteur')->nullable();
+            
             $table->unsignedBigInteger('id_agent_en_charge')->nullable();
+            $table->unsignedBigInteger('id_entite')->nullable();
 
             // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
             $table->foreign('id_expediteur')
                 ->references('id')->on('expediteurs')
+                ->onDelete('set null')->onUpdate('cascade');
+
+                $table->foreign('id_entite')
+                ->references('id')->on('entites')
                 ->onDelete('set null')->onUpdate('cascade');
 
             $table->foreign('id_agent_en_charge')
