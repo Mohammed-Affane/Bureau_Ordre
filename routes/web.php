@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\EntiteController;
+use App\Http\Controllers\BO\CourrierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,27 +17,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('users', UserController::class);
 });
-
-/* Route::middleware(['auth', 'role:bo'])->group(function () {
-    Route::get('/bo/dashboard', [DashboardController::class, 'index'])->name('bo.dashboard');
-    Route::resource('courriers', CourrierController::class);
-});
-
-// Similar route groups for cab, sg, and chef_division
-Route::middleware(['auth', 'role:cab'])->group(function () {
-    Route::get('/cab/dashboard', [DashboardController::class, 'index'])->name('cab.dashboard');
-    Route::resource('departements', DepartementController::class);
-});
-
-Route::middleware(['auth', 'role:sg'])->group(function () {
-    Route::get('/sg/dashboard', [DashboardController::class, 'index'])->name('sg.dashboard');
-    Route::resource('services', ServiceController::class);
-});
-
-Route::middleware(['auth', 'role:chef_division'])->group(function () {
-    Route::get('/chef_division/dashboard', [DashboardController::class, 'index'])->name('chef_division.dashboard');
-    Route::resource('sous_departements', SousDepartementController::class);
-}); */
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -51,9 +31,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 // BO Routes
 Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(function () {
+    Route::resource('courriers', CourrierController::class);
     Route::get('dashboard', fn () => view('dashboards.bo.index'))->name('dashboard');
-    Route::get('couriers/create', fn () => view('bo.couriers.create'))->name('couriers.create');
-    Route::get('couriers', fn () => view('bo.couriers.index'))->name('couriers.index');
     Route::get('history', fn () => view('bo.history'))->name('history');
 });
 

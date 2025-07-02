@@ -8,7 +8,16 @@ class Courrier extends Model
 {
 
      protected $fillable = [
-        'nom_complet', 'email', 'mot_de_passe', 'role'
+        'reference_arrive',
+        'reference_BO',
+        'type_courrier',
+        'objet',
+        'date_reception',
+        'date_enregistrement',
+        'Nbr_piece',
+        'priorite',
+        'id_expediteur',
+        'id_agent_en_charge',
     ];
     
 // Expéditeur externe
@@ -19,7 +28,7 @@ class Courrier extends Model
 // Agent en charge du courrier
     public function agent()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_agent_en_charge');
+        return $this->belongsTo(User::class, 'id_agent_en_charge');
     }
 // Liste des destinataires (pour courrier depart)
     public function destinataires()

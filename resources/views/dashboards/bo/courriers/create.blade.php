@@ -1,0 +1,376 @@
+<x-app-layout>
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Créer un nouveau courrier</h2>
+    
+    <form method="POST" action="{{ route('bo.courriers.store') }}" class="space-y-6" id="courier-form">
+        @csrf
+        
+        <!-- Sender Section -->
+        <section class="sender-section">
+            <h3 class="text-lg font-semibold mb-4">Expéditeur</h3>
+            
+            <div x-data="senderFormController()" class="space-y-6">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                    <div class="flex-1 max-w-md">
+                        <label for="expediteur_id" class="block font-medium text-gray-700 mb-1">
+                            Expéditeur existant
+                        </label>
+                        <select 
+                            x-on:change="handleExistingSenderChange($event)" 
+                            name="expediteur_id" 
+                            id="expediteur_id" 
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"
+                            aria-describedby="expediteur_id_help">
+                            <option value="">Sélectionnez un expéditeur existant</option>
+                            @foreach ($expediteurs as $expediteur)
+                                <option value="{{ $expediteur->id }}" @selected(old('expediteur_id') == $expediteur->id)>
+                                    {{ $expediteur->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <p id="expediteur_id_help" class="mt-1 text-xs text-gray-500">
+                            Choisissez un expéditeur dans la liste ou créez-en un nouveau
+                        </p>
+                        @error('expediteur_id')
+                            <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                    <button 
+                        type="button" 
+                        x-on:click="toggleNewSenderForm()"
+                        class="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-500 border border-indigo-300 rounded-md hover:border-indigo-400 transition-colors duration-200"
+                        x-text="showNewSenderForm ? 'Masquer le formulaire' : 'Ajouter un nouvel expéditeur'">
+                    </button>
+                </div>
+
+                <!-- New Sender Form -->
+                <div x-show="showNewSenderForm" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 transform scale-95"
+                     x-transition:enter-end="opacity-100 transform scale-100"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform scale-100"
+                     x-transition:leave-end="opacity-0 transform scale-95"
+                     class="new-sender-form bg-gray-50 p-4 rounded-lg border">
+                    
+                    <h4 class="text-md font-medium text-gray-900 mb-4">Informations du nouvel expéditeur</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="exp_nom" class="block font-medium text-gray-700 mb-1">
+                                Nom de l'expéditeur <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                name="exp_nom" 
+                                id="exp_nom" 
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                                value="{{ old('exp_nom') }}"
+                                maxlength="255"
+                                x-bind:required="showNewSenderForm && !hasSelectedExistingSender">
+                            @error('exp_nom')
+                                <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exp_type_source" class="block font-medium text-gray-700 mb-1">
+                                Type de source <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                name="exp_type_source" 
+                                id="exp_type_source" 
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                                value="{{ old('exp_type_source') }}"
+                                maxlength="100"
+                                x-bind:required="showNewSenderForm && !hasSelectedExistingSender">
+                            @error('exp_type_source')
+                                <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exp_adresse" class="block font-medium text-gray-700 mb-1">Adresse</label>
+                            <input 
+                                type="text" 
+                                name="exp_adresse" 
+                                id="exp_adresse" 
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                                value="{{ old('exp_adresse') }}"
+                                maxlength="500">
+                            @error('exp_adresse')
+                                <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exp_telephone" class="block font-medium text-gray-700 mb-1">Téléphone</label>
+                            <input 
+                                type="tel" 
+                                name="exp_telephone" 
+                                id="exp_telephone" 
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                                value="{{ old('exp_telephone') }}"
+                                pattern="[0-9+\-\s\(\)]*"
+                                maxlength="20">
+                            @error('exp_telephone')
+                                <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-200">
+
+        <!-- Courier Section -->
+        <section class="courier-section">
+            <h3 class="text-lg font-semibold mb-4">Informations du courrier</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-group">
+                    <label for="type_courrier" class="block font-medium text-gray-700 mb-1">
+                        Type de courrier <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                    </label>
+                    <select 
+                        name="type_courrier" 
+                        id="type_courrier" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        required>
+                        <option value="">Choisir le type...</option>
+                        <option value="arrive" @selected(old('type_courrier') === 'arrive')>Arrivé</option>
+                        <option value="depart" @selected(old('type_courrier') === 'depart')>Départ</option>
+                        <option value="interne" @selected(old('type_courrier') === 'interne')>Interne</option>
+                    </select>
+                    @error('type_courrier')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="objet" class="block font-medium text-gray-700 mb-1">
+                        Objet <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        name="objet" 
+                        id="objet" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('objet') }}" 
+                        maxlength="255"
+                        required>
+                    @error('objet')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="reference_arrive" class="block font-medium text-gray-700 mb-1">
+                        Référence d'arrivée
+                    </label>
+                    <input 
+                        type="number" 
+                        name="reference_arrive" 
+                        id="reference_arrive" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('reference_arrive') }}"
+                        min="1"
+                        step="1">
+                    @error('reference_arrive')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="reference_BO" class="block font-medium text-gray-700 mb-1">
+                        Référence BO
+                    </label>
+                    <input 
+                        type="number" 
+                        name="reference_BO" 
+                        id="reference_BO" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('reference_BO') }}"
+                        min="1"
+                        step="1">
+                    @error('reference_BO')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de réception</label>
+                    <input 
+                        type="date" 
+                        name="date_reception" 
+                        id="date_reception" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('date_reception') }}"
+                        max="{{ date('Y-m-d') }}">
+                    @error('date_reception')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="date_enregistrement" class="block font-medium text-gray-700 mb-1">
+                        Date d'enregistrement <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                    </label>
+                    <input 
+                        type="date" 
+                        name="date_enregistrement" 
+                        id="date_enregistrement" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('date_enregistrement', date('Y-m-d')) }}" 
+                        max="{{ date('Y-m-d') }}"
+                        required>
+                    @error('date_enregistrement')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="Nbr_piece" class="block font-medium text-gray-700 mb-1">
+                        Nombre de pièces <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        name="Nbr_piece" 
+                        id="Nbr_piece" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('Nbr_piece', 1) }}" 
+                        min="1" 
+                        max="999"
+                        step="1"
+                        required>
+                    @error('Nbr_piece')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group">
+                    <label for="priorite" class="block font-medium text-gray-700 mb-1">Priorité</label>
+                    <select 
+                        name="priorite" 
+                        id="priorite" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                        <option value="" @selected(old('priorite') === '')>Normale</option>
+                        <option value="urgent" @selected(old('priorite') === 'urgent')>Urgent</option>
+                        <option value="confidentiel" @selected(old('priorite') === 'confidentiel')>Confidentiel</option>
+                        <option value="A reponse obligatoire" @selected(old('priorite') === 'A reponse obligatoire')>À réponse obligatoire</option>
+                    </select>
+                    @error('priorite')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div class="form-group md:col-span-2">
+                    <label for="id_agent_en_charge" class="block font-medium text-gray-700 mb-1">Agent en charge</label>
+                    <select 
+                        name="id_agent_en_charge" 
+                        id="id_agent_en_charge" 
+                        class="block w-full max-w-md rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                        <option value="">Aucun agent assigné</option>
+                        @if(isset($agents) && count($agents) > 0)
+                            @foreach($agents as $agent)
+                                <option value="{{ $agent->id }}" @selected(old('id_agent_en_charge') == $agent->id)>
+                                    {{ $agent->nom_complet ?? $agent->name ?? 'Agent #' . $agent->id }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    @error('id_agent_en_charge')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Actions -->
+        <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200">
+            <a href="{{ route('bo.courriers.index') }}" 
+               class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                Annuler
+            </a>
+            <button type="submit" 
+                    class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                Créer le courrier
+            </button>
+        </div>
+    </form>
+
+    <script>
+        function senderFormController() {
+            return {
+                showNewSenderForm: false,
+                hasSelectedExistingSender: false,
+                
+                init() {
+                    // Show new sender form if there are validation errors for sender fields
+                    const senderErrors = ['exp_nom', 'exp_type_source', 'exp_adresse', 'exp_telephone'];
+                    const hasErrors = senderErrors.some(field => 
+                        document.querySelector(`[name="${field}"]`)?.closest('.form-group')?.querySelector('.text-red-600')
+                    );
+                    
+                    if (hasErrors) {
+                        this.showNewSenderForm = true;
+                    }
+                },
+                
+                toggleNewSenderForm() {
+                    this.showNewSenderForm = !this.showNewSenderForm;
+                    
+                    if (this.showNewSenderForm) {
+                        // Clear existing sender selection when showing new form
+                        document.getElementById('expediteur_id').value = '';
+                        this.hasSelectedExistingSender = false;
+                    }
+                },
+                
+                handleExistingSenderChange(event) {
+                    this.hasSelectedExistingSender = event.target.value !== '';
+                    
+                    if (this.hasSelectedExistingSender) {
+                        // Hide new sender form and clear its fields
+                        this.showNewSenderForm = false;
+                        this.clearNewSenderFields();
+                    }
+                },
+                
+                clearNewSenderFields() {
+                    const fields = ['exp_nom', 'exp_type_source', 'exp_adresse', 'exp_telephone'];
+                    fields.forEach(fieldName => {
+                        const field = document.getElementById(fieldName);
+                        if (field) field.value = '';
+                    });
+                }
+            }
+        }
+        
+        // Form validation and UX improvements
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('courier-form');
+            
+            // Auto-set registration date to today if empty
+            const dateEnregistrement = document.getElementById('date_enregistrement');
+            if (dateEnregistrement && !dateEnregistrement.value) {
+                dateEnregistrement.value = new Date().toISOString().split('T')[0];
+            }
+            
+            // Form submission validation
+            form.addEventListener('submit', function(e) {
+                const expediteurId = document.getElementById('expediteur_id').value;
+                const expNom = document.getElementById('exp_nom').value.trim();
+                
+                // Ensure either existing sender is selected or new sender info is provided
+                if (!expediteurId && !expNom) {
+                    e.preventDefault();
+                    alert('Veuillez sélectionner un expéditeur existant ou remplir les informations du nouvel expéditeur.');
+                    return false;
+                }
+            });
+        });
+    </script>
+</x-app-layout>
