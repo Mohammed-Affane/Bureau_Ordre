@@ -53,7 +53,7 @@
                             <div class="w-12 text-sm text-gray-600">{{ $day }}</div>
                             <div class="flex-1 ml-4">
                                 <div class="bg-gray-200 rounded-full h-2">
-                                    <div class="bg-blue-600 h-2 rounded-full" style="width: {{ ($weekData[$index] / 35) * 100 }}%"></div>
+                                    <div class="bg-blue-600 h-2 rounded-full" style=`width: {{ ($weekData[$index] / 35) * 100 }}%`></div>
                                 </div>
                             </div>
                             <div class="ml-4 text-sm font-medium text-gray-900 w-8">{{ $weekData[$index] }}</div>

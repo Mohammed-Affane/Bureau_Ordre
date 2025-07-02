@@ -22,7 +22,7 @@ class Courrier extends Model
 // Agent en charge du courrier
     public function agent()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_agent_en_charge');
+        return $this->belongsTo(User::class, 'id_agent_en_charge');
     }
 // Liste des destinataires (pour courrier depart)
     public function destinataires()

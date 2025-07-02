@@ -92,6 +92,22 @@
                                 <a href="{{ url('/admin/dashboard') }}" class="px-6 py-3 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition shadow-sm">
                                     Go to Admin Dashboard
                                 </a>
+                            @elseif(auth()->user()->hasRole('bo'))
+                                <a href="{{ url('/bo/dashboard') }}" class="px-6 py-3 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition shadow-sm">
+                                    Go to BO Dashboard
+                                </a>
+                            @elseif(auth()->user()->hasRole('cab'))
+                                <a href="{{ url('/cab/dashboard') }}" class="px-6 py-3 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition shadow-sm">
+                                    Go to Cabinet Dashboard
+                                </a>
+                            @elseif(auth()->user()->hasRole('sg'))
+                                <a href="{{ url('/sg/dashboard') }}" class="px-6 py-3 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition shadow-sm">
+                                    Go to Secrétariat Général Dashboard
+                                </a>
+                            @elseif(auth()->user()->hasRole('chef_division'))
+                                <a href="{{ url('/chef_division/dashboard') }}" class="px-6 py-3 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition shadow-sm">
+                                    Go to Chef Division Dashboard
+                                </a>
                             @else
                                 <a href="{{ url('/dashboard') }}" class="px-6 py-3 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition shadow-sm">
                                     Go to Dashboard
