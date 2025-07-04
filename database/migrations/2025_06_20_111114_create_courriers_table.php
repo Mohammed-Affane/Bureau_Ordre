@@ -31,11 +31,10 @@ return new class extends Migration
             $table->integer('Nbr_piece')->default(1)->nullable();
             $table->enum('priorite', ['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])->nullable();
 
-            $table->string('statut')->nullable();
+            $table->enum('statut', ['en_attente','en_cours', 'arriver','cloture', 'archiver'])->default('en_attente')->nullable();
 
             // Clés étrangères
             $table->unsignedBigInteger('id_expediteur')->nullable();
-            
             $table->unsignedBigInteger('id_agent_en_charge')->nullable();
             $table->unsignedBigInteger('id_entite_a')->nullable();
             $table->unsignedBigInteger('id_entite_par')->nullable();
