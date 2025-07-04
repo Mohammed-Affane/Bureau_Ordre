@@ -15,30 +15,41 @@ return new class extends Migration
             $table->id(); // BIGINT UNSIGNED PRIMARY KEY
 
             // Références (en integers si c’est bien ce que tu veux)
-            $table->unsignedBigInteger('reference_arrive')->unique()->nullable();
-            $table->unsignedBigInteger('reference_BO')->unique()->nullable();
+            $table->unsignedBigInteger('reference_arrive')->nullable();
+            $table->unsignedBigInteger('reference_bo')->nullable();
+            $table->unsignedBigInteger('reference_visa')->nullable();
+            $table->unsignedBigInteger('reference_dec')->nullable();
 
             // Infos principales
             $table->enum('type_courrier', ['arrive', 'depart', 'interne']);
             $table->text('objet');
-            $table->string('fichier_scan')->nullable();
             $table->date('date_reception')->nullable();
-            $table->date('date_enregistrement');
-            $table->integer('Nbr_piece')->default(1);
+            $table->date('date_depart')->nullable();
+            $table->boolean('is_interne')->nullable()->default(false);
+            $table->string('fichier_scan')->nullable();
+            $table->date('date_enregistrement')->nullable();
+            $table->integer('Nbr_piece')->default(1)->nullable();
             $table->enum('priorite', ['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])->nullable();
+
+            $table->string('statut')->nullable();
 
             // Clés étrangères
             $table->unsignedBigInteger('id_expediteur')->nullable();
             
             $table->unsignedBigInteger('id_agent_en_charge')->nullable();
-            $table->unsignedBigInteger('id_entite')->nullable();
+            $table->unsignedBigInteger('id_entite_a')->nullable();
+            $table->unsignedBigInteger('id_entite_par')->nullable();
 
             // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
             $table->foreign('id_expediteur')
                 ->references('id')->on('expediteurs')
                 ->onDelete('set null')->onUpdate('cascade');
 
-                $table->foreign('id_entite')
+                $table->foreign('id_entite_a')
+                ->references('id')->on('entites')
+                ->onDelete('set null')->onUpdate('cascade');
+
+                $table->foreign('id_entite_par')
                 ->references('id')->on('entites')
                 ->onDelete('set null')->onUpdate('cascade');
 
