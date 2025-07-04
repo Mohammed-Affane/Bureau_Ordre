@@ -36,21 +36,12 @@ return new class extends Migration
             // Clés étrangères
             $table->unsignedBigInteger('id_expediteur')->nullable();
             $table->unsignedBigInteger('id_agent_en_charge')->nullable();
-            $table->unsignedBigInteger('id_entite_a')->nullable();
-            $table->unsignedBigInteger('id_entite_par')->nullable();
 
             // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
             $table->foreign('id_expediteur')
                 ->references('id')->on('expediteurs')
                 ->onDelete('set null')->onUpdate('cascade');
 
-                $table->foreign('id_entite_a')
-                ->references('id')->on('entites')
-                ->onDelete('set null')->onUpdate('cascade');
-
-                $table->foreign('id_entite_par')
-                ->references('id')->on('entites')
-                ->onDelete('set null')->onUpdate('cascade');
 
             $table->foreign('id_agent_en_charge')
                 ->references('id')->on('users')

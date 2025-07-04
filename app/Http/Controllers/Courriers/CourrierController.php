@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\BO;
+namespace App\Http\Controllers\Courriers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourrierRequest;
@@ -20,12 +20,12 @@ class CourrierController extends Controller
     public function index(): View
     {
         $courriers = Courrier::latest()->paginate(10);
-        return view('dashboards.bo.courriers.index', compact('courriers'));
+        return view('courriers.index', compact('courriers'));
     }
 
     public function create(): View
     {
-        return view('dashboards.bo.courriers.create', [
+        return view('courriers.create', [
             'agents' => User::all(),
             'expediteurs' => Expediteur::orderBy('nom')->get(['id', 'nom'])
         ]);
@@ -36,7 +36,7 @@ class CourrierController extends Controller
         try {
             $this->courrierService->createCourrier($request->validated());
             
-            return redirect()->route('bo.courriers.index')
+            return redirect()->route('courriers.index')
                 ->with('success', 'Courrier créé avec succès.');
                 
         } catch (\Exception $e) {
