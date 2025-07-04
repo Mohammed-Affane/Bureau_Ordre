@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('affectations', function (Blueprint $table) {
             $table->id();
             $table->string('statut_affectation')->nullable();
             $table->date('date_affectation')->nullable();
-            $table->date('commentaire_affectation')->nullable();
             $table->text('Instruction')->nullable();
 
              // Clés étrangères

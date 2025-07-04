@@ -67,11 +67,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Courrier::class, 'id_agent_en_charge');
     }
-//1 utilisateur peut effectuer plusieurs traitements
-    public function traitements()
-    {
-        return $this->hasMany(Traitement::class, 'id_utilisateur');
-    }
+
 //Affectations créées par l'utilisateur
     public function affectationsDonnees()
     {

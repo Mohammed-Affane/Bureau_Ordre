@@ -15,21 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('action');
             $table->text('commentaire')->nullable();
-            $table->date('date_action')->nullable();
+            $table->date('date_traitement')->nullable();
             
 
             // Clés étrangères
-            $table->unsignedBigInteger('id_courrier')->nullable();
-            $table->unsignedBigInteger('id_utilisateur')->nullable();
+            $table->unsignedBigInteger('id_affectation')->nullable();
 
              // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
-            $table->foreign('id_courrier')
-                ->references('id')->on('courriers')
+            $table->foreign('id_affectation')
+                ->references('id')->on('affectations')
                 ->onDelete('set null')->onUpdate('cascade');
 
-            $table->foreign('id_utilisateur')
-                ->references('id')->on('users')
-                ->onDelete('set null')->onUpdate('cascade');
 
 
 
