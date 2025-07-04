@@ -11,7 +11,7 @@ class Affectation extends Model
         'id_affecte_a_utilisateur',
         'id_affecte_par_utilisateur',
         'statut_affectation',
-        'commentaire_affectation',
+        'Instruction',
         'date_affectation'
     ];
 
@@ -22,11 +22,15 @@ class Affectation extends Model
 
     public function affecteA()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_affecte_a_utilisateur');
+        return $this->belongsTo(User::class, 'id_affecte_a_utilisateur');
     }
 
     public function affectePar()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_affecte_par_utilisateur');
+        return $this->belongsTo(User::class, 'id_affecte_par_utilisateur');
+    }
+    public function traitements()
+    {
+        return $this->hasMany(Traitement::class, 'id_affectation');
     }
 }

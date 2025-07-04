@@ -8,12 +8,13 @@ class Courrier extends Model
 {
 
      protected $fillable = [
-        'reference_arrive', 'reference_BO', 'type_courrier',
+        'reference_arrive', 'reference_BO','reference_visa','reference_dec' ,'type_courrier',
         'objet','date_reception','date_enregistrement','Nbr_piece',
-        'priorite','id_expediteur','id_agent_en_charge'
+        'priorite','id_expediteur','id_agent_en_charge','fichier_scan','date_depart','statut','id_entite_a',
+        'id_entite_par','date_depart','is_interne'
     ];
 
-    
+
 // Expéditeur externe
     public function expediteur()
     {
@@ -29,24 +30,20 @@ class Courrier extends Model
     {
         return $this->hasMany(CourrierDestinataire::class, 'courrier_id');
     }
+    public function entiteDestinataire()
+    {
+        return $this->belongsTo(Entite::class, 'id_entite_a');
+    }
+
+    public function entiteExpediteur()
+    {
+        return $this->belongsTo(Entite::class, 'id_entite_par');
+    }
+
 // Affectations liées à ce courrier
     public function affectations()
     {
         return $this->hasMany(Affectation::class, 'id_courrier');
     }
-// Traitements liés à ce courrier
-    public function traitements()
-    {
-        return $this->hasMany(Traitement::class, 'id_courrier');
-    }
-// Courriers auxquels celui-ci répond
-    public function referencesSources()
-    {
-        return $this->hasMany(CourrierReference::class, 'id_courrier_cible');
-    }
-// Courriers qui sont des réponses à celui-ci
-    public function referencesReponses()
-    {
-        return $this->hasMany(CourrierReference::class, 'id_courrier_source');
-    }
+
 }

@@ -29,9 +29,7 @@ public function create()
 {
     try {
         // Get active agents only, ordered by name
-        $agents = User::where('status', 'active')
-            ->orderBy('name')
-            ->get(['id', 'name', 'nom_complet']);
+        $agents = Auth::user()->get();
 
         // Get expediteurs ordered by name
         $expediteurs = Expediteur::orderBy('nom')
@@ -178,9 +176,15 @@ private function createCourier(array $validated, int $expediteurId): Courrier
         'id_expediteur' => $expediteurId,
         'id_agent_en_charge' => $validated['id_agent_en_charge'] ?? null,
         'created_by' => auth()->id(),
-        'status' => 'pending', // Default status
+        'status' => 'pending',
+        ''=>'' // Default status
     ];
-    
+     // Gestion des documents
+            // if ($request->hasFile('document_files')) {
+            //     $this->handleDocumentUpload($request->file('document_files'), $courrier);
+            // }
+
+            DB::commit();
     // Generate reference number if not provided
     if (empty($courierData['reference_BO'])) {
         $courierData['reference_BO'] = $this->generateReferenceNumber($validated['type_courrier']);
