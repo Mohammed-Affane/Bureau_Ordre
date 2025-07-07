@@ -8,8 +8,8 @@ class Courrier extends Model
 {
 
      protected $fillable = [
-        'reference_arrive', 'reference_BO','reference_visa','reference_dec' ,'type_courrier',
-        'objet','date_reception','date_enregistrement','Nbr_piece',
+        'reference_arrive', 'reference_BO','reference_visa','reference_dec' ,'reference_depart',
+        'type_courrier','objet','date_reception','date_enregistrement','Nbr_piece',
         'priorite','id_expediteur','id_agent_en_charge','fichier_scan','date_depart','statut','id_entite_a',
         'id_entite_par','date_depart','is_interne'
     ];
