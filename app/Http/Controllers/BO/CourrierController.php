@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\BO;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CourrierRequest;
 use App\Models\Expediteur;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Models\Courrier;
 use App\Services\CourrierService;
+use App\Http\Requests\CourrierRequest;
 
 class CourrierController extends Controller
 {
