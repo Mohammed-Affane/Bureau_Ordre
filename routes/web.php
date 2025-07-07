@@ -23,7 +23,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('entites', EntiteController::class);
-    Route::resource('courriers', Courrier::class);
+    Route::resource('courriers', CourrierController::class);
     Route::get('couriers', fn () => view('dashboards.admin.courriers.index'))->name('courriers');
     Route::get('reports', fn () => view('admin.reports'))->name('reports');
     Route::get('settings', fn () => view('admin.settings'))->name('settings');

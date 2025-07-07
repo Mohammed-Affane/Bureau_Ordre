@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Courriers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Expediteur;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use App\Models\Entite;
 use App\Models\Courrier;
+use Illuminate\View\View;
+use App\Models\Expediteur;
 use App\Services\CourrierService;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\CourrierRequest;
 
 class CourrierController extends Controller
@@ -27,6 +28,7 @@ class CourrierController extends Controller
     {
         return view('courriers.create', [
             'agents' => User::all(),
+            'entites' => Entite::all(),
             'expediteurs' => Expediteur::orderBy('nom')->get(['id', 'nom'])
         ]);
     }

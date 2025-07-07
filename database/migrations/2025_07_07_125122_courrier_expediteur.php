@@ -11,20 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courrier_destinataires', function (Blueprint $table) {
+         Schema::create('courrier_expediteur', function (Blueprint $table) {
             $table->id();
-            $table->string('nom')->nullable();
-            $table->string('type_source')->nullable();
-            $table->text('adresse')->nullable();
-
-            $table->enum('type_courrier', ['interne', 'externe']);
 
             // Clés étrangères
-            $table->unsignedBigInteger('id_courrier')->nullable();
+            $table->unsignedBigInteger('courrier_id')->nullable();
             $table->unsignedBigInteger('entite_id')->nullable();
 
              // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
-            $table->foreign('id_courrier')
+            $table->foreign('courrier_id')
                 ->references('id')->on('courriers')
                 ->onDelete('set null')->onUpdate('cascade');
 
@@ -45,7 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courrier_destinataires');
+        Schema::dropIfExists('courrier_expediteur');
     }
-     
 };

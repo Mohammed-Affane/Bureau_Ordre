@@ -28,14 +28,13 @@ class Entite extends Model
     {
         return $this->hasMany(Entite::class, 'parent_id');
     }
-//  Courriers reçus
-    public function courriersRecus()
+    public function expediteurCourriers()
     {
-        return $this->hasMany(Courrier::class, 'entite_dest_id');
+        return $this->hasMany(CourrierExpediteur::class);
     }
-//  Courriers envoyés
-    public function courriersEnvoyes()
+
+    public function destinataireCourriers()
     {
-        return $this->hasMany(Courrier::class, 'entite_source_id');
+        return $this->hasMany(CourrierDestinataire::class);
     }
 }
