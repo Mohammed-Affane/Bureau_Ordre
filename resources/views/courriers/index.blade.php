@@ -16,6 +16,14 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence BO</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Visa</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Décision</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Départ</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Départ</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Enregistrement</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr Pièces</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Réception</th>
@@ -30,15 +38,23 @@
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_BO }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->type_courrier }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_visa }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_dec }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_depart }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->statut }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_depart }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->fichier_scan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->type_courrier }}</td>                                             
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->agent->name ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($courrier->priorite) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{ route('bo.courriers.show', $courrier) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Voir</a>
-                                            <a href="{{ route('bo.courriers.edit', $courrier) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Modifier</a>
+                                            <a href="{{ route('courriers.show', $courrier) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Voir</a>
+                                            <a href="{{ route('courriers.edit', $courrier) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Modifier</a>
                                             <form action="{{ route('courriers.destroy', $courrier) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
