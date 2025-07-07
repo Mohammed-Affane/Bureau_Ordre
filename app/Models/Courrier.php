@@ -10,9 +10,16 @@ class Courrier extends Model
      protected $fillable = [
         'reference_arrive', 'reference_BO','reference_visa','reference_dec' ,'reference_depart',
         'type_courrier','objet','date_reception','date_enregistrement','Nbr_piece',
-        'priorite','id_expediteur','id_agent_en_charge','fichier_scan','date_depart','statut','id_entite_a',
-        'id_entite_par','date_depart','is_interne'
+        'priorite','id_expediteur','id_agent_en_charge','fichier_scan','statut',
+        'date_depart','is_interne'
     ];
+
+
+    public function expediteursPivot()
+    {
+        return $this->belongsToMany(Entite::class, 'courrier_expediteur', 'courrier_id', 'entite_id');
+    }
+
 
 
 // Expéditeur externe
@@ -30,14 +37,9 @@ class Courrier extends Model
     {
         return $this->hasMany(CourrierDestinataire::class, 'courrier_id');
     }
-    public function entiteDestinataire()
+    public function expediteurs()
     {
-        return $this->belongsTo(Entite::class, 'id_entite_a');
-    }
-
-    public function entiteExpediteur()
-    {
-        return $this->belongsTo(Entite::class, 'id_entite_par');
+        return $this->hasMany(CourrierExpediteur::class);
     }
 
 // Affectations liées à ce courrier
@@ -45,6 +47,8 @@ class Courrier extends Model
     {
         return $this->hasMany(Affectation::class, 'id_courrier');
     }
+
+    
     
 
 }
