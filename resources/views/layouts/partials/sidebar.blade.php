@@ -23,7 +23,7 @@
                                         ['name' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'home'],
                                         ['name' => 'Utilisateurs', 'route' => 'admin.users.index', 'icon' => 'users'],
                                         ['name' => 'Rôles', 'route' => 'admin.roles.index', 'icon' => 'user-shield'],
-                                        ['name' => 'Courriers', 'route' => 'admin.courriers.index', 'icon' => 'mail'],
+                                        ['name' => 'Courriers', 'route' => 'courriers.index', 'icon' => 'mail'],
                                         ['name' => 'Rapports', 'route' => 'admin.reports', 'icon' => 'chart-bar'],
                                         ['name' => 'Paramètres', 'route' => 'admin.settings', 'icon' => 'cog'],
                                         ['name' => 'Entités', 'route' => 'admin.entites.index', 'icon' => 'building'],
@@ -32,8 +32,8 @@
                                 case 'bo':
                                     $menuItems = [
                                         ['name' => 'Dashboard', 'route' => 'bo.dashboard', 'icon' => 'home'],
-                                        ['name' => 'Nouveau Courrier', 'route' => 'bo.courriers.create', 'icon' => 'plus'],
-                                        ['name' => 'Courriers Reçus', 'route' => 'bo.courriers.index', 'icon' => 'inbox'],
+                                        ['name' => 'Nouveau Courrier', 'route' => 'courriers.create', 'icon' => 'plus'],
+                                        ['name' => 'Courriers Reçus', 'route' => 'courriers.index', 'icon' => 'inbox'],
                                         ['name' => 'Historique', 'route' => 'bo.history', 'icon' => 'clock'],
                                     ];
                                     break;

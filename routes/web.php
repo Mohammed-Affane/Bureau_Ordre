@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\BO\CourrierController;
+use App\Http\Controllers\Courriers\CourrierController;
 use App\Http\Controllers\Admin\EntiteController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 
@@ -13,14 +13,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('users', UserController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('courriers', CourrierController::class);
 });
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-
+    Route::get('/admin/dashboard',[AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('entites', EntiteController::class);
@@ -32,8 +31,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 // BO Routes
 Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(function () {
-
-    Route::resource('courriers', CourrierController::class);
     Route::get('dashboard', fn () => view('dashboards.bo.index'))->name('dashboard');
     Route::get('history', fn () => view('bo.history'))->name('history');
 });

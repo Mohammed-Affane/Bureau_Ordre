@@ -45,5 +45,6 @@ class Courrier extends Model
     {
         return $this->hasMany(Affectation::class, 'id_courrier');
     }
+    
 
 }
