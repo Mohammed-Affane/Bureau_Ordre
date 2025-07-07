@@ -1,7 +1,10 @@
 <x-app-layout>
     <h2 class="text-2xl font-bold text-gray-900 mb-6">Créer un nouveau courrier</h2>
     
-    <form method="POST" action="{{ route('courriers.store') }}" class="space-y-6" id="courier-form" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('courriers.store') }}" class="space-y-6" id="courier-form" enctype="multipart/form-data" x-data="{
+        type: '{{ old('type_courrier', '') }}',
+        updateType(e) { this.type = e.target.value; },
+    }">
         @csrf
         
        
@@ -29,7 +32,86 @@
                  <!-- Sender Section -->
         <section class="sender-section">
             <h3 class="text-lg font-semibold mb-4">Expéditeur</h3>
-            
+<script>
+    function courierTypeController() {
+        return {
+            selectedType: '',
+            isInterne: false,
+
+            init() {
+                this.selectedType = document.getElementById('type_courrier').value;
+                this.watchTypeChanges();
+            },
+
+            watchTypeChanges() {
+                document.getElementById('type_courrier').addEventListener('change', (e) => {
+                    this.selectedType = e.target.value;
+                });
+            },
+
+            showSenderSection() {
+                return this.selectedType === 'arrive' || (this.selectedType === 'depart' && !this.isInterne);
+            },
+
+            showInternalFields() {
+                return this.selectedType === 'interne' || (this.selectedType === 'depart' && this.isInterne);
+            }
+        }
+    }
+</script>
+
+<div x-data="courierTypeController()" class="space-y-6">
+    <!-- Type Selection -->
+    <div class="form-group">
+        <label for="is_interne" class="block font-medium text-gray-700 mb-1" x-show="selectedType === 'depart'">
+            Est-ce un courrier interne?
+        </label>
+        <div class="flex items-center space-x-4" x-show="selectedType === 'depart'">
+            <label class="inline-flex items-center">
+                <input type="radio" name="is_interne" value="1" x-model="isInterne" class="form-radio">
+                <span class="ml-2">Oui</span>
+            </label>
+            <label class="inline-flex items-center">
+                <input type="radio" name="is_interne" value="0" x-model="isInterne" class="form-radio">
+                <span class="ml-2">Non</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Internal Mail Fields -->
+    <div x-show="showInternalFields()" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+                <label for="entite_source" class="block font-medium text-gray-700 mb-1">
+                    Entité source <span class="text-red-500">*</span>
+                </label>
+                <select name="entite_source" id="entite_source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    <option value="">Sélectionner l'entité source</option>
+                    @foreach($entites as $entite)
+                        <option value="{{ $entite->id }}">{{ $entite->nom }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="entite_destination" class="block font-medium text-gray-700 mb-1">
+                    Entité destination <span class="text-red-500">*</span>
+                </label>
+                <select name="entite_destination" id="entite_destination" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    <option value="">Sélectionner l'entité destination</option>
+                    @foreach($entites as $entite)
+                        <option value="{{ $entite->id }}">{{ $entite->nom }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Sender Section -->
+    <div x-show="showSenderSection()" class="space-y-4">
+        <!-- Your existing sender form code goes here -->
+    </div>
+</div>
             <div x-data="senderFormController()" class="space-y-6">
                 <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
                     <div class="flex-1 max-w-md">
