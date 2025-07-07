@@ -41,36 +41,23 @@ class CourrierService
             'type_courrier' => $data['type_courrier'],
             'objet' => trim($data['objet']),
             'reference_arrive' => $data['reference_arrive'] ?? null,
-            'reference_BO' => $data['reference_BO'] ?? $this->generateReferenceNumber($data['type_courrier']),
+            'reference_BO' => $data['reference_BO']?? null,
+            'reference_visa' => $data['reference_visa']?? null,
+            'reference_dec' => $data['reference_dec']?? null,
+            'reference_depart' => $data['reference_depart']?? null,
             'date_reception' => $data['date_reception'] ?? null,
             'date_enregistrement' => $data['date_enregistrement'],
             'Nbr_piece' => $data['Nbr_piece'],
             'priorite' => $data['priorite'] ?? 'normale',
             'id_expediteur' => $expediteurId,
             'id_agent_en_charge' => $data['id_agent_en_charge'] ?? null,
-            'id_entite' => $data['id_entite'] ?? null,
+            'id_entite_par' => $data['id_entite_par'] ?? null,
+            'id_entite_a' => $data['id_entite_a'] ?? null,
             'created_by' => auth()->id(),
             'status' => 'pending',
+            'is_interne' => $data['is_interne'] ?? false,
         ];
 
         return $courrierData;
-    }
-
-    public function generateReferenceNumber(string $type): int
-    {
-        $prefix = match($type) {
-            'arrive' => 1,
-            'depart' => 2,
-            'interne' => 3,
-            default => 9
-        };
-        
-        $latestRef = Courrier::where('type_courrier', $type)
-            ->whereYear('created_at', now()->year)
-            ->max('reference_BO');
-        
-        $sequence = $latestRef ? (int)substr((string)$latestRef, -4) + 1 : 1;
-        
-        return (int)($prefix . now()->year . str_pad($sequence, 4, '0', STR_PAD_LEFT));
     }
 }

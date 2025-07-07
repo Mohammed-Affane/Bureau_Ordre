@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('reference_bo')->nullable();
             $table->unsignedBigInteger('reference_visa')->nullable();
             $table->unsignedBigInteger('reference_dec')->nullable();
+            $table->unsignedBigInteger('reference_depart')->nullable();
 
             // Infos principales
             $table->enum('type_courrier', ['arrive', 'depart', 'interne']);
