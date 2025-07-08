@@ -36,10 +36,10 @@
             </button>
 
             <div x-show="showNewSenderForm" class="mt-4 space-y-2">
-                <input type="text" name="nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
         </div>
 
@@ -67,19 +67,19 @@
                 <div x-show="type === 'depart' || type === 'decision' || type === 'interne' || type === 'visa'">
                     <label>Destinataires externes</label>
                     <select name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                        @foreach($expediteurs as $expediteur)
-                            <option value="{{ $expediteur->id }}">{{ $expediteur->nom }}</option>
+                        @foreach($destinataires as $destinataire)
+                            <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
                         @endforeach
                     </select>
 
-                    <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
+                    {{-- <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
                 Ajouter un nouvel Destinataire
-            </button>
+            </button> --}}
 
-            <div x-show="showNewSenderForm" class="mt-4 space-y-2">
-                <input type="text" name="nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+            <div class="mt-4 space-y-2">
+                <input type="text" name="dest_nom[]" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="dest_adresse[]" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
                 </div>
             </div>
