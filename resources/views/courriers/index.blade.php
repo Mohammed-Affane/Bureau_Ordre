@@ -37,7 +37,7 @@
                                 @forelse($courriers as $courrier)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_BO }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_bo }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_visa }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_dec }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_depart }}</td>
