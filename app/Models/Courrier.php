@@ -8,14 +8,11 @@ class Courrier extends Model
 {
 
      protected $fillable = [
-        'reference_arrive', 'reference_BO','reference_visa','reference_dec' ,'reference_depart',
+        'reference_arrive', 'reference_bo','reference_visa','reference_dec' ,'reference_depart',
         'type_courrier','objet','date_reception','date_enregistrement','Nbr_piece',
         'priorite','id_expediteur','id_agent_en_charge','fichier_scan','statut',
         'date_depart','is_interne','entite_id'
     ];
-
-
-
 
 // Expéditeur externe
     public function expediteur()
@@ -45,8 +42,5 @@ class Courrier extends Model
     {
         return $this->belongsTo(Entite::class, 'entite_id');
     }
-
-    
-    
 
 }
