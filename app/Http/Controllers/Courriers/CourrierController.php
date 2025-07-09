@@ -7,11 +7,12 @@ use App\Models\Entite;
 use App\Models\Courrier;
 use Illuminate\View\View;
 use App\Models\Expediteur;
+use Illuminate\Http\Request;
 use App\Services\CourrierService;
 use App\Http\Controllers\Controller;
 use App\Models\CourrierDestinataire;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\CourrierRequest;
+// use App\Http\Requests\CourrierRequest;
 
 class CourrierController extends Controller
 {
@@ -35,7 +36,7 @@ class CourrierController extends Controller
         ]);
     }
 
-    public function store(CourrierRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
 
     //    $validated = $request->validate([
@@ -54,6 +55,9 @@ class CourrierController extends Controller
     // ]);
 
 
+
+
+
     $expediteurId = null;
 
 // 1. Cas du courrier arrivé avec ajout manuel d'expéditeur
@@ -65,6 +69,7 @@ if ($request->type_courrier === 'arrive') {
             'type_source'  => $request->exp_type_source,
             'adresse'      => $request->exp_adresse,
             'telephone'    => $request->exp_telephone,
+            'CIN'    => $request->exp_CIN,
         ]);
         $expediteurId = $expediteur->id;
     }
@@ -81,6 +86,7 @@ if ($request->type_courrier === 'arrive') {
     $courrier = Courrier::create([
         'type_courrier' => $request->type_courrier,
         'objet' => $request->objet,
+        'Nbr_piece'=>$request->Nbr_piece,
         'reference_arrive'=>$request->reference_arrive,
         'reference_bo'=>$request->reference_bo,
         'reference_visa'=>$request->reference_visa,
