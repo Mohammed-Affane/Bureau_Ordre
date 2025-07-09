@@ -22,7 +22,7 @@ class CourrierController extends Controller
 
     public function index(): View
     {
-        $courriers = Courrier::latest()->paginate(10);
+        $courriers = Courrier::latest()->paginate(5);
         return view('courriers.index', compact('courriers'));
     }
 
@@ -38,6 +38,7 @@ class CourrierController extends Controller
 
 public function store(Request $request): RedirectResponse
 {
+    
     $request->validate([
         'fichier_scan' => 'nullable|file|mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp|max:2048',
     ]);
@@ -100,6 +101,24 @@ public function store(Request $request): RedirectResponse
         'Nbr_piece' => $request->Nbr_piece,
     ]);
 
+if ($request->has('destinataires_entite')) {
+    $ids = [];
+    foreach ($request->destinataires_entite as $idDestinataire) {
+        if ($idDestinataire && is_numeric($idDestinataire)) {
+            $destinataire = CourrierDestinataire::create([
+                'entite_id'      => $idDestinataire,
+                'type_courrier'  => 'interne',
+            ]);
+            $ids[] = $destinataire->id;
+        }
+    }
+
+    if (!empty($ids)) {
+        $courrier->courrierDestinatairePivot()->attach($ids);
+    }
+}
+
+
     // === EXPEDITEUR (cas courrier départ) ===
     if (in_array($courrier->type_courrier, ['depart', 'decision'])) {
         // Entité expéditrice (une seule)
@@ -109,33 +128,32 @@ public function store(Request $request): RedirectResponse
         }
     }
 
-    // === DESTINATAIRES EXTERNES SÉLECTIONNÉS ===
-    if ($request->has('destinataires_externe')) {
-        foreach ($request->destinataires_externe as $idDestinataire) {
-            if ($idDestinataire && is_numeric($idDestinataire)) {
-                CourrierDestinataire::create([
-                    'id_courrier'    => $courrier->id,
-                    'entite_id'      => $request->entite_id,
-                    'type_courrier'  => 'interne', 
-                ]);
-            }
+    // === DESTINATAIRES EXTERNES ===
+if ($request->has('destinataires_externe')) {
+    $courrier->courrierDestinatairePivot()->attach($request->destinataires_externe);
+}
+
+// === DESTINATAIRES EXTERNES AJOUTÉS MANUELLEMENT ===
+if ($request->has('dest_nom')) {
+    $ids = [];
+    foreach ($request->dest_nom as $index => $nom) {
+        if (!empty($nom)) {
+            $destinataire = CourrierDestinataire::create([
+                'nom'            => $nom,
+                'type_source'    => $request->dest_type_source[$index] ?? null,
+                'adresse'        => $request->dest_adresse[$index] ?? null,
+                'CIN'            => $request->dest_CIN[$index] ?? null,
+                'telephone'      => $request->dest_telephone[$index] ?? null,
+                'type_courrier'  => 'externe',
+            ]);
+            $ids[] = $destinataire->id;
         }
     }
 
-    // === DESTINATAIRES EXTERNES AJOUTÉS MANUELLEMENT ===
-    if ($request->has('dest_nom')) {
-        foreach ($request->dest_nom as $index => $nom) {
-            if (!empty($nom)) {
-                CourrierDestinataire::create([
-                    'id_courrier'    => $courrier->id,
-                    'nom'            => $nom,
-                    'type_source'    => $request->dest_type_source[$index] ?? null,
-                    'adresse'        => $request->dest_adresse[$index] ?? null,
-                    'type_courrier'  => 'externe',
-                ]);
-            }
-        }
+    if (!empty($ids)) {
+        $courrier->courrierDestinatairePivot()->attach($ids);
     }
+}
 
     return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès.');
 }

@@ -35,12 +35,16 @@
                 Ajouter un nouvel expéditeur
             </button>
 
-            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md">
+            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: '' }" x-on:change="typesource = $event.target.value">
                 <input type="text" name="exp_nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <select  name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                    <option value="">Sélectionner...</option>
+                    <option value="citoyen">citoyen</option>
+                    <option value="administration">administration</option>
+                </select>
                 <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-show="typesource=='citoyen'">
             </div>
         </div>
 
@@ -66,24 +70,37 @@
                     </select>
                 </div>
                 <div x-show="type === 'depart' || type === 'decision' || type === 'interne' || type === 'visa'">
-                    <label>Destinataires externes</label>
-                    <select name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                        @foreach($destinataires as $destinataire)
-                            <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
-                        @endforeach
-                    </select>
+                 <div x-data="{ manualDestinataires: [] }">
+    <label>Destinataires externes</label>
+    <select name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+        @foreach($destinataires as $destinataire)
+            <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
+        @endforeach
+    </select>
 
-                    <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
-                Ajouter un nouvel Destinataire
-            </button> 
+    <button type="button"
+            class="mt-2 text-indigo-600"
+            @click="manualDestinataires.push({ nom: '', type_source: '', adresse: '', CIN: '', telephone: '' })">
+        + Ajouter un nouveau destinataire
+    </button>
 
-            <div class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-show="showNewSenderForm">
-                <input type="text" name="dest_nom[]" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_adresse[]" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_CIN[]" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_telephone[]" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-            </div>
+    <template x-for="(dest, index) in manualDestinataires" :key="index">
+        <div class="mt-4 space-y-2 bg-indigo-100 p-4 rounded-md shadow-md relative">
+            <button type="button"
+                    class="absolute top-1 right-1 text-red-600"
+                    @click="manualDestinataires.splice(index, 1)">
+                ✖
+            </button>
+
+            <input type="text" :name="'dest_nom[]'" x-model="dest.nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_type_source[]'" x-model="dest.type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_adresse[]'" x-model="dest.adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_CIN[]'" x-model="dest.CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_telephone[]'" x-model="dest.telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm">
+        </div>
+    </template>
+</div>
+
                 </div>
             </div>
         </div>
