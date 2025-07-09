@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use App\Models\CourrierDestinataire;
 use Illuminate\Http\RedirectResponse;
 //use App\Http\Requests\CourrierRequest;
-use Illuminate\Http\Request;
 
 class CourrierController extends Controller
 {
