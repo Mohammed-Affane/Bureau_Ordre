@@ -31,6 +31,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entite</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
+
                                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
@@ -46,7 +47,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_depart }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->fichier_scan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap"><img src="{{ $courrier->fichier_scan ? asset('fichiers_scans/' . $courrier->fichier_scan) : '#' }}" alt="Fichier Scan" class="w-10 h-10 object-cover rounded"></td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->type_courrier }}</td>                                             
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception }}</td>
