@@ -36,9 +36,9 @@
             </button>
 
             <div x-show="showNewSenderForm" class="mt-4 space-y-2">
-                <input type="text" name="nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="nom_expediteur" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="type_source_expediteur" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="adresse_expediteur" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
         </div>
@@ -77,9 +77,9 @@
             </button>
 
             <div x-show="showNewSenderForm" class="mt-4 space-y-2">
-                <input type="text" name="nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="nom_destinataire" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="type_source_destinataire" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="adresse_destinataire" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
                 </div>
             </div>
@@ -103,6 +103,8 @@
                         <option value="arrive" @selected(old('type_courrier') === 'arrive')>Arrivé</option>
                         <option value="depart" @selected(old('type_courrier') === 'depart')>Départ</option>
                         <option value="interne" @selected(old('type_courrier') === 'interne')>Interne</option>
+                        <option value="visa" @selected(old('type_courrier') === 'visa')>Visa</option>
+                        <option value="decision" @selected(old('type_courrier') === 'decision')>Décision</option>
                     </select>
                     @error('type_courrier')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
@@ -413,3 +415,71 @@
         </div>
     </form>
 </x-app-layout>
+<script>
+    function documentUploadController() {
+    return {
+        selectedFiles: [],
+        dragover: false,
+
+        handleDrop(e) {
+            this.dragover = false;
+            const files = Array.from(e.dataTransfer.files);
+            this.processFiles(files);
+        },
+
+        handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            this.processFiles(files);
+            e.target.value = ''; // Reset input to allow selecting same file again
+        },
+
+        processFiles(files) {
+            const validTypes = [
+                'application/pdf',
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/bmp',
+                'image/tiff',
+                'image/webp'
+            ];
+
+            files.forEach(file => {
+                if (!validTypes.includes(file.type)) {
+                    alert(`Le fichier ${file.name} n'est pas d'un type valide.`);
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) { // 10MB
+                    alert(`Le fichier ${file.name} dépasse la taille maximale de 10MB.`);
+                    return;
+                }
+
+                // Create preview for images
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        file.preview = e.target.result;
+                        this.selectedFiles.push(file);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    this.selectedFiles.push(file);
+                }
+            });
+        },
+
+        removeFile(index) {
+            this.selectedFiles.splice(index, 1);
+        },
+
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    };
+}
+</script>
