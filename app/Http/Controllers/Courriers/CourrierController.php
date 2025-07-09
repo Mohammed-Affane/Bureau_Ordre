@@ -38,20 +38,44 @@ class CourrierController extends Controller
     public function store(CourrierRequest $request): RedirectResponse
     {
 
-       $validated = $request->validate([
-        'type_courrier' => 'required|in:arrive,depart,interne',
-        'objet' => 'nullable|string|max:255',
-        'expediteur_id' => 'nullable|exists:expediteurs,id',
-        'entite_source' => 'nullable|exists:entites,id',
-        'exp_nom' => 'nullable|string|max:255',
-        'exp_type_source' => 'nullable|string|max:255',
-        'exp_adresse' => 'nullable|string|max:500',
-        'exp_telephone' => 'nullable|string|max:20',
-        'destinataires_entite' => 'nullable|array',
-        'destinataires_entite.*' => 'exists:entites,id',
-        'destinataires_externe' => 'nullable|array',
-        'destinataires_externe.*' => 'exists:expediteurs,id',
-    ]);
+    //    $validated = $request->validate([
+    //     'type_courrier' => 'required|in:arrive,depart,interne',
+    //     'objet' => 'nullable|string|max:255',
+    //     'expediteur_id' => 'nullable|exists:expediteurs,id',
+    //     'entite_source' => 'nullable|exists:entites,id',
+    //     'exp_nom' => 'nullable|string|max:255',
+    //     'exp_type_source' => 'nullable|string|max:255',
+    //     'exp_adresse' => 'nullable|string|max:500',
+    //     'exp_telephone' => 'nullable|string|max:20',
+    //     'destinataires_entite' => 'nullable|array',
+    //     'destinataires_entite.*' => 'exists:entites,id',
+    //     'destinataires_externe' => 'nullable|array',
+    //     'destinataires_externe.*' => 'exists:expediteurs,id',
+    // ]);
+
+
+    $expediteurId = null;
+
+// 1. Cas du courrier arrivé avec ajout manuel d'expéditeur
+if ($request->type_courrier === 'arrive') {
+    // Si utilisateur a rempli manuellement un expéditeur
+    if ($request->filled('exp_nom') ) {
+        $expediteur = Expediteur::create([
+            'nom'          => $request->exp_nom,
+            'type_source'  => $request->exp_type_source,
+            'adresse'      => $request->exp_adresse,
+            'telephone'    => $request->exp_telephone,
+        ]);
+        $expediteurId = $expediteur->id;
+    }
+    // Sinon il a sélectionné un existant
+    elseif ($request->filled('id_expediteur')) {
+        $expediteurId = $request->id_expediteur;
+    }
+    
+}
+
+
 
      // 2. Créer le courrier
     $courrier = Courrier::create([
@@ -66,40 +90,36 @@ class CourrierController extends Controller
         'date_depart'=>$request->date_depart,
         'date_enregistrement'=>$request->date_enregistrement,
         'priorite'=>$request->priorite,
-        'id_agent_en_charge'=>$request->id_agent_en_charge
+        'id_agent_en_charge'=>$request->id_agent_en_charge,
+        'id_expediteur'=>$expediteurId
     ]);
 
 
-   // 1. Ajouter les destinataires internes (via entite_id)
-if ($request->has('destinataires_entite')) {
-    foreach ($request->destinataires_entite as $entiteId) {
-        if (!empty($entiteId)) {
-            CourrierDestinataire::create([
-                'id_courrier'    => $courrier->id,
-                'entite_id'      => $entiteId,
-                'type_courrier'  => 'interne',
-            ]);
-        }
+
+    
+// === EXPEDITEUR (cas courrier départ) ===
+if (in_array($courrier->type_courrier, ['depart', 'decision'])) {
+    // Entité expéditrice (une seule)
+    if ($request->filled('entite_id')) {
+        $courrier->entite_id = $request->entite_id;
+        $courrier->save();
     }
 }
 
-// 2. Ajouter les destinataires externes (via select multiple)
+// === DESTINATAIRES EXTERNES SÉLECTIONNÉS ===
 if ($request->has('destinataires_externe')) {
-    foreach ($request->destinataires_externe as $expediteurId) {
-        $expediteur = Expediteur::find($expediteurId);
-        if ($expediteur) {
+    foreach ($request->destinataires_externe as $idDestinataire) {
+        if ($idDestinataire && is_numeric($idDestinataire)) {
             CourrierDestinataire::create([
                 'id_courrier'    => $courrier->id,
-                'nom'            => $expediteur->nom,
-                'type_source'    => $expediteur->type_source,
-                'adresse'        => $expediteur->adresse,
-                'type_courrier'  => 'externe',
+                'entite_id'      => $request->entite_id,
+                'type_courrier'  => 'interne', 
             ]);
         }
     }
 }
 
-// 3. Ajouter les destinataires externes saisis manuellement
+// === DESTINATAIRES EXTERNES AJOUTÉS MANUELLEMENT ===
 if ($request->has('dest_nom')) {
     foreach ($request->dest_nom as $index => $nom) {
         if (!empty($nom)) {
@@ -113,6 +133,7 @@ if ($request->has('dest_nom')) {
         }
     }
 }
+
 
 
 

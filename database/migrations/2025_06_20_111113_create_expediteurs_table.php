@@ -14,8 +14,9 @@ return new class extends Migration
         
         Schema::create('expediteurs', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('type_source');
+            $table->string('nom')->nullable();
+            $table->string('CIN')->nullable();
+            $table->string('type_source')->nullable();
             $table->text('adresse')->nullable();
             $table->string('telephone')->nullable();
             $table->timestamps();

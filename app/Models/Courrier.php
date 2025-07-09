@@ -19,17 +19,14 @@ class Courrier extends Model
     {
         return $this->belongsTo(Expediteur::class, 'id_expediteur');
     }
+    
 
 // Agent en charge du courrier
     public function agent()
     {
         return $this->belongsTo(User::class, 'id_agent_en_charge');
     }
-// Liste des destinataires (pour courrier depart)
-    public function destinataires()
-    {
-        return $this->hasMany(CourrierDestinataire::class, 'courrier_id');
-    }
+
 
 // Affectations liées à ce courrier
     public function affectations()
@@ -41,6 +38,12 @@ class Courrier extends Model
     public function entiteExpediteur()
     {
         return $this->belongsTo(Entite::class, 'entite_id');
+    }
+
+    // relation pivot 
+    public function courrierDestinatairePivot()
+    {
+        return $this->belongsToMany(CourrierDestinataire::class, 'courrier_destinataire_pivot', 'id_courrier', 'id_destinataire_courrier');
     }
 
 }

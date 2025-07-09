@@ -72,9 +72,9 @@
                         @endforeach
                     </select>
 
-                    {{-- <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
+                    <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
                 Ajouter un nouvel Destinataire
-            </button> --}}
+            </button> 
 
             <div class="mt-4 space-y-2">
                 <input type="text" name="dest_nom[]" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
