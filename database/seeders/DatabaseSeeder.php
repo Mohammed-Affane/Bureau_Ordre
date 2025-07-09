@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
         ]);
+        $this->call(EntiteAndUserSeeder::class);
+
         
         // Create admin user
         $user = \App\Models\User::factory()->create([
