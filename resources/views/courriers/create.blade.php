@@ -36,10 +36,10 @@
             </button>
 
             <div x-show="showNewSenderForm" class="mt-4 space-y-2">
-                <input type="text" name="nom_expediteur" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="type_source_expediteur" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="adresse_expediteur" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
         </div>
 
@@ -67,19 +67,19 @@
                 <div x-show="type === 'depart' || type === 'decision' || type === 'interne' || type === 'visa'">
                     <label>Destinataires externes</label>
                     <select name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                        @foreach($expediteurs as $expediteur)
-                            <option value="{{ $expediteur->id }}">{{ $expediteur->nom }}</option>
+                        @foreach($destinataires as $destinataire)
+                            <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
                         @endforeach
                     </select>
 
                     <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
                 Ajouter un nouvel Destinataire
-            </button>
+            </button> 
 
-            <div x-show="showNewSenderForm" class="mt-4 space-y-2">
-                <input type="text" name="nom_destinataire" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="type_source_destinataire" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="adresse_destinataire" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+            <div class="mt-4 space-y-2">
+                <input type="text" name="dest_nom[]" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="dest_adresse[]" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
                 </div>
             </div>
@@ -90,26 +90,7 @@
             <h3 class="text-lg font-semibold mb-4">Informations du courrier</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="form-group">
-                    <label for="type_courrier" class="block font-medium text-gray-700 mb-1">
-                        Type de courrier <span class="text-red-500" aria-label="Champ obligatoire">*</span>
-                    </label>
-                    <select 
-                        name="type_courrier" 
-                        id="type_courrier" 
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
-                        required>
-                        <option value="">Choisir le type...</option>
-                        <option value="arrive" @selected(old('type_courrier') === 'arrive')>Arrivé</option>
-                        <option value="depart" @selected(old('type_courrier') === 'depart')>Départ</option>
-                        <option value="interne" @selected(old('type_courrier') === 'interne')>Interne</option>
-                        <option value="visa" @selected(old('type_courrier') === 'visa')>Visa</option>
-                        <option value="decision" @selected(old('type_courrier') === 'decision')>Décision</option>
-                    </select>
-                    @error('type_courrier')
-                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
-                    @enderror
-                </div>
+                
                 
                 <div class="form-group">
                     <label for="objet" class="block font-medium text-gray-700 mb-1">
@@ -415,71 +396,3 @@
         </div>
     </form>
 </x-app-layout>
-<script>
-    function documentUploadController() {
-    return {
-        selectedFiles: [],
-        dragover: false,
-
-        handleDrop(e) {
-            this.dragover = false;
-            const files = Array.from(e.dataTransfer.files);
-            this.processFiles(files);
-        },
-
-        handleFileSelect(e) {
-            const files = Array.from(e.target.files);
-            this.processFiles(files);
-            e.target.value = ''; // Reset input to allow selecting same file again
-        },
-
-        processFiles(files) {
-            const validTypes = [
-                'application/pdf',
-                'image/jpeg',
-                'image/png',
-                'image/gif',
-                'image/bmp',
-                'image/tiff',
-                'image/webp'
-            ];
-
-            files.forEach(file => {
-                if (!validTypes.includes(file.type)) {
-                    alert(`Le fichier ${file.name} n'est pas d'un type valide.`);
-                    return;
-                }
-
-                if (file.size > 10 * 1024 * 1024) { // 10MB
-                    alert(`Le fichier ${file.name} dépasse la taille maximale de 10MB.`);
-                    return;
-                }
-
-                // Create preview for images
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        file.preview = e.target.result;
-                        this.selectedFiles.push(file);
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    this.selectedFiles.push(file);
-                }
-            });
-        },
-
-        removeFile(index) {
-            this.selectedFiles.splice(index, 1);
-        },
-
-        formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-    };
-}
-</script>
