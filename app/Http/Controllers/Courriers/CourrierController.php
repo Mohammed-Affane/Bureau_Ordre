@@ -7,6 +7,7 @@ use App\Models\Entite;
 use App\Models\Courrier;
 use Illuminate\View\View;
 use App\Models\Expediteur;
+use Illuminate\Http\Request;
 use App\Services\CourrierService;
 use App\Http\Controllers\Controller;
 use App\Models\CourrierDestinataire;
