@@ -35,12 +35,16 @@
                 Ajouter un nouvel expéditeur
             </button>
 
-            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md">
+            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: '' }" x-on:change="typesource = $event.target.value">
                 <input type="text" name="exp_nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <select  name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                    <option value="">Sélectionner...</option>
+                    <option value="citoyen">citoyen</option>
+                    <option value="administration">administration</option>
+                </select>
                 <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-show="typesource=='citoyen'">
             </div>
         </div>
 
@@ -52,9 +56,6 @@
                 @endforeach
             </select>
         </div>
-
-        
-
         <div >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div x-show="type === 'interne' || type === 'arrive' ">
@@ -66,24 +67,37 @@
                     </select>
                 </div>
                 <div x-show="type === 'depart' || type === 'decision' || type === 'interne' || type === 'visa'">
-                    <label>Destinataires externes</label>
-                    <select name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                        @foreach($destinataires as $destinataire)
-                            <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
-                        @endforeach
-                    </select>
+                 <div x-data="{ manualDestinataires: [] }">
+    <label>Destinataires externes</label>
+    <select name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+        @foreach($destinataires as $destinataire)
+            <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
+        @endforeach
+    </select>
 
-                    <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
-                Ajouter un nouvel Destinataire
-            </button> 
+    <button type="button"
+            class="mt-2 text-indigo-600"
+            @click="manualDestinataires.push({ nom: '', type_source: '', adresse: '', CIN: '', telephone: '' })">
+        + Ajouter un nouveau destinataire
+    </button>
 
-            <div class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-show="showNewSenderForm">
-                <input type="text" name="dest_nom[]" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_adresse[]" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_CIN[]" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="dest_telephone[]" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-            </div>
+    <template x-for="(dest, index) in manualDestinataires" :key="index">
+        <div class="mt-4 space-y-2 bg-indigo-100 p-4 rounded-md shadow-md relative">
+            <button type="button"
+                    class="absolute top-1 right-1 text-red-600"
+                    @click="manualDestinataires.splice(index, 1)">
+                ✖
+            </button>
+
+            <input type="text" :name="'dest_nom[]'" x-model="dest.nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_type_source[]'" x-model="dest.type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_adresse[]'" x-model="dest.adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_CIN[]'" x-model="dest.CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <input type="text" :name="'dest_telephone[]'" x-model="dest.telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm">
+        </div>
+    </template>
+</div>
+
                 </div>
             </div>
         </div>
@@ -304,92 +318,74 @@
             <h3 class="text-lg font-semibold mb-4">Document du courrier</h3>
             
             <div x-data="documentUploadController()" class="space-y-4">
-                <!-- Upload Area -->
-                <div class="upload-area">
-                    <label for="document_files" class="block font-medium text-gray-700 mb-2">
-                        Scanner ou télécharger le document
-                    </label>
+    <!-- Upload Area -->
+    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors"
+         :class="{ 'border-blue-500 bg-blue-50': dragover }"
+         x-on:dragover.prevent="dragover = true"
+         x-on:dragleave="dragover = false"
+         x-on:drop.prevent="handleDrop($event)">
+        
+        <div class="text-sm text-gray-600">
+            <label for="document_files" class="cursor-pointer">
+                <span class="font-medium text-indigo-600 hover:text-indigo-500">Cliquez pour télécharger</span>
+                ou glissez-déposez votre fichier
+            </label>
+            <input 
+                type="file" 
+                id="document_files" 
+                name="fichier_scan" 
+                accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp"
+                class="sr-only"
+                x-on:change="handleFileSelect($event)">
+        </div>
+        
+        <p class="text-xs text-gray-500 mt-2">
+            PDF, JPG, PNG, GIF, BMP, TIFF, WebP (max 2MB)
+        </p>
+    </div>
+    
+    <!-- Selected File Preview -->
+    <div x-show="selectedFile" class="mt-4">
+        <div class="bg-gray-50 rounded-lg p-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <!-- Image preview -->
+                    <template x-if="selectedFile && selectedFile.type.startsWith('image/')">
+                        <img :src="selectedFile.preview" 
+                             class="w-16 h-16 object-cover rounded-lg border">
+                    </template>
                     
-                    <!-- Drop zone -->
-                    <div 
-                        x-on:drop.prevent="handleDrop($event)"
-                        x-on:dragover.prevent="dragover = true"
-                        x-on:dragleave.prevent="dragover = false"
-                        x-bind:class="dragover ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'"
-                        class="border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200">
-                        
-                        <div class="space-y-4">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <!-- PDF icon -->
+                    <template x-if="selectedFile && selectedFile.type === 'application/pdf'">
+                        <div class="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 18h12V6l-4-4H4v16zm8-14v4h4l-4-4z"/>
                             </svg>
-                            
-                            <div class="text-sm text-gray-600">
-                                <label for="document_files" class="cursor-pointer">
-                                    <span class="font-medium text-indigo-600 hover:text-indigo-500">Cliquez pour télécharger</span>
-                                    ou glissez-déposez vos fichiers
-                                </label>
-                                <input 
-                                    type="file" 
-                                    id="document_files" 
-                                    name="document_files[]" 
-                                    multiple 
-                                    accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp"
-                                    class="sr-only"
-                                    x-on:change="handleFileSelect($event)">
-                            </div>
-                            
-                            <p class="text-xs text-gray-500">
-                                PDF, JPG, PNG, GIF, BMP, TIFF, WebP (max 10MB par fichier)
-                            </p>
                         </div>
-                    </div>
+                    </template>
                     
-                    @error('document_files')
-                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
-                    @enderror
-                    @error('document_files.*')
-                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- File Preview -->
-                <div x-show="selectedFiles.length > 0" class="file-preview">
-                    <h4 class="text-md font-medium text-gray-900 mb-3">Fichiers sélectionnés</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <template x-for="(file, index) in selectedFiles" :key="index">
-                            <div class="relative border rounded-lg p-3 bg-white shadow-sm">
-                                <!-- Image preview -->
-                                <div x-show="file.type.startsWith('image/')" class="mb-2">
-                                    <img :src="file.preview" :alt="file.name" class="w-full h-32 object-cover rounded">
-                                </div>
-                                
-                                <!-- PDF preview -->
-                                <div x-show="file.type === 'application/pdf'" class="mb-2 flex items-center justify-center h-32 bg-red-50 rounded">
-                                    <svg class="w-12 h-12 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                
-                                <!-- File info -->
-                                <div class="text-sm">
-                                    <p class="font-medium text-gray-900 truncate" x-text="file.name"></p>
-                                    <p class="text-gray-500" x-text="formatFileSize(file.size)"></p>
-                                </div>
-                                
-                                <!-- Remove button -->
-                                <button 
-                                    type="button"
-                                    x-on:click="removeFile(index)"
-                                    class="absolute top-1 right-1 p-1 bg-red-100 hover:bg-red-200 rounded-full text-red-600 transition-colors duration-200">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </template>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900" x-text="selectedFile?.name"></p>
+                        <p class="text-xs text-gray-500" x-text="formatFileSize(selectedFile?.size)"></p>
                     </div>
                 </div>
+                
+                <button type="button" 
+                        x-on:click="removeFile()"
+                        class="text-red-600 hover:text-red-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
+        </div>
+    </div>
+    
+    <!-- Error Messages -->
+    @error('fichier_scan')
+        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+    @enderror
+</div>
         </section>
 
 
@@ -400,24 +396,28 @@
     </form>
 </x-app-layout>
 <script>
+
 function documentUploadController() {
     return {
-        selectedFiles: [],
+        selectedFile: null,
         dragover: false,
-
+        
         handleDrop(e) {
             this.dragover = false;
             const files = Array.from(e.dataTransfer.files);
-            this.processFiles(files);
+            if (files.length > 0) {
+                this.processFile(files[0]); // Only take the first file
+            }
         },
-
+        
         handleFileSelect(e) {
             const files = Array.from(e.target.files);
-            this.processFiles(files);
-            e.target.value = ''; // Reset input to allow selecting same file again
+            if (files.length > 0) {
+                this.processFile(files[0]); // Only take the first file
+            }
         },
-
-        processFiles(files) {
+        
+        processFile(file) {
             const validTypes = [
                 'application/pdf',
                 'image/jpeg',
@@ -427,36 +427,46 @@ function documentUploadController() {
                 'image/tiff',
                 'image/webp'
             ];
-
-            files.forEach(file => {
-                if (!validTypes.includes(file.type)) {
-                    alert(`Le fichier ${file.name} n'est pas d'un type valide.`);
-                    return;
-                }
-
-                if (file.size > 10 * 1024 * 1024) { // 10MB
-                    alert(`Le fichier ${file.name} dépasse la taille maximale de 10MB.`);
-                    return;
-                }
-
-                // Create preview for images
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        file.preview = e.target.result;
-                        this.selectedFiles.push(file);
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    this.selectedFiles.push(file);
-                }
-            });
+            
+            if (!validTypes.includes(file.type)) {
+                alert(`Le fichier ${file.name} n'est pas d'un type valide.`);
+                return;
+            }
+            
+            if (file.size > 2 * 1024 * 1024) { // 2MB to match backend validation
+                alert(`Le fichier ${file.name} dépasse la taille maximale de 2MB.`);
+                return;
+            }
+            
+            // Create preview for images
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    file.preview = e.target.result;
+                    this.selectedFile = file;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                this.selectedFile = file;
+            }
+            
+            // Set the file input value programmatically
+            this.updateFileInput(file);
         },
-
-        removeFile(index) {
-            this.selectedFiles.splice(index, 1);
+        
+        updateFileInput(file) {
+            const fileInput = document.getElementById('document_files');
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
         },
-
+        
+        removeFile() {
+            this.selectedFile = null;
+            const fileInput = document.getElementById('document_files');
+            fileInput.value = '';
+        },
+        
         formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
@@ -466,5 +476,4 @@ function documentUploadController() {
         }
     };
 }
-
 </script>
