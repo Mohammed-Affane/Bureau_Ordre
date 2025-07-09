@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expediteur extends Model
 {
-    protected $fillable = ['nom', 'type_source', 'adresse', 'telephone'];
+    protected $fillable = ['nom','CIN', 'type_source', 'adresse', 'telephone'];
 
     public function courriers()
     {

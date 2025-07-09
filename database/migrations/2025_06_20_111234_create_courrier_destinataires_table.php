@@ -15,18 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('nom')->nullable();
             $table->string('type_source')->nullable();
+            $table->string('CIN')->nullable();
             $table->text('adresse')->nullable();
 
             $table->enum('type_courrier', ['interne', 'externe']);
 
-            // Clés étrangères
-            $table->unsignedBigInteger('id_courrier')->nullable();
             $table->unsignedBigInteger('entite_id')->nullable();
 
-             // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
-            $table->foreign('id_courrier')
-                ->references('id')->on('courriers')
-                ->onDelete('set null')->onUpdate('cascade');
 
             $table->foreign('entite_id')
                 ->references('id')->on('entites')
