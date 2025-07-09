@@ -35,11 +35,12 @@
                 Ajouter un nouvel expéditeur
             </button>
 
-            <div x-show="showNewSenderForm" class="mt-4 space-y-2">
+            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md">
                 <input type="text" name="exp_nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
         </div>
 
@@ -76,10 +77,12 @@
                 Ajouter un nouvel Destinataire
             </button> 
 
-            <div class="mt-4 space-y-2">
+            <div class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-show="showNewSenderForm">
                 <input type="text" name="dest_nom[]" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="dest_adresse[]" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="dest_CIN[]" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <input type="text" name="dest_telephone[]" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
             </div>
                 </div>
             </div>
@@ -396,3 +399,72 @@
         </div>
     </form>
 </x-app-layout>
+<script>
+function documentUploadController() {
+    return {
+        selectedFiles: [],
+        dragover: false,
+
+        handleDrop(e) {
+            this.dragover = false;
+            const files = Array.from(e.dataTransfer.files);
+            this.processFiles(files);
+        },
+
+        handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            this.processFiles(files);
+            e.target.value = ''; // Reset input to allow selecting same file again
+        },
+
+        processFiles(files) {
+            const validTypes = [
+                'application/pdf',
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/bmp',
+                'image/tiff',
+                'image/webp'
+            ];
+
+            files.forEach(file => {
+                if (!validTypes.includes(file.type)) {
+                    alert(`Le fichier ${file.name} n'est pas d'un type valide.`);
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) { // 10MB
+                    alert(`Le fichier ${file.name} dépasse la taille maximale de 10MB.`);
+                    return;
+                }
+
+                // Create preview for images
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        file.preview = e.target.result;
+                        this.selectedFiles.push(file);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    this.selectedFiles.push(file);
+                }
+            });
+        },
+
+        removeFile(index) {
+            this.selectedFiles.splice(index, 1);
+        },
+
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    };
+}
+
+</script>
