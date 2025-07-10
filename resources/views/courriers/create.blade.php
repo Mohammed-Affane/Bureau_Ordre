@@ -35,20 +35,25 @@
                 Ajouter un nouvel expéditeur
             </button>
 
-            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: '' }" x-on:change="typesource = $event.target.value">
-                <input type="text" name="exp_nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <select  name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: '' }" >
+                <input type="text" name="exp_nom" placeholder="Nom" 
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <select  name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-model="typesource">
                     <option value="">Sélectionner...</option>
                     <option value="citoyen">citoyen</option>
                     <option value="administration">administration</option>
                 </select>
                 <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-show="typesource=='citoyen'">
+                 <template x-if="typesource === 'citoyen'">
+                    <input type="text" name="exp_CIN" 
+                    placeholder="CIN" 
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"  >
+                </template>
             </div>
         </div>
 
-        <div x-show="type === 'depart' || type === 'decision'">
+        <div x-show="type === 'depart' || type === 'decision' || type === 'interne'">
             <label>Entité expéditrice</label>
             <select name="entite_id" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 @foreach($entites as $entite)
@@ -57,7 +62,7 @@
             </select>
         </div>
         <div >
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols gap-4">
                 <div x-show="type === 'interne' || type === 'arrive' ">
                     <label>Destinataires internes</label>
                     <select name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
@@ -69,20 +74,37 @@
                 <div x-show="type === 'depart' || type === 'decision' || type === 'interne' || type === 'visa'">
                  <div x-data="{ manualDestinataires: [] }">
     <label>Destinataires externes</label>
-    <select name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+    <select id="destinataires" name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
         @foreach($destinataires as $destinataire)
+        
             <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
         @endforeach
+
     </select>
 
-    <button type="button"
-            class="mt-2 text-indigo-600"
-            @click="manualDestinataires.push({ nom: '', type_source: '', adresse: '', CIN: '', telephone: '' })">
-        + Ajouter un nouveau destinataire
+    <div class="flex justify-between gap-4">
+    <!-- Réinitialiser button -->
+    <button
+        type="button"
+        onclick="resetSelect()"
+        class="px-4 py-2  text-red-600 font-semibold rounded hover:bg-red-200 transition">
+        Réinitialiser la sélection
     </button>
 
+    <!-- Ajouter destinataire button -->
+    <button
+        type="button"
+        class="px-4 py-2 text-indigo-600 font-semibold rounded hover:bg-indigo-200 transition"
+        @click="manualDestinataires.push({ nom: '', type_source: '', adresse: '', CIN: '', telephone: '' })">
+        + Ajouter un nouveau destinataire
+    </button>
+</div>
+
+
+            <!-- Bouton de réinitialisation -->
+
     <template x-for="(dest, index) in manualDestinataires" :key="index">
-        <div class="mt-4 space-y-2 bg-indigo-100 p-4 rounded-md shadow-md relative">
+        <div class="mt-4 space-y-2 bg-indigo-100 p-4 rounded-md shadow-md relative" x-data="{ typesource: '' }">
             <button type="button"
                     class="absolute top-1 right-1 text-red-600"
                     @click="manualDestinataires.splice(index, 1)">
@@ -90,10 +112,17 @@
             </button>
 
             <input type="text" :name="'dest_nom[]'" x-model="dest.nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm">
-            <input type="text" :name="'dest_type_source[]'" x-model="dest.type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <select  name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-model="typesource">
+                    <option value="">Sélectionner...</option>
+                    <option value="citoyen">citoyen</option>
+                    <option value="administration">administration</option>
+                </select>
             <input type="text" :name="'dest_adresse[]'" x-model="dest.adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm">
-            <input type="text" :name="'dest_CIN[]'" x-model="dest.CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm">
-            <input type="text" :name="'dest_telephone[]'" x-model="dest.telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm">
+            <template x-if="typesource === 'citoyen'">
+                    <input type="text" name="dest_CIN[]" 
+                    placeholder="CIN" 
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"  >
+            </template>            <input type="text" :name="'dest_telephone[]'" x-model="dest.telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm">
         </div>
     </template>
 </div>
@@ -211,7 +240,7 @@
                     @enderror
                 </div>
                 
-                <div class="form-group"  x-show="type === 'arrive' || type === 'visa'|| type === 'decision'">
+                <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
                     <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de réception</label>
                     <input 
                         type="date" 
@@ -225,7 +254,7 @@
                     @enderror
                 </div>
                 
-                <div class="form-group" x-show="type === 'depart' || type === 'interne'" >
+                <div class="form-group" x-show="type === 'depart' || type === 'interne'|| type === 'decision'" >
                     <label for="date_depart" class="block font-medium text-gray-700 mb-1">Date de Depart</label>
                     <input 
                         type="date" 
@@ -476,4 +505,8 @@ function documentUploadController() {
         }
     };
 }
+function resetSelect() {
+        const select = document.getElementById('destinataires');
+        Array.from(select.options).forEach(option => option.selected = false);
+    }
 </script>
