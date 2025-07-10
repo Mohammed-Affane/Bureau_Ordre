@@ -128,7 +128,10 @@ if ($request->has('destinataires_entite')) {
         }
     }
 
-   
+    // === DESTINATAIRES EXTERNES ===
+if ($request->has('destinataires_externe')) {
+    $courrier->courrierDestinatairePivot()->attach($request->destinataires_externe);
+}
 
 // === DESTINATAIRES EXTERNES AJOUTÉS MANUELLEMENT ===
 if ($request->has('dest_nom')) {
