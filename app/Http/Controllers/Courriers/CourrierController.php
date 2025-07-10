@@ -32,7 +32,7 @@ class CourrierController extends Controller
             'agents' => User::all(),
             'entites' => Entite::all(),
             'expediteurs' => Expediteur::orderBy('nom')->get(['id', 'nom']),
-            'destinataires'=>CourrierDestinataire::all(),
+            'destinataires'=>CourrierDestinataire::where('nom' ,'<>', Null)->get()
         ]);
     }
 
@@ -120,7 +120,7 @@ if ($request->has('destinataires_entite')) {
 
 
     // === EXPEDITEUR (cas courrier départ) ===
-    if (in_array($courrier->type_courrier, ['depart', 'decision'])) {
+    if (in_array($courrier->type_courrier, ['depart', 'decision','interne'])) {
         // Entité expéditrice (une seule)
         if ($request->filled('entite_id')) {
             $courrier->entite_id = $request->entite_id;
@@ -128,10 +128,7 @@ if ($request->has('destinataires_entite')) {
         }
     }
 
-    // === DESTINATAIRES EXTERNES ===
-if ($request->has('destinataires_externe')) {
-    $courrier->courrierDestinatairePivot()->attach($request->destinataires_externe);
-}
+   
 
 // === DESTINATAIRES EXTERNES AJOUTÉS MANUELLEMENT ===
 if ($request->has('dest_nom')) {
@@ -154,6 +151,8 @@ if ($request->has('dest_nom')) {
         $courrier->courrierDestinatairePivot()->attach($ids);
     }
 }
+
+
 
     return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès.');
 }

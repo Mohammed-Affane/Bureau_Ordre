@@ -22,11 +22,10 @@ return new class extends Migration
             $table->unsignedBigInteger('reference_depart')->nullable();
 
             // Infos principales
-            $table->enum('type_courrier', ['arrive', 'depart', 'visa', 'decision']);
+            $table->enum('type_courrier', ['arrive', 'depart', 'visa', 'decision','interne']);
             $table->text('objet');
             $table->date('date_reception')->nullable();
             $table->date('date_depart')->nullable();
-            $table->boolean('is_interne')->nullable()->default(false);
             $table->string('fichier_scan')->nullable();
             $table->date('date_enregistrement')->nullable();
             $table->integer('Nbr_piece')->default(1)->nullable();

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourrierDestinataire extends Model
 {
-    protected $fillable = ['entite_id','CIN', 'nom', 'type_source', 'adresse','type_courrier'];
+    protected $fillable = ['nom', 'type_source','CIN','telephone', 'adresse','type_courrier','entite_id'];
 
     // relation pivot 
     public function courrierDestinatairePivot()
