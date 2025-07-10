@@ -154,10 +154,7 @@ if ($request->has('dest_nom')) {
         $courrier->courrierDestinatairePivot()->attach($ids);
     }
 }
-// if($request->has('destinataires_externes')&& $request->has('destinataires_entite') ){
-//     $courrier->courrierDestinatairePivot()->attach($request->destinataire_externe);
 
-// }
 
 
     return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès.');

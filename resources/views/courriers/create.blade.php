@@ -35,6 +35,7 @@
                 Ajouter un nouvel expéditeur
             </button>
 
+
             <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: '' }" >
                 <input type="text" name="exp_nom" placeholder="Nom" 
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
@@ -45,11 +46,13 @@
                 </select>
                 <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+
                  <template x-if="typesource === 'citoyen'">
                     <input type="text" name="exp_CIN" 
                     placeholder="CIN" 
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"  >
                 </template>
+
             </div>
         </div>
 
