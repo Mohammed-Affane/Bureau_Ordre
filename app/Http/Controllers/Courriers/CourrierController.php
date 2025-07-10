@@ -32,7 +32,7 @@ class CourrierController extends Controller
             'agents' => User::all(),
             'entites' => Entite::all(),
             'expediteurs' => Expediteur::orderBy('nom')->get(['id', 'nom']),
-            'destinataires'=>CourrierDestinataire::all(),
+            'destinataires'=>CourrierDestinataire::where('nom' ,'<>', Null)->get()
         ]);
     }
 
@@ -175,6 +175,8 @@ if ($request->has('dest_nom')) {
         $courrier->courrierDestinatairePivot()->attach($ids);
     }
 }
+
+
 
     return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès.');
 }
