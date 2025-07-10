@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('type_source')->nullable();
             $table->string('CIN')->nullable();
             $table->text('adresse')->nullable();
-            $table->string('telephone')->nullable();
 
             $table->enum('type_courrier', ['interne', 'externe']);
 
