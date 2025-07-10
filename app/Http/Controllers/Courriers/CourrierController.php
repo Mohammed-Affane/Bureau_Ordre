@@ -70,11 +70,32 @@ public function store(Request $request): RedirectResponse
         $file = $request->file('fichier_scan');
 
         // Create the directory if it doesn't exist
-        $destinationPath = public_path('fichiers_scans');
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0755, true);
+        if($request->type_courrier==='arrive'){
+            $destinationPath = public_path('fichiers_scans_arrive');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+        }elseif($request->type_courrier==='depart'){
+            $destinationPath = public_path('fichiers_scans_depart');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+        }elseif($request->type_courrier==='decision'){
+            $destinationPath = public_path('fichiers_scans_decision');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+        }elseif($request->type_courrier==='visa'){
+            $destinationPath = public_path('fichiers_scans_visa');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+        }elseif($request->type_courrier==='interne'){
+            $destinationPath = public_path('fichiers_scans_interne');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
         }
-
         // Generate unique filename
         $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
 
@@ -120,7 +141,7 @@ if ($request->has('destinataires_entite')) {
 
 
     // === EXPEDITEUR (cas courrier départ) ===
-    if (in_array($courrier->type_courrier, ['depart', 'decision'])) {
+    if (in_array($courrier->type_courrier, ['depart', 'decision','interne'])) {
         // Entité expéditrice (une seule)
         if ($request->filled('entite_id')) {
             $courrier->entite_id = $request->entite_id;
