@@ -49,12 +49,12 @@
             <td class="px-6 py-4 whitespace-nowrap">
                 @if($courrier->fichier_scan)
                     @php
-                        $filePath = public_path('fichiers_scans/' . $courrier->fichier_scan);
-                        $fileUrl = asset('fichiers_scans/' . $courrier->fichier_scan);
+                        $basePath = 'fichiers_scans_' . $courrier->type_courrier;
+                        $filePath = public_path($basePath . '/' . $courrier->fichier_scan);
+                        $fileUrl = asset($basePath . '/' . $courrier->fichier_scan);
                         $fileExtension = pathinfo($courrier->fichier_scan, PATHINFO_EXTENSION);
                         $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'];
                     @endphp
-                    
                     @if(file_exists($filePath))
                         @if(in_array(strtolower($fileExtension), $imageExtensions))
                             <!-- Display image -->
