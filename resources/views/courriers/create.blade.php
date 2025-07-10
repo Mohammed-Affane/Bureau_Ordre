@@ -35,16 +35,16 @@
                 Ajouter un nouvel expéditeur
             </button>
 
-            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: '' }" x-on:change="typesource = $event.target.value">
+            <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: 'citoyen' }">
                 <input type="text" name="exp_nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <select  name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                <select x-model="typesource" name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                     <option value="">Sélectionner...</option>
                     <option value="citoyen">citoyen</option>
                     <option value="administration">administration</option>
                 </select>
                 <input type="text" name="exp_adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <input type="text" name="exp_telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-show="typesource=='citoyen'">
+                <input type="text" name="exp_CIN" placeholder="CIN" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-show="typesource=='citoyen'" required>
             </div>
         </div>
 
