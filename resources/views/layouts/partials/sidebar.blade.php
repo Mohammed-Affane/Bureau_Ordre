@@ -41,7 +41,14 @@
                                     $menuItems = [
                                         ['name' => 'Dashboard', 'route' => 'bo.dashboard', 'icon' => 'home'],
                                         ['name' => 'Nouveau Courrier', 'route' => 'courriers.create', 'icon' => 'plus'],
-                                        ['name' => 'Courriers Reçus', 'route' => 'courriers.index', 'icon' => 'inbox'],
+                                        ['name' => 'Courriers', 'route' => 'courriers.index', 'icon' => 'inbox', 'submenu' => [
+                                            ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
+                                            ['name' => 'Départs', 'route' => 'courriers.depart'],
+                                            ['name' => 'Internes', 'route' => 'courriers.interne'],
+                                            ['name' => 'Visas', 'route' => 'courriers.visa'],
+                                            ['name' => 'Décisions', 'route' => 'courriers.decision'],
+                                        ]
+                                    ],
                                         ['name' => 'Historique', 'route' => 'bo.history', 'icon' => 'clock'],
                                     ];
                                     break;
