@@ -288,6 +288,7 @@
                     @enderror
                 </div>
                 
+                
                 <div class="form-group">
                     <label for="Nbr_piece" class="block font-medium text-gray-700 mb-1">
                         Nombre de pièces <span class="text-red-500" aria-label="Champ obligatoire">*</span>

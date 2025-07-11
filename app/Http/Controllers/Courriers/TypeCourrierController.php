@@ -13,7 +13,10 @@ class TypeCourrierController extends Controller
      */
     public function courrierArrivee()
     {
-        $courriers = Courrier::where('type_courrier', 'arrive')->get();
+        
+
+        $courriers = Courrier::where('type_courrier', 'arrive')->paginate(5);
+
         return view('courriers.typesCourriers.arrive', compact('courriers'));
     }
 
@@ -22,7 +25,7 @@ class TypeCourrierController extends Controller
      */
     public function courrierDepart() 
     {
-        $courriers = Courrier::where('type_courrier', 'depart')->get();
+        $courriers = Courrier::where('type_courrier', 'depart')->paginate(5);
         return view('courriers.typesCourriers.depart', compact('courriers'));
     }
 
@@ -31,7 +34,7 @@ class TypeCourrierController extends Controller
      */
     public function courrierInterne()
     {
-        $courriers = Courrier::where('type_courrier', 'interne')->get();
+        $courriers = Courrier::where('type_courrier', 'interne')->paginate(5);
         return view('courriers.typesCourriers.interne', compact('courriers'));
     }
 
@@ -40,7 +43,7 @@ class TypeCourrierController extends Controller
      */
     public function courrierVisa()
     {
-        $courriers = Courrier::where('type_courrier', 'visa')->get();
+        $courriers = Courrier::where('type_courrier', 'visa')->paginate(5);
         return view('courriers.typesCourriers.visa', compact('courriers'));
     }
 
@@ -49,7 +52,7 @@ class TypeCourrierController extends Controller
      */
     public function courrierDecision()
     {
-        $courriers = Courrier::where('type_courrier', 'decision')->get();
+        $courriers = Courrier::where('type_courrier', 'decision')->paginate(5);
         return view('courriers.typesCourriers.decision', compact('courriers'));
     }
 }

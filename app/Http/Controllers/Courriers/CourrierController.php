@@ -62,8 +62,9 @@ class CourrierController extends Controller
 
         // Handle file upload before creating courrier
         $filename = null;
-        if ($request->hasFile('fichier_scan') && $request->file('fichier_scan')->isValid()) {
+        if ($request->hasFile('fichier_scan')) {
             $file = $request->file('fichier_scan');
+
 
             // Create the directory if it doesn't exist
             if($request->type_courrier==='arrive'){
@@ -98,6 +99,7 @@ class CourrierController extends Controller
             // Move the file
             $file->move($destinationPath, $filename);
         }
+        
 
         // 2. Créer le courrier
         $courrier = Courrier::create([
@@ -172,15 +174,32 @@ class CourrierController extends Controller
         }
 
         if($request->type_courrier==='visa'){
-            return redirect()->route('courriers.typesCourriers.visa')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.visa')->with('success', 'Courrier créé avec succès.');
         }elseif($request->type_courrier==='depart'){
-            return redirect()->route('courriers.typesCourriers.depart')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.depart')->with('success', 'Courrier créé avec succès.');
         }elseif($request->type_courrier==='decision'){
-            return redirect()->route('courriers.typesCourriers.decision')->with('success', 'Courrier créé avec succès.');    
+            return redirect()->route('courriers.decision')->with('success', 'Courrier créé avec succès.');    
         }elseif($request->type_courrier==='interne'){
-            return redirect()->route('courriers.typesCourriers.interne')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.interne')->with('success', 'Courrier créé avec succès.');
         }elseif($request->type_courrier==='arrive'){
-            return redirect()->route('courriers.typesCourriers.arrive')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.arrive')->with('success', 'Courrier créé avec succès.');
         }
+    }
+
+    public function showDestinataires(Courrier $courrier): View
+{
+    // Charger les relations avec entité
+    $courrier->load('courrierDestinatairePivot.entite');
+
+    return view('courriers.destinataires', compact('courrier'));
+}
+
+
+
+    public function show(){
+
+    }
+    public function destroy(){
+
     }
 }

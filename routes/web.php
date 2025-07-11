@@ -16,11 +16,13 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
-    Route::get('courriers/arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive');
-    Route::get('courriers/depart', [TypeCourrierController::class, 'courrierDepart'])->name('courriers.depart');
-    Route::get('courriers/interne', [TypeCourrierController::class, 'courrierInterne'])->name('courriers.interne');
-    Route::get('courriers/visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa');
-    Route::get('courriers/decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
+    Route::get('/courriers/{courrier}/destinataires', [CourrierController::class, 'showDestinataires'])
+    ->name('courriers.destinataires');
+    Route::get('courriers.arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive');
+    Route::get('courriers.depart', [TypeCourrierController::class, 'courrierDepart'])->name('courriers.depart');
+    Route::get('courriers.interne', [TypeCourrierController::class, 'courrierInterne'])->name('courriers.interne');
+    Route::get('courriers.visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa');
+    Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
 });
 
 // Admin Routes
