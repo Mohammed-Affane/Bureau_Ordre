@@ -28,7 +28,9 @@
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Réception</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expéditeur</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entite</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recepteurs</th>
+
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entite Expediteur</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -99,6 +101,17 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+               @foreach ($courrier->courrierDestinatairePivot as $dest)
+               @if ($dest->entite)
+                    • {{ $dest->entite->nom }}<br>
+                @else
+                    <em>{{$dest->nom}}</em><br>
+                @endif
+            @endforeach
+
+
+            </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->agent->name ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($courrier->priorite) }}</td>
