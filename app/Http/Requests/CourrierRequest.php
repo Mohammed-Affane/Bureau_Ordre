@@ -32,10 +32,7 @@ class CourrierRequest extends FormRequest
             'Nbr_piece' => ['required', 'integer', 'min:1', 'max:999'],
             
             // Priorité
-            'priorite' => ['nullable', 'string', Rule::in(['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])],
-            
-            // Agent en charge
-            'id_agent_en_charge' => ['nullable', 'integer', 'exists:users,id'],
+            'priorite' => ['required', 'string', Rule::in(['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])],
             
             // Références conditionnelles selon le type
             'reference_arrive' => ['nullable', 'integer', 'min:1'],
@@ -82,7 +79,7 @@ class CourrierRequest extends FormRequest
             'dest_telephone.*' => ['nullable', 'string', 'max:20'],
             
             // Fichier scan
-            'fichier_scan' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'],
+            'fichier_scan' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'],
         ];
     }
 
@@ -110,10 +107,7 @@ class CourrierRequest extends FormRequest
             'Nbr_piece.max' => 'Le nombre de pièces ne peut pas dépasser 999.',
             
             'priorite.in' => 'La priorité sélectionnée n\'est pas valide.',
-            
-            'id_agent_en_charge.exists' => 'L\'agent sélectionné n\'existe pas.',
-            'id_expediteur.exists' => 'L\'expéditeur sélectionné n\'existe pas.',
-            'entite_id.exists' => 'L\'entité sélectionnée n\'existe pas.',
+
             
             'reference_arrive.integer' => 'La référence d\'arrivée doit être un nombre entier.',
             'reference_arrive.min' => 'La référence d\'arrivée doit être au moins 1.',
@@ -164,7 +158,6 @@ class CourrierRequest extends FormRequest
             'date_depart' => 'date de départ',
             'Nbr_piece' => 'nombre de pièces',
             'priorite' => 'priorité',
-            'id_agent_en_charge' => 'agent en charge',
             'id_expediteur' => 'expéditeur',
             'entite_id' => 'entité expéditrice',
             'reference_arrive' => 'référence d\'arrivée',
