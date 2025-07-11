@@ -18,16 +18,24 @@
                             $menuItems = [];
                             
                             switch($userRole) {
-                                case 'admin':
-                                    $menuItems = [
-                                        ['name' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'home'],
-                                        ['name' => 'Utilisateurs', 'route' => 'admin.users.index', 'icon' => 'users'],
-                                        ['name' => 'Rôles', 'route' => 'admin.roles.index', 'icon' => 'user-shield'],
-                                        ['name' => 'Courriers', 'route' => 'courriers.index', 'icon' => 'mail'],
-                                        ['name' => 'Rapports', 'route' => 'admin.reports', 'icon' => 'chart-bar'],
-                                        ['name' => 'Paramètres', 'route' => 'admin.settings', 'icon' => 'cog'],
-                                        ['name' => 'Entités', 'route' => 'admin.entites.index', 'icon' => 'building'],
-                                    ];
+                               case 'admin':
+                                $menuItems = [
+                                    ['name' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'home'],
+                                    ['name' => 'Utilisateurs', 'route' => 'admin.users.index', 'icon' => 'users'],
+                                    ['name' => 'Rôles', 'route' => 'admin.roles.index', 'icon' => 'user-shield'],
+                                    [
+                                        'name' => 'Courriers',
+                                        'icon' => 'mail',
+                                        'submenu' => [
+                                            ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
+                                            ['name' => 'Départs', 'route' => 'courriers.depart'],
+                                            ['name' => 'Internes', 'route' => 'courriers.interne'],
+                                            ['name' => 'Visas', 'route' => 'courriers.visa'],
+                                            ['name' => 'Décisions', 'route' => 'courriers.decision'],
+                                        ]
+                                    ],
+                                    ['name' => 'Entités', 'route' => 'admin.entites.index', 'icon' => 'building'],
+                                ];
                                     break;
                                 case 'bo':
                                     $menuItems = [
@@ -71,18 +79,32 @@
                         @endphp
                         
                         @foreach($menuItems as $item)
-                            <li>
-                                <a href="{{ route($item['route']) }}" 
-                                   class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs($item['route']) ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                           @if(isset($item['submenu']))
+                            <div x-data="{ open: false }">
+                                <button @click="open = !open"
+                                    class="group flex w-full gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white">
                                     @include('components.icons.' . $item['icon'], ['class' => 'h-6 w-6 shrink-0'])
                                     {{ $item['name'] }}
-                                    @if($item['name'] === 'À Traiter' || $item['name'] === 'À Affecter')
-                                        <span class="ml-auto w-5 h-5 text-xs bg-red-600 text-white rounded-full flex items-center justify-center">
-                                            {{ rand(1, 9) }}
-                                        </span>
-                                    @endif
-                                </a>
-                            </li>
+                                    <svg :class="open ? 'rotate-90' : ''" class="ml-auto h-4 w-4 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                                <div x-show="open" class="mt-1 space-y-1 pl-8">
+                                    @foreach($item['submenu'] as $subitem)
+                                        <a href="{{ route($subitem['route']) }}"
+                                        class="block rounded-md p-2 text-sm leading-6 font-medium {{ request()->routeIs($subitem['route']) ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                                            {{ $subitem['name'] }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ route($item['route']) }}"
+                            class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs($item['route']) ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                                @include('components.icons.' . $item['icon'], ['class' => 'h-6 w-6 shrink-0'])
+                                {{ $item['name'] }}
+                            </a>
+                        @endif
                         @endforeach
                     </ul>
                 </li>

@@ -288,6 +288,7 @@
                     @enderror
                 </div>
                 
+                
                 <div class="form-group">
                     <label for="Nbr_piece" class="block font-medium text-gray-700 mb-1">
                         Nombre de pièces <span class="text-red-500" aria-label="Champ obligatoire">*</span>
@@ -319,26 +320,6 @@
                         <option value="A reponse obligatoire" @selected(old('priorite') === 'A reponse obligatoire')>À réponse obligatoire</option>
                     </select>
                     @error('priorite')
-                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
-                    @enderror
-                </div>
-                
-                <div class="form-group md:col-span-2">
-                    <label for="id_agent_en_charge" class="block font-medium text-gray-700 mb-1">Agent en charge</label>
-                    <select 
-                        name="id_agent_en_charge" 
-                        id="id_agent_en_charge" 
-                        class="block w-full max-w-md rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                        <option value="">Aucun agent assigné</option>
-                        @if(isset($agents) && count($agents) > 0)
-                            @foreach($agents as $agent)
-                                <option value="{{ $agent->id }}" @selected(old('id_agent_en_charge') == $agent->id)>
-                                    {{ $agent->nom_complet ?? $agent->name ?? 'Agent #' . $agent->id }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                    @error('id_agent_en_charge')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
                 </div>
