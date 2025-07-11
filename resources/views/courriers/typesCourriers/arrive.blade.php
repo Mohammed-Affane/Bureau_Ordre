@@ -34,6 +34,22 @@
         <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_bo }}</td>
+
+<td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+    @switch($courrier->statut)
+        @case('en_attente') bg-yellow-100 text-yellow-800 @break
+        @case('en_cours') bg-red-100 text-blue-800 @break
+        @case('arriver') bg-blue-100 text-green-800 @break
+        @case('cloture') bg-green-100 text-blue-800 @break
+        @default bg-gray-100 text-gray-800
+    @endswitch">
+    {{ ucfirst(str_replace('_', ' ', $courrier->statut)) }}
+</span>
+                                </td>
+
+
+
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->statut }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
@@ -99,7 +115,7 @@
             @endforeach --}}
 
             <a href="{{ route('courriers.destinataires', $courrier->id) }}"
-   class="text-blue-600 hover:text-blue-800 underline">
+   class="text-blue-600 visited:text-purple-600 ...">
    Voir les destinataires
 </a>
 
@@ -107,7 +123,21 @@
 
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->agent->name ?? '-' }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($courrier->priorite) }}</td>
+
+            
+            <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                
+                @switch($courrier->priorite)
+        @case('normale') bg-green-100 text-yellow-800 @break
+        @case('urgent') bg-red-100 text-blue-800 @break
+        @case('confidentiel') bg-yellow-100 text-green-800 @break
+        @case('A reponse obligatoire') bg-blue-100 text-blue-800 @break
+        @default bg-gray-100 text-gray-800
+    @endswitch">
+    {{ ucfirst(str_replace('_', ' ', $courrier->priorite)) }}
+                </span>
+            </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <a href="{{ route('courriers.show', $courrier) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Voir</a>
                 <a href="{{ route('courriers.edit', $courrier) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Modifier</a>

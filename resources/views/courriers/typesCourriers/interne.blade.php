@@ -89,7 +89,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <a href="{{ route('courriers.destinataires', $courrier->id) }}"
-   class="text-blue-600 hover:text-blue-800 underline">
+   class="text-blue-600 visited:text-purple-600 ...">
    Voir les destinataires
 </a>
 
