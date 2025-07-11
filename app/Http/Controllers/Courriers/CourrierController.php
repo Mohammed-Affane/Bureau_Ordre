@@ -22,7 +22,8 @@ class CourrierController extends Controller
 
     public function index(): View
     {
-        $courriers = Courrier::latest()->paginate(5);
+        $courriers = Courrier::with('courrierDestinatairePivot.entite')->latest()->paginate(5);
+
         return view('courriers.index', compact('courriers'));
     }
 
@@ -70,8 +71,9 @@ class CourrierController extends Controller
 
         // Handle file upload before creating courrier
         $filename = null;
-        if ($request->hasFile('fichier_scan') && $request->file('fichier_scan')->isValid()) {
+        if ($request->hasFile('fichier_scan')) {
             $file = $request->file('fichier_scan');
+
 
             // Create the directory if it doesn't exist
             if($request->type_courrier==='arrive'){
@@ -106,6 +108,7 @@ class CourrierController extends Controller
             // Move the file
             $file->move($destinationPath, $filename);
         }
+        
 
         // 2. Créer le courrier
         $courrier = Courrier::create([
@@ -190,5 +193,22 @@ class CourrierController extends Controller
         }elseif($request->type_courrier==='arrive'){
             return redirect()->route('courriers.arrive')->with('success', 'Courrier créé avec succès.');
         }
+    }
+
+    public function showDestinataires(Courrier $courrier): View
+{
+    // Charger les relations avec entité
+    $courrier->load('courrierDestinatairePivot.entite');
+
+    return view('courriers.destinataires', compact('courrier'));
+}
+
+
+
+    public function show(){
+
+    }
+    public function destroy(){
+
     }
 }

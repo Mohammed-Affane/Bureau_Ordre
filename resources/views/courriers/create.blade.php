@@ -68,7 +68,7 @@
             <div class="grid grid-cols-1 md:grid-cols gap-4">
                 <div x-show="type === 'interne' || type === 'arrive' ">
                     <label>Destinataires internes</label>
-                    <select name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                    <select id="destinataires" name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                         @foreach($entites as $entite)
                             <option value="{{ $entite->id }}">{{ $entite->nom }}</option>
                         @endforeach
@@ -287,6 +287,7 @@
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
                 </div>
+                
                 
                 <div class="form-group">
                     <label for="Nbr_piece" class="block font-medium text-gray-700 mb-1">
