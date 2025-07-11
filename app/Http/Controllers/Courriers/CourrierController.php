@@ -170,6 +170,16 @@ class CourrierController extends Controller
             }
         }
 
-        return redirect()->route('courriers.index')->with('success', 'Courrier créé avec succès.');
+        if($request->type_courrier==='visa'){
+            return redirect()->route('courriers.typesCourriers.visa')->with('success', 'Courrier créé avec succès.');
+        }elseif($request->type_courrier==='depart'){
+            return redirect()->route('courriers.typesCourriers.depart')->with('success', 'Courrier créé avec succès.');
+        }elseif($request->type_courrier==='decision'){
+            return redirect()->route('courriers.typesCourriers.decision')->with('success', 'Courrier créé avec succès.');    
+        }elseif($request->type_courrier==='interne'){
+            return redirect()->route('courriers.typesCourriers.interne')->with('success', 'Courrier créé avec succès.');
+        }elseif($request->type_courrier==='arrive'){
+            return redirect()->route('courriers.typesCourriers.arrive')->with('success', 'Courrier créé avec succès.');
+        }
     }
 }
