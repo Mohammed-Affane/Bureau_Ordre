@@ -91,13 +91,11 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
-               @foreach ($courrier->courrierDestinatairePivot as $dest)
-               @if ($dest->entite)
-                    • {{ $dest->entite->nom }}<br>
-                @else
-                    <em>{{$dest->nom}}</em><br>
-                @endif
-            @endforeach
+                <a href="{{ route('courriers.destinataires', $courrier->id) }}"
+   class="text-blue-600 hover:text-blue-800 underline">
+   Voir les destinataires
+</a>
+
 
 
             </td>
