@@ -27,6 +27,15 @@ class CourrierController extends Controller
         return view('courriers.index', compact('courriers'));
     }
 
+    public function show(Courrier $courrier){
+        return view('courriers.show',compact('courrier'));
+    }
+
+    public function destroy(Courrier $courrier){
+        $courrier->delete();
+        return redirect()->route('courriers.index')->with('success','Courrier deleted successfully');
+    }
+
     public function create(): View
     {
         return view('courriers.create', [
