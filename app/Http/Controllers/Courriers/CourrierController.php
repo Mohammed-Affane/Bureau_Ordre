@@ -29,7 +29,6 @@ class CourrierController extends Controller
     public function create(): View
     {
         return view('courriers.create', [
-            'agents' => User::all(),
             'entites' => Entite::all(),
             'expediteurs' => Expediteur::orderBy('nom')->get(['id', 'nom']),
             'destinataires'=>CourrierDestinataire::whereNotNull('nom')->get()
@@ -112,7 +111,7 @@ class CourrierController extends Controller
             'date_depart' => $request->date_depart,
             'date_enregistrement' => $request->date_enregistrement,
             'priorite' => $request->priorite,
-            'id_agent_en_charge' => $request->id_agent_en_charge,
+            'id_agent_en_charge' => auth()->user()->id,
             'id_expediteur' => $expediteurId,
             'fichier_scan' => $filename,
             'Nbr_piece' => $request->Nbr_piece,

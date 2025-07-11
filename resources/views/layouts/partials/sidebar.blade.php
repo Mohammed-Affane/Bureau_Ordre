@@ -24,8 +24,6 @@
                                         ['name' => 'Utilisateurs', 'route' => 'admin.users.index', 'icon' => 'users'],
                                         ['name' => 'Rôles', 'route' => 'admin.roles.index', 'icon' => 'user-shield'],
                                         ['name' => 'Courriers', 'route' => 'courriers.index', 'icon' => 'mail'],
-                                        ['name' => 'Rapports', 'route' => 'admin.reports', 'icon' => 'chart-bar'],
-                                        ['name' => 'Paramètres', 'route' => 'admin.settings', 'icon' => 'cog'],
                                         ['name' => 'Entités', 'route' => 'admin.entites.index', 'icon' => 'building'],
                                     ];
                                     break;

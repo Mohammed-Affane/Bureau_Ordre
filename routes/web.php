@@ -19,7 +19,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/admin/dashboard',[AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard',[AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('entites', EntiteController::class);
