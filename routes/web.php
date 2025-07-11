@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Courriers\CourrierController;
 use App\Http\Controllers\Admin\EntiteController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Courriers\TypeCourrierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,6 +16,11 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
+    Route::get('courriers/arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive');
+    Route::get('courriers/depart', [TypeCourrierController::class, 'courrierDepart'])->name('courriers.depart');
+    Route::get('courriers/interne', [TypeCourrierController::class, 'courrierInterne'])->name('courriers.interne');
+    Route::get('courriers/visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa');
+    Route::get('courriers/decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
 });
 
 // Admin Routes
@@ -23,7 +29,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('entites', EntiteController::class);
-    Route::resource('courriers', CourrierController::class);
+
     Route::get('couriers', fn () => view('dashboards.admin.courriers.index'))->name('courriers');
     Route::get('reports', fn () => view('admin.reports'))->name('reports');
     Route::get('settings', fn () => view('admin.settings'))->name('settings');
