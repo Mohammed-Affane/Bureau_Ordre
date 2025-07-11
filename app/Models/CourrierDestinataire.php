@@ -13,6 +13,10 @@ class CourrierDestinataire extends Model
     {
         return $this->belongsToMany(Courrier::class, 'courrier_destinataire_pivot', 'id_destinataire_courrier','id_courrier');
     }
+    public function entite()
+    {
+    return $this->belongsTo(Entite::class, 'entite_id');
+    }
 
     
 }

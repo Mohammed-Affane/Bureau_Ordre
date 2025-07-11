@@ -22,7 +22,8 @@ class CourrierController extends Controller
 
     public function index(): View
     {
-        $courriers = Courrier::latest()->paginate(5);
+        $courriers = Courrier::with('courrierDestinatairePivot.entite')->latest()->paginate(5);
+
         return view('courriers.index', compact('courriers'));
     }
 
