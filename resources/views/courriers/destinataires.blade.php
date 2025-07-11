@@ -26,6 +26,38 @@
         </ul>
     @endif
 
+    @if ($courrier->type_courrier==='arrive')   
+    
     <a href="{{ route('courriers.arrive') }}" class="mt-4 inline-block text-indigo-600 hover:underline">← Retour à la liste des courriers</a>
+
+   
+    @endif
+    @if ($courrier->type_courrier==='depart')   
+    
+    <a href="{{ route('courriers.depart') }}" class="mt-4 inline-block text-indigo-600 hover:underline">← Retour à la liste des courriers</a>
+
+   
+    @endif
+
+    @if ($courrier->type_courrier==='decision')   
+    
+    <a href="{{ route('courriers.decision') }}" class="mt-4 inline-block text-indigo-600 hover:underline">← Retour à la liste des courriers</a>
+
+   
+    @endif
+
+    @if ($courrier->type_courrier==='visa')   
+    
+    <a href="{{ route('courriers.visa') }}" class="mt-4 inline-block text-indigo-600 hover:underline">← Retour à la liste des courriers</a>
+
+   
+    @endif
+     @if ($courrier->type_courrier==='interne')   
+    
+    <a href="{{ route('courriers.interne') }}" class="mt-4 inline-block text-indigo-600 hover:underline">← Retour à la liste des courriers</a>
+
+   
+    @endif
+
 </div>
 </x-app-layout>
