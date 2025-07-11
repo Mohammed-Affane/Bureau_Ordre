@@ -26,6 +26,15 @@ class CourrierController extends Controller
         return view('courriers.index', compact('courriers'));
     }
 
+    public function show(Courrier $courrier){
+        return view('courriers.show',compact('courrier'));
+    }
+
+    public function destroy(Courrier $courrier){
+        $courrier->delete();
+        return redirect()->route('courriers.index')->with('success','Courrier deleted successfully');
+    }
+
     public function create(): View
     {
         return view('courriers.create', [
@@ -171,15 +180,15 @@ class CourrierController extends Controller
         }
 
         if($request->type_courrier==='visa'){
-            return redirect()->route('courriers.typesCourriers.visa')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.visa')->with('success', 'Courrier créé avec succès.');
         }elseif($request->type_courrier==='depart'){
-            return redirect()->route('courriers.typesCourriers.depart')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.depart')->with('success', 'Courrier créé avec succès.');
         }elseif($request->type_courrier==='decision'){
-            return redirect()->route('courriers.typesCourriers.decision')->with('success', 'Courrier créé avec succès.');    
+            return redirect()->route('courriers.decision')->with('success', 'Courrier créé avec succès.');    
         }elseif($request->type_courrier==='interne'){
-            return redirect()->route('courriers.typesCourriers.interne')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.interne')->with('success', 'Courrier créé avec succès.');
         }elseif($request->type_courrier==='arrive'){
-            return redirect()->route('courriers.typesCourriers.arrive')->with('success', 'Courrier créé avec succès.');
+            return redirect()->route('courriers.arrive')->with('success', 'Courrier créé avec succès.');
         }
     }
 }
