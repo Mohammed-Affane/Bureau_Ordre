@@ -71,7 +71,7 @@ class CourrierController extends Controller
 
         // Handle file upload before creating courrier
         $filename = null;
-        if ($request->hasFile('fichier_scan')) {
+        if ($request->hasFile('fichier_scan') ) {
             $file = $request->file('fichier_scan');
 
 
@@ -107,6 +107,9 @@ class CourrierController extends Controller
 
             // Move the file
             $file->move($destinationPath, $filename);
+        }
+        else {
+            file_put_contents('php://stderr', "File upload failed or no file provided.\n");
         }
         
 
