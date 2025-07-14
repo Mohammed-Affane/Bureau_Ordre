@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Courriers\TypeCourrierController;
 use App\Http\Controllers\Exports\ExportCourrierController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('entites', EntiteController::class);
+    Route::resource('permissions', \App\Http\Controllers\Admin\PermissionController::class);
 
     Route::get('couriers', fn () => view('dashboards.admin.courriers.index'))->name('courriers');
     Route::get('reports', fn () => view('admin.reports'))->name('reports');
