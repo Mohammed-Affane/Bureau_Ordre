@@ -90,6 +90,9 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="mt-4">
+                        {{ $entites->links() }}
+                    </div>
                 </div>
             </div>
         </div>
