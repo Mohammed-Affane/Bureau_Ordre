@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('courriers.interne', [TypeCourrierController::class, 'courrierInterne'])->name('courriers.interne');
     Route::get('courriers.visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa');
     Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
+    Route::get('courriers.search', [TypeCourrierController::class, 'searchCourrier'])->name('courriers.search');
 });
 
 // Admin Routes
