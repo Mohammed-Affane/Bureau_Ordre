@@ -27,6 +27,15 @@ class CourrierController extends Controller
         return view('courriers.index', compact('courriers'));
     }
 
+    public function show(Courrier $courrier){
+        return view('courriers.show',compact('courrier'));
+    }
+
+    public function destroy(Courrier $courrier){
+        $courrier->delete();
+        return redirect()->route('courriers.index')->with('success','Courrier deleted successfully');
+    }
+
     public function create(): View
     {
         return view('courriers.create', [
@@ -62,7 +71,7 @@ class CourrierController extends Controller
 
         // Handle file upload before creating courrier
         $filename = null;
-        if ($request->hasFile('fichier_scan')) {
+        if ($request->hasFile('fichier_scan') ) {
             $file = $request->file('fichier_scan');
 
 
@@ -98,6 +107,9 @@ class CourrierController extends Controller
 
             // Move the file
             $file->move($destinationPath, $filename);
+        }
+        else {
+            file_put_contents('php://stderr', "File upload failed or no file provided.\n");
         }
         
 
@@ -194,12 +206,4 @@ class CourrierController extends Controller
     return view('courriers.destinataires', compact('courrier'));
 }
 
-
-
-    public function show(){
-
-    }
-    public function destroy(){
-
-    }
 }

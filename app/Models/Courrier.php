@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
+
 
 class Courrier extends Model
 {
@@ -13,6 +13,14 @@ class Courrier extends Model
         'priorite','id_expediteur','id_agent_en_charge','fichier_scan','statut',
         'date_depart','is_interne','entite_id'
     ];
+    // app/Models/Courrier.php
+
+protected $casts = [
+    'date_reception' => 'datetime',
+    'date_enregistrement' => 'datetime',
+    'date_depart' => 'datetime',
+    // other casts...
+];
 
 // Expéditeur externe
     public function expediteur()
@@ -45,5 +53,8 @@ class Courrier extends Model
     {
         return $this->belongsToMany(CourrierDestinataire::class, 'courrier_destinataire_pivot', 'id_courrier', 'id_destinataire_courrier');
     }
+
+
+    
 
 }
