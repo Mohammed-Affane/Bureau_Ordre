@@ -3,7 +3,7 @@
 <head>
     <title>Liste des Courriers - {{ ucfirst($type) }}</title>
     <style>
-        body { font-family: Arial, sans-serif; font-size: 12px; }
+        body { font-family: 'Tajawal', sans-serif; font-size: 12px; }
         .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
         .header h1 { margin: 0; font-size: 18px; }
         .header .subtitle { font-size: 14px; color: #555; }

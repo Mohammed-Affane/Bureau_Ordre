@@ -14,7 +14,7 @@
                                   <!-- Export Dropdown -->
                                   <div x-data="{ open: false }" class="relative inline-block text-left">
                                       <div>
-                                          <button @click="open = !open" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="export-menu" aria-expanded="false" aria-haspopup="true">
+                                          <button  @click="open = !open" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="export-menu" aria-expanded="false" aria-haspopup="true">
                                               <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                   <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                               </svg>
@@ -32,7 +32,7 @@
                                                   </svg>
                                                   Excel
                                               </a> --}}
-                                              <a href="{{ route('export.courriers.pdf', ['type' => 'decision']) . '?' . http_build_query(request()->query()) }}" 
+                                              <a target="_blank"  href="{{ route('export.courriers.pdf', ['type' => 'decision']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                                                   <svg class="mr-3 h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -159,7 +159,7 @@
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entite Expediteur</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
-    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
 </tr>
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
@@ -236,7 +236,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <a href="{{ route('courriers.destinataires', $courrier->id) }}"
-   class="text-blue-600 hover:text-blue-800 underline">
+   class="text-blue-600 visited:text-purple-600 ...">
    Voir les destinataires
 </a>
 

@@ -32,7 +32,7 @@
                                                   </svg>
                                                   Excel
                                               </a> --}}
-                                              <a href="{{ route('export.courriers.pdf', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
+                                              <a target="_blank" href="{{ route('export.courriers.pdf', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                                                   <svg class="mr-3 h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -161,7 +161,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recepteurs</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
@@ -188,6 +188,7 @@
                 </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
+
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 @if($courrier->fichier_scan)
@@ -243,7 +244,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
             <a href="{{ route('courriers.destinataires', $courrier->id) }}"
-   class="text-blue-600 hover:text-blue-800 underline">
+   class="text-blue-600 visited:text-purple-600 ...">
    Voir les destinataires
 </a>
 
@@ -264,6 +265,7 @@
                     {{ ucfirst(str_replace('_', ' ', $courrier->priorite)) }}
                 </span>
             </td>
+
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <a href="{{ route('courriers.show', $courrier) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Voir</a>
                 <a href="{{ route('courriers.edit', $courrier) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Modifier</a>
