@@ -22,7 +22,7 @@
         </div>
 
         <!-- Expéditeur -->
-        <div x-show="type === 'arrive'">
+        <div x-show="type === 'arrive' || type === 'visa'">
             <label>Expéditeur externe</label>
             <select name="id_expediteur" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                 <option value="">Sélectionner...</option>
