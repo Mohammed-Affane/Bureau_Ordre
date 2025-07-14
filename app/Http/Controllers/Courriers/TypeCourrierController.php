@@ -4,25 +4,38 @@ namespace App\Http\Controllers\Courriers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Courrier;
+use App\Http\Traits\CourrierFilterTrait;
+use App\Exports\CourriersExport;
+use App\Exports\CourriersPdfExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class TypeCourrierController extends Controller
 {
+    use CourrierFilterTrait;
+
+    protected $perPage = 15;
+
     /**
      * Display incoming mail courriers
      */
     public function courrierArrivee(Request $request)
     {
-        $courriers = $this->getCourriersByType('arrive', $request);
+        
+
+        $query = $this->applyCourrierFilters(Courrier::query(), 'arrive');
+        $courriers = $query->paginate($this->perPage);
         return view('courriers.typesCourriers.arrive', compact('courriers'));
     }
 
     /**
      * Display outgoing mail courriers
      */
-    public function courrierDepart(Request $request)
+    public function courrierDepart()
     {
-        $courriers = $this->getCourriersByType('depart', $request);
+        $query = $this->applyCourrierFilters(Courrier::query(), 'depart');
+        $courriers = $query->paginate($this->perPage);
         return view('courriers.typesCourriers.depart', compact('courriers'));
     }
 
@@ -31,81 +44,78 @@ class TypeCourrierController extends Controller
      */
     public function courrierInterne(Request $request)
     {
-        $courriers = $this->getCourriersByType('interne', $request);
+       $query = $this->applyCourrierFilters(Courrier::query(), 'interne');
+        $courriers = $query->paginate($this->perPage);
         return view('courriers.typesCourriers.interne', compact('courriers'));
     }
 
     /**
-     * Display confidential mail courriers
+     * Display visa mail courriers
      */
     public function courrierVisa(Request $request)
     {
-        $courriers = $this->getCourriersByType('visa', $request);
+        $query = $this->applyCourrierFilters(Courrier::query(), 'visa');
+        $courriers = $query->paginate($this->perPage);
         return view('courriers.typesCourriers.visa', compact('courriers'));
     }
 
     /**
-     * Display urgent mail courriers
+     * Display decision mail courriers
      */
     public function courrierDecision(Request $request)
     {
-        $courriers = $this->getCourriersByType('decision', $request);
+        $query = $this->applyCourrierFilters(Courrier::query(), 'decision');
+        $courriers = $query->paginate($this->perPage);
         return view('courriers.typesCourriers.decision', compact('courriers'));
     }
 
-    /**
-     * Helper method to get courriers by type with search functionality
-     */
-    private function getCourriersByType($type, Request $request)
+     public function exportExcel($type)
     {
-        // Start with base query filtered by courier type
-        $query = Courrier::where('type_courrier', $type);
-
-        // Apply search filter if search term exists
-        if ($request->filled('search')) {
-            $searchTerm = $request->search;
-            
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('reference_arrive', 'like', "%{$searchTerm}%")
-                  ->orWhere('reference_depart', 'like', "%{$searchTerm}%")
-                  ->orWhere('reference_visa', 'like', "%{$searchTerm}%")
-                  ->orWhere('reference_decision', 'like', "%{$searchTerm}%")
-                  ->orWhere('reference_interne', 'like', "%{$searchTerm}%")
-                  ->orWhere('reference_bo', 'like', "%{$searchTerm}%")
-                  ->orWhere('objet', 'like', "%{$searchTerm}%")
-                  ->orWhere('statut', 'like', "%{$searchTerm}%")
-                  ->orWhere('priorite', 'like', "%{$searchTerm}%")
-                  ->orWhere('date_enregistrement', 'like', "%{$searchTerm}%")
-                  ->orWhere('date_reception', 'like', "%{$searchTerm}%")
-                  ->orWhereHas('expediteur', function ($expediteurQuery) use ($searchTerm) {
-                      $expediteurQuery->where('nom', 'like', "%{$searchTerm}%")
-                                    ->orWhere('email', 'like', "%{$searchTerm}%")
-                                    ->orWhere('telephone', 'like', "%{$searchTerm}%");
-                  })
-                  ->orWhereHas('agent', function ($agentQuery) use ($searchTerm) {
-                      $agentQuery->where('name', 'like', "%{$searchTerm}%")
-                                ->orWhere('email', 'like', "%{$searchTerm}%");
-                  });
-            });
-        }
-
-        // Apply additional filters if needed
-        if ($request->filled('statut')) {
-            $query->where('statut', $request->statut);
-        }
-
-        if ($request->filled('priorite')) {
-            $query->where('priorite', $request->priorite);
-        }
-
-        // Include relationships and paginate
-        $courriers = $query->with(['expediteur', 'agent'])
-                          ->orderBy('created_at', 'desc')
-                          ->paginate(10);
-
-        // Preserve search parameter in pagination links
-        $courriers->appends($request->query());
-
-        return $courriers;
+        $title = $this->getTypeTitle($type);
+        return Excel::download(new CourriersExport($type), "courriers_{$type}.xlsx");
     }
+
+    // /**
+    //  * Export to PDF for specific type
+    //  */
+    // public function exportPdf($type)
+    // {
+    //     $title = $this->getTypeTitle($type);
+    //     return Excel::download(
+    //         new CourriersPdfExport($type, $title), 
+    //         "courriers_{$type}.pdf", 
+    //         \Maatwebsite\Excel\Excel::DOMPDF
+    //     );
+    // }
+
+    // /**
+    //  * Direct PDF export
+    //  */
+    // public function exportDirectPdf($type)
+    // {
+    //     $query = $this->applyCourrierFilters(Courrier::query(), $type);
+    //     $courriers = $query->with(['expediteur', 'agent', 'entiteExpediteur'])->get();
+    //     $title = $this->getTypeTitle($type);
+        
+    //     $pdf = PDF::loadView('courriers.exports.courriers', compact('courriers', 'title'))
+    //         ->setPaper('A4', 'landscape');
+            
+    //     return $pdf->download("courriers_{$type}.pdf");
+    // }
+
+    // /**
+    //  * Get translated title for type
+    //  */
+    // protected function getTypeTitle($type)
+    // {
+    //     $titles = [
+    //         'arrive' => 'Courriers d\'Arrivée',
+    //         'depart' => 'Courriers de Départ',
+    //         'interne' => 'Courriers Internes',
+    //         'visa' => 'Courriers de Visa',
+    //         'decision' => 'Courriers de Décision'
+    //     ];
+        
+    //     return $titles[$type] ?? 'Liste des Courriers';
+    // }
 }

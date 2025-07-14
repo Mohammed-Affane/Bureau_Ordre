@@ -9,6 +9,7 @@ use App\Http\Controllers\Courriers\CourrierController;
 use App\Http\Controllers\Admin\EntiteController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Courriers\TypeCourrierController;
+use App\Http\Controllers\Exports\ExportCourrierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -75,5 +76,14 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
     Route::get('completed', fn () => view('division.completed'))->name('completed');
 });
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+
+
+Route::prefix('export')->group(function () {
+    
+    Route::get('/courriers/{type}/pdf', [ExportCourrierController::class, 'exportPdf'])
+        ->name('export.courriers.pdf');
+
+});
 
 require __DIR__.'/auth.php';
