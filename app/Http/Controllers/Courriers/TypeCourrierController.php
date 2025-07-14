@@ -20,7 +20,7 @@ class TypeCourrierController extends Controller
     /**
      * Display incoming mail courriers
      */
-    public function courrierArrivee()
+    public function courrierArrivee(Request $request)
     {
         
 
@@ -42,7 +42,7 @@ class TypeCourrierController extends Controller
     /**
      * Display internal mail courriers
      */
-    public function courrierInterne()
+    public function courrierInterne(Request $request)
     {
        $query = $this->applyCourrierFilters(Courrier::query(), 'interne');
         $courriers = $query->paginate($this->perPage);
@@ -52,7 +52,7 @@ class TypeCourrierController extends Controller
     /**
      * Display visa mail courriers
      */
-    public function courrierVisa()
+    public function courrierVisa(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'visa');
         $courriers = $query->paginate($this->perPage);
@@ -62,7 +62,7 @@ class TypeCourrierController extends Controller
     /**
      * Display decision mail courriers
      */
-    public function courrierDecision()
+    public function courrierDecision(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'decision');
         $courriers = $query->paginate($this->perPage);

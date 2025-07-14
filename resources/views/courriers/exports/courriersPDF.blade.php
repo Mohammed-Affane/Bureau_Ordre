@@ -3,7 +3,7 @@
 <head>
     <title>Liste des Courriers - {{ ucfirst($type) }}</title>
     <style>
-        body { font-family: Arial, sans-serif; font-size: 12px; }
+        body { font-family: 'Tajawal', sans-serif; font-size: 12px; }
         .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
         .header h1 { margin: 0; font-size: 18px; }
         .header .subtitle { font-size: 14px; color: #555; }
@@ -44,15 +44,17 @@
     <table>
         <thead>
             <tr>
-                @if ($type === 'depart')
+                @if ($type === 'depart' || $type === 'interne')
 
                 <th>Réf.Depart</th>
                     
                 @elseif ($type === 'arrive' )
                 <th>Réf. Arrivée </th>
                 <th>Réf. BO</th>
-                  @elseif ($type === 'decision' )
+                @elseif ($type === 'decision' )
                 <th>Réf. Decision</th>
+                @elseif($type === 'visa')
+                <th>Réf. Visa</th>
 
                 @endif
                 
@@ -61,11 +63,11 @@
                 <th>Date Enreg.</th>
                 <th>Pièces</th>
                 <th>Objet</th>
-                @if ($type === 'depart' || $type === 'decision')
+                @if ($type === 'depart' || $type === 'decision' || $type === 'interne')
 
                 <th>Date Depart</th>
                     
-                @elseif ($type === 'arrive' )
+                @elseif ($type === 'arrive' || $type === 'visa') 
                 <th>Date Réception</th>
                 @endif
                 <th>Expéditeur</th>
@@ -78,7 +80,7 @@
             @foreach($courriers as $courrier)
             <tr>
 
-                 @if ($type === 'depart')
+                 @if ($type === 'depart' || $type === 'interne')
 
                 <td>{{ $courrier->reference_depart }}</td>
                     
@@ -88,6 +90,8 @@
                 
                 @elseif ($type === 'decision' )
                <td>{{ $courrier->reference_dec}}</td>
+               @elseif($type === 'visa')
+               <td>{{ $courrier->reference_visa}}</td>
 
                 @endif
                

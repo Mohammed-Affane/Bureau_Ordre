@@ -12,6 +12,9 @@ use App\Exports\CourriersExport;
 use App\Exports\CourriersPdfExport; 
 use Illuminate\Contracts\View\View;
 
+use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
+
+
 
 
 
@@ -20,21 +23,31 @@ class ExportCourrierController extends Controller
     public function exportPdf(Request $request, $type)
     {
         // Get filtered courriers based on request parameters
-        $query = Courrier::where('type_courrier', $type)
-            ->with(['expediteur', 'agent', 'entiteExpediteur','courrierDestinatairePivot' 
-        ]);
-        
-        // Apply filters from request
-        $this->applyFilters($query, $request);
-        
-        $courriers = $query->get();
+         $query = Courrier::where('type_courrier', $type)
+             ->with(['expediteur', 'agent', 'entiteExpediteur','courrierDestinatairePivot' 
+         ]);
+
+          $courriers = $query->get();
         
         // Generate PDF
-        $pdf = PDF::loadView('courriers.exports.courriersPDF', [
-            'courriers' => $courriers,
-            'type' => $type,
-            'filters' => $request->all(),
-        ])->setPaper('a4', 'landscape');
+        // $pdf = PDF::loadView('courriers.exports.courriersPDF', [
+        //     'courriers' => $courriers,
+        //     'type' => $type,
+        //     'filters' => $request->all(),
+        // ])->setPaper('a4', 'landscape');
+
+        $html = view('courriers.exports.courriersPDF',[
+             'courriers' => $courriers,
+             'type' => $type,
+             'filters' => $request->all(),
+         ])->render();
+    $pdfContent = GpdfFacade::generate($html);
+    return response($pdfContent, 200, ['Content-Type' => 'application/pdf']);
+        
+        // Apply filters from request
+        // $this->applyFilters($query, $request);
+        
+        
         
         // Download PDF
         return $pdf->download("courriers-{$type}.pdf");
