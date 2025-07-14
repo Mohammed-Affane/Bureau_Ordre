@@ -23,6 +23,7 @@
                                     ['name' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'home'],
                                     ['name' => 'Utilisateurs', 'route' => 'admin.users.index', 'icon' => 'users'],
                                     ['name' => 'Rôles', 'route' => 'admin.roles.index', 'icon' => 'user-shield'],
+                                    ['name' => 'Permissions', 'route' => 'admin.permissions.index', 'icon' => 'lock'],
                                     [
                                         'name' => 'Courriers',
                                         'icon' => 'mail',
