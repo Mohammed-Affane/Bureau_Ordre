@@ -8,8 +8,51 @@
                             <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Internes</h1>
                             <p class="text-sm text-gray-500 mt-1">Tous les courriers enregistrés dans le bureau d'ordre</p>
                         </div>
+                         {{-- Export Dropdown --}}
+
+                            <div class="flex space-x-3">
+                                  <!-- Export Dropdown -->
+                                  <div x-data="{ open: false }" class="relative inline-block text-left">
+                                      <div>
+                                          <button @click="open = !open" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="export-menu" aria-expanded="false" aria-haspopup="true">
+                                              <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                  <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                              </svg>
+                                              Exporter
+                                          </button>
+                                      </div>
+                                  
+                                      <!-- Dropdown panel -->
+                                      <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-menu">
+                                          <div class="py-1" role="none">
+                                              {{-- <a href="{{ route('export.courriers.excel', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
+                                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                                  <svg class="mr-3 h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                  </svg>
+                                                  Excel
+                                              </a> --}}
+                                              <a href="{{ route('export.courriers.pdf', ['type' => 'interne']) . '?' . http_build_query(request()->query()) }}" 
+                                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                                  <svg class="mr-3 h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                                  </svg>
+                                                  PDF (via Excel)
+                                              </a>
+                                              {{-- <a href="{{ route('export.courriers.direct-pdf', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
+                                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                                  <svg class="mr-3 h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                                  </svg>
+                                                  PDF (Direct)
+                                              </a> --}}
+                                          </div>
+                                      </div>
+                                  </div>
+
                         <a href="{{ route('courriers.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Nouveau courrier</a>
                     </div>
+                                              </div>
                      <!-- Search and Filter Section -->
                     <div class="mb-6 bg-gray-50 p-4 rounded-lg">
                         <form method="GET" action="{{ route('courriers.interne') }}">
