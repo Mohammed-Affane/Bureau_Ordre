@@ -22,35 +22,30 @@ class ExportCourrierController extends Controller
 {
     public function exportPdf(Request $request, $type)
     {
-        // Get filtered courriers based on request parameters
-         $query = Courrier::where('type_courrier', $type)
-             ->with(['expediteur', 'agent', 'entiteExpediteur','courrierDestinatairePivot' 
-         ]);
+       $query = Courrier::where('type_courrier', $type)
+        ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
 
-          $courriers = $query->get();
-        
-        // Generate PDF
-        // $pdf = PDF::loadView('courriers.exports.courriersPDF', [
-        //     'courriers' => $courriers,
-        //     'type' => $type,
-        //     'filters' => $request->all(),
-        // ])->setPaper('a4', 'landscape');
+    // Apply filters before getting the results
+    $this->applyFilters($query, $request);
 
-        $html = view('courriers.exports.courriersPDF',[
-             'courriers' => $courriers,
-             'type' => $type,
-             'filters' => $request->all(),
-         ])->render();
+    // Get filtered courriers
+    $courriers = $query->get();
+
+    // Generate HTML for PDF
+    $html = view('courriers.exports.courriersPDF', [
+        'courriers' => $courriers,
+        'type' => $type,
+        'filters' => $request->all(),
+    ])->render();
+
+    // Generate PDF
     $pdfContent = GpdfFacade::generate($html);
-    return response($pdfContent, 200, ['Content-Type' => 'application/pdf']);
-        
-        // Apply filters from request
-        // $this->applyFilters($query, $request);
-        
-        
-        
-        // Download PDF
-        return $pdf->download("courriers-{$type}.pdf");
+    
+    // Return PDF as download
+    return response($pdfContent, 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'attachment; filename="courriers-'.$type.'.pdf"'
+    ]);
     }
 
     protected function applyFilters($query, $request)
