@@ -102,9 +102,11 @@
         "bold_italic": "MarkaziText-BoldItalic"
     },
     "tajawal": {
-        "normal": "Tajawal-Normal",
-        "bold": "Tajawal-Bold",
-        "italic": "Tajawal-Italic",
-        "bold_italic": "Tajawal-BoldItalic"
+        "normal": "C:\\Users\\Ali Jalal\\Desktop\\laravelProjects\\Bureau_Ordre\\public\\vendor\\gpdf\\fonts\/tajawal_normal_0c3cef995b1fae93393158a42371100c",
+        "bold": "tajawal_bold_2060785a2ffd07ce783c86ddded3b1b4",
+        "italic": "C:\\Users\\Ali Jalal\\Desktop\\laravelProjects\\Bureau_Ordre\\public\\vendor\\gpdf\\fonts\/Tajawal-Italic",
+        "bold_italic": "C:\\Users\\Ali Jalal\\Desktop\\laravelProjects\\Bureau_Ordre\\public\\vendor\\gpdf\\fonts\/Tajawal-BoldItalic",
+        "300": "C:\\Users\\Ali Jalal\\Desktop\\laravelProjects\\Bureau_Ordre\\public\\vendor\\gpdf\\fonts\/tajawal_300_f882ecefec5bfc76c79c149749ec8769",
+        "500": "C:\\Users\\Ali Jalal\\Desktop\\laravelProjects\\Bureau_Ordre\\public\\vendor\\gpdf\\fonts\/tajawal_500_1873d76e872ef9eb7a2feae0982a6b4e"
     }
 }

@@ -3,18 +3,60 @@
 <head>
     <title>Liste des Courriers - {{ ucfirst($type) }}</title>
     <style>
-        body { font-family: 'Tajawal', sans-serif; font-size: 12px; }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
-        .header h1 { margin: 0; font-size: 18px; }
-        .header .subtitle { font-size: 14px; color: #555; }
-        .filters { margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px; }
-        .filter-item { display: inline-block; margin-right: 15px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        .footer { margin-top: 20px; text-align: right; font-size: 10px; color: #666; }
-        .status-badge { padding: 2px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; }
-        .priority-badge { padding: 2px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 12px;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed; /* This is crucial */
+            word-wrap: break-word;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+            word-break: break-word; /* Ensure text breaks to fit */
+            overflow: hidden; /* Hide overflow */
+            overflow-wrap: break-word;
+        }
+
+        /* Column Widths */
+        .col-ref { width: 8%; }
+        .col-ref-bo { width: 8%; }
+        .col-statut { width: 7%; }
+        .col-date-enreg { width: 7%; }
+        .col-pieces { width: 5%; }
+        .col-objet { width: 15%; } /* Reduced from 20% */
+        .col-date-depart, 
+        .col-date-reception { width: 12%; } /* Increased from 7% */
+        .col-expediteur { width: 12%; }
+        .col-agent { width: 10%; }
+        .col-priorite { width: 8%; }
+        .col-destinataires { width: 15%; }
+
+        /* For PDF printing */
+        @page {
+            size: A4 landscape;
+            margin: 10mm;
+        }
+
+        /* Adjust the list in destinataires column */
+        td ul {
+            margin: 0;
+            padding-left: 15px;
+        }
+
+        td li {
+            margin-bottom: 2px;
+        }
     </style>
 </head>
 <body>
@@ -43,39 +85,35 @@
 
     <table>
         <thead>
-            <tr>
-                @if ($type === 'depart' || $type === 'interne')
-
-                <th>Réf.Depart</th>
-                    
-                @elseif ($type === 'arrive' )
-                <th>Réf. Arrivée </th>
-                <th>Réf. BO</th>
-                @elseif ($type === 'decision' )
-                <th>Réf. Decision</th>
-                @elseif($type === 'visa')
-                <th>Réf. Visa</th>
-
-                @endif
-                
-                
-                <th>Statut</th>
-                <th>Date Enreg.</th>
-                <th>Pièces</th>
-                <th>Objet</th>
-                @if ($type === 'depart' || $type === 'decision' || $type === 'interne')
-
-                <th>Date Depart</th>
-                    
-                @elseif ($type === 'arrive' || $type === 'visa') 
-                <th>Date Réception</th>
-                @endif
-                <th>Expéditeur</th>
-                <th>Agent</th>
-                <th>Priorité</th>
-                <th>Destinataires</th>
-            </tr>
-        </thead>
+    <tr>
+        @if ($type === 'depart' || $type === 'interne')
+            <th class="col-ref">Réf.Depart</th>
+        @elseif ($type === 'arrive')
+            <th class="col-ref">Réf. Arrivée</th>
+            <th class="col-ref-bo">Réf. BO</th>
+        @elseif ($type === 'decision')
+            <th class="col-ref">Réf. Decision</th>
+        @elseif ($type === 'visa')
+            <th class="col-ref">Réf. Visa</th>
+        @endif
+        
+        <th class="col-statut">Statut</th>
+        <th class="col-date-enreg">Date Enreg.</th>
+        <th class="col-pieces">Pièces</th>
+        <th class="col-objet">Objet</th>
+        
+        @if ($type === 'depart' || $type === 'decision' || $type === 'interne')
+            <th class="col-date-depart">Date Depart</th>
+        @elseif ($type === 'arrive' || $type === 'visa')
+            <th class="col-date-reception">Date Réception</th>
+        @endif
+        
+        <th class="col-expediteur">Expéditeur</th>
+        <th class="col-agent">Agent</th>
+        <th class="col-priorite">Priorité</th>
+        <th class="col-destinataires">Destinataires</th>
+    </tr>
+</thead>
         <tbody>
             @foreach($courriers as $courrier)
             <tr>

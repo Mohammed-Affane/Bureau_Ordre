@@ -85,6 +85,8 @@ Route::prefix('export')->group(function () {
     
     Route::get('/courriers/{type}/pdf', [ExportCourrierController::class, 'exportPdf'])
         ->name('export.courriers.pdf');
+    Route::get('/courriers/{type}/excel', [ExportCourrierController::class, 'exportExcel'])
+        ->name('export.courriers.excel');
 
 });
 
