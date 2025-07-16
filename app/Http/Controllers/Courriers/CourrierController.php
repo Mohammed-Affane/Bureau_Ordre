@@ -406,6 +406,9 @@ class CourrierController extends Controller
 
     return view('courriers.destinataires', compact('courrier'));
 }
+public function affecte(){
+    dd('test');
+}
 
 
 }

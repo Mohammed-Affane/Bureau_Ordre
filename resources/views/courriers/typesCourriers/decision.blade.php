@@ -258,15 +258,12 @@
                     {{ ucfirst(str_replace('_', ' ', $courrier->priorite)) }}
                 </span>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="{{ route('courriers.show', $courrier) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Voir</a>
-                <a href="{{ route('courriers.edit', $courrier) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Modifier</a>
-                <form action="{{ route('courriers.destroy', $courrier) }}" method="POST" class="inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce courrier ?')">Supprimer</button>
-                </form>
-            </td>
+           <td class="px-4 py-3 whitespace-nowrap">
+
+  <x-Actions type='decision' :courrier="$courrier"  />
+
+
+      </td>
         </tr>
     @empty
         <tr>

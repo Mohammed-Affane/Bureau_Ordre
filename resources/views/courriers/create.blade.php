@@ -405,6 +405,7 @@
         <!-- Submit -->
         <div class="mt-6">
             <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Créer le courrier</button>
+
         </div>
     </form>
 </x-app-layout>
