@@ -7,45 +7,61 @@ use App\Http\Controllers\Controller;
 use App\Models\Courrier;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;    
-use PDF;
-use App\Exports\CourriersExport;
-use App\Exports\CourriersPdfExport; 
+use PDF; 
 use Illuminate\Contracts\View\View;
-
 use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
-
-
-
-
+use App\Exports\CourriersExport;
 
 class ExportCourrierController extends Controller
 {
     public function exportPdf(Request $request, $type)
     {
-       $query = Courrier::where('type_courrier', $type)
-        ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
+        // Get filtered courriers based on request parameters
+         $query = Courrier::where('type_courrier', $type)
+             ->with(['expediteur', 'agent', 'entiteExpediteur','courrierDestinatairePivot' 
+         ]);
+         $this->applyFilters($query, $request);
 
-    // Apply filters before getting the results
-    $this->applyFilters($query, $request);
+          $courriers = $query->get();
 
-    // Get filtered courriers
-    $courriers = $query->get();
-
-    // Generate HTML for PDF
-    $html = view('courriers.exports.courriersPDF', [
-        'courriers' => $courriers,
-        'type' => $type,
-        'filters' => $request->all(),
-    ])->render();
-
-    // Generate PDF
+          
+        $html = view('courriers.exports.courriersPDF',[
+             'courriers' => $courriers,
+             'type' => $type,
+             'filters' => $request->all(),
+         ])->render();
     $pdfContent = GpdfFacade::generate($html);
-    
-    // Return PDF as download
     return response($pdfContent, 200, [
         'Content-Type' => 'application/pdf',
-        'Content-Disposition' => 'attachment; filename="courriers-'.$type.'.pdf"'
+        'Content-Disposition' => 'attachment; filename="courriers-'.$type.'.pdf"',
     ]);
+    }
+    
+    public function exportExcel(Request $request, $type)
+    {
+            // Start with a fresh query
+        $query = Courrier::query()->where('type_courrier', $type)
+            ->with([
+                'expediteur',
+                'agent',
+                'entiteExpediteur',
+                'courrierDestinatairePivot'
+            ]);
+
+        // Apply filters BEFORE getting the results
+        $this->applyFilters($query, $request);
+
+        // Get the filtered results
+        $courriers = $query->get();
+           
+        // Generate filename with timestamp
+        $filename = "courriers-{$type}-" . now()->format('Ymd-His') . ".xlsx";
+
+
+        return Excel::download(
+            new CourriersExport($courriers, $type, $request->all()),
+            $filename
+        );
     }
 
     protected function applyFilters($query, $request)
@@ -53,10 +69,14 @@ class ExportCourrierController extends Controller
         if ($request->has('search')) {
             $query->where(function($q) use ($request) {
                 $q->where('reference_arrive', 'like', '%'.$request->search.'%')
-                  ->orWhere('objet', 'like', '%'.$request->search.'%')
-                  ->orWhereHas('expediteur', function($q) use ($request) {
-                      $q->where('nom', 'like', '%'.$request->search.'%');
-                  });
+                    ->orWhere('reference_depart', 'like', '%'.$request->search.'%')
+                    ->orWhere('reference_dec', 'like', '%'.$request->search.'%')
+                    ->orWhere('reference_visa', 'like', '%'.$request->search.'%')
+                    ->orWhere('reference_bo', 'like', '%'.$request->search.'%')
+                    ->orWhere('objet', 'like', '%'.$request->search.'%')
+                    ->orWhereHas('expediteur', function($q) use ($request) {
+                        $q->where('nom', 'like', '%'.$request->search.'%');
+                    });
             });
         }
 

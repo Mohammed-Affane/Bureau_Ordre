@@ -25,19 +25,19 @@
                                       <!-- Dropdown panel -->
                                       <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-menu">
                                           <div class="py-1" role="none">
-                                              {{-- <a href="{{ route('export.courriers.excel', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
+                                               <a href="{{ route('export.courriers.excel', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                                                   <svg class="mr-3 h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                   </svg>
                                                   Excel
-                                              </a> --}}
+                                              </a> 
                                               <a target="_blank"  href="{{ route('export.courriers.pdf', ['type' => 'depart']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                                                   <svg class="mr-3 h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                                   </svg>
-                                                  PDF (via Excel)
+                                                  PDF
                                               </a>
                                               {{-- <a href="{{ route('export.courriers.direct-pdf', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
