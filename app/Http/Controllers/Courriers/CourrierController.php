@@ -31,7 +31,7 @@ class CourrierController extends Controller
 
     public function destroy(Courrier $courrier){
         $courrier->delete();
-        return redirect()->route('courriers.index')->with('success','Courrier deleted successfully');
+        return redirect()->route("courriers.$courrier->type_courrier")->with('success','Courrier deleted successfully');
     }
 
     public function create(): View
@@ -99,6 +99,7 @@ class CourrierController extends Controller
                 if (!file_exists($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
+                    
             }
             // Generate unique filename
             $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
@@ -405,5 +406,6 @@ class CourrierController extends Controller
 
     return view('courriers.destinataires', compact('courrier'));
 }
+
 
 }
