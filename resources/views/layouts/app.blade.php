@@ -59,14 +59,10 @@
     {{-- code for component actions {create-modifier-supprimer-affecter  --}}
     
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.action-dropdown').forEach(select => {
-        select.addEventListener('change', function() {
-            const action = this.value;
-            const container = this.closest('.action-container');
-            const courrierId = container.dataset.courrierId;
-            
-            this.selectedIndex = 0;
+ document.addEventListener('alpine:init', () => {
+    Alpine.data('actionHandler', () => ({
+        handleAction(action) {
+            const courrierId = this.$el.dataset.courrierId;
             
             switch(action) {
                 case 'show':
@@ -77,7 +73,7 @@
                     break;
                 case 'affecte':
                     window.location.href = `/courriers/${courrierId}/affecte`;
-                break;
+                    break;
                 case 'delete':
                     if(confirm('Êtes-vous sûr de vouloir supprimer ce courrier ?')) {
                         const form = document.createElement('form');
@@ -101,8 +97,8 @@
                     }
                     break;
             }
-        });
-    });
+        }
+    }));
 });
 </script>
 </body>
