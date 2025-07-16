@@ -26,3 +26,4 @@
 @endphp
 
 @include($dashboardView)
+

@@ -18,6 +18,9 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
+//-------affectation route 
+  Route::get('courriers.affecte', [CourrierController::class, 'affecte'])->name('courriers.affecte');
+  //-------
     Route::get('/courriers/{courrier}/destinataires', [CourrierController::class, 'showDestinataires'])
     ->name('courriers.destinataires');
     Route::get('courriers.arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive');
