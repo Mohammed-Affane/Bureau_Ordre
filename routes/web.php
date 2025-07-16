@@ -26,6 +26,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('courriers.visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa');
     Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
     Route::get('courriers.search', [TypeCourrierController::class, 'searchCourrier'])->name('courriers.search');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    
+
+Route::prefix('export')->group(function () {
+    
+    Route::get('/courriers/{type}/pdf', [ExportCourrierController::class, 'exportPdf'])
+        ->name('export.courriers.pdf');
+    Route::get('/courriers/{type}/excel', [ExportCourrierController::class, 'exportExcel'])
+        ->name('export.courriers.excel');
+
+});
+
 });
 
 // Admin Routes
@@ -77,17 +90,68 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
     Route::get('progress', fn () => view('division.progress'))->name('progress');
     Route::get('completed', fn () => view('division.completed'))->name('completed');
 });
-Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
 
-
-Route::prefix('export')->group(function () {
-    
-    Route::get('/courriers/{type}/pdf', [ExportCourrierController::class, 'exportPdf'])
-        ->name('export.courriers.pdf');
-    Route::get('/courriers/{type}/excel', [ExportCourrierController::class, 'exportExcel'])
-        ->name('export.courriers.excel');
-
-});
 
 require __DIR__.'/auth.php';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

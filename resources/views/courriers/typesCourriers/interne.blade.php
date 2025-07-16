@@ -37,7 +37,7 @@
                                                   <svg class="mr-3 h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                                   </svg>
-                                                  PDF (via Excel)
+                                                  PDF
                                               </a>
                                               {{-- <a href="{{ route('export.courriers.direct-pdf', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">

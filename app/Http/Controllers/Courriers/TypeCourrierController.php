@@ -15,7 +15,7 @@ class TypeCourrierController extends Controller
 {
     use CourrierFilterTrait;
 
-    protected $perPage = 15;
+    protected $perPage = 5;
 
     /**
      * Display incoming mail courriers
