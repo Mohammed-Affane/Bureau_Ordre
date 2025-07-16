@@ -63,7 +63,7 @@
                                         Référence Decision
                                     </dt>
                                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ $courrier->reference_decision ?? '-' }}
+                                        {{ $courrier->reference_dec ?? '-' }}
                                     </dd>
                                 </div>
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4">
