@@ -16,9 +16,7 @@ use App\Http\Requests\CourrierRequest; // Add this import
 
 class CourrierController extends Controller
 {
-    public function __construct(
-        private  CourrierService $courrierService
-    ) {}
+
 
     public function index(): View
     {
@@ -198,6 +196,208 @@ class CourrierController extends Controller
             return redirect()->route('courriers.arrive')->with('success', 'Courrier créé avec succès.');
         }
     }
+
+    public function edit(Courrier $courrier)
+    {
+        // Load necessary relationships
+        $courrier->load([
+            'expediteur',
+            'courrierDestinatairePivot', // Updated to use the pivot relationship
+            'courrierDestinatairePivot.entite'
+        ]);
+
+        // Get all destinataires (for dropdowns)
+        $destinatairesExternes = CourrierDestinataire::where('type_courrier', 'externe')->get();
+        $entites = Entite::all();
+
+        // Separate destinataires by type
+        $destinatairesInterne = [];
+        $destinatairesExterne = [];
+        $destinatairesManuels = [];
+
+        foreach ($courrier->courrierDestinatairePivot as $courrierDest) {
+            if ($courrierDest->entite_id) {
+                $destinatairesInterne[] = $courrierDest->entite_id;
+            } elseif ($courrierDest->destinataire) {
+                if ($courrierDest->type_courrier === 'externe') {
+                    $destinatairesExterne[] = $courrierDest->destinataire_id;
+                } else {
+                    $destinatairesManuels[] = $courrierDest->destinataire;
+                }
+            }
+        }
+
+        // Get all expediteurs for dropdown
+        $expediteurs = Expediteur::all();
+
+        return view('courriers.edit', [
+            'courrier' => $courrier,
+            'expediteurs' => $expediteurs,
+            'destinatairesExternes' => $destinatairesExternes,
+            'entites' => $entites,
+            'selectedDestinatairesInterne' => $destinatairesInterne,
+            'selectedDestinatairesExterne' => $destinatairesExterne,
+            'destinatairesManuels' => $destinatairesManuels,
+            'typeCourrier' => $courrier->type_courrier,
+        ]);
+    }
+
+    public function update(CourrierRequest $request, Courrier $courrier): RedirectResponse
+        {
+    $expediteurId = $courrier->id_expediteur;
+
+    // 1. Handle expediteur for arrived courrier
+    if ($request->type_courrier === 'arrive') {
+        // If user manually filled expediteur info
+        if ($request->filled('exp_nom')) {
+            // If courrier already has an expediteur, update it
+            if ($courrier->id_expediteur) {
+                $expediteur = Expediteur::find($courrier->id_expediteur);
+                $expediteur->update([
+                    'nom'          => $request->exp_nom,
+                    'type_source'  => $request->exp_type_source,
+                    'adresse'      => $request->exp_adresse,
+                    'telephone'    => $request->exp_telephone,
+                    'CIN'          => $request->exp_CIN,
+                ]);
+            } else {
+                // Create new expediteur
+                $expediteur = Expediteur::create([
+                    'nom'          => $request->exp_nom,
+                    'type_source'  => $request->exp_type_source,
+                    'adresse'      => $request->exp_adresse,
+                    'telephone'    => $request->exp_telephone,
+                    'CIN'          => $request->exp_CIN,
+                ]);
+                $expediteurId = $expediteur->id;
+            }
+        }
+        // User selected existing expediteur
+        elseif ($request->filled('id_expediteur')) {
+            $expediteurId = $request->id_expediteur;
+        }
+    }
+
+    // Handle file upload
+    $filename = $courrier->fichier_scan;
+    if ($request->hasFile('fichier_scan')) {
+        $file = $request->file('fichier_scan');
+
+        // Determine destination path based on courrier type
+        if($request->type_courrier==='arrive'){
+            $destinationPath = public_path('fichiers_scans_arrive');
+        } elseif($request->type_courrier==='depart'){
+            $destinationPath = public_path('fichiers_scans_depart');
+        } elseif($request->type_courrier==='decision'){
+            $destinationPath = public_path('fichiers_scans_decision');
+        } elseif($request->type_courrier==='visa'){
+            $destinationPath = public_path('fichiers_scans_visa');
+        } elseif($request->type_courrier==='interne'){
+            $destinationPath = public_path('fichiers_scans_interne');
+        }
+
+        // Create directory if it doesn't exist
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        // Delete old file if exists
+        if ($filename && file_exists($destinationPath.'/'.$filename)) {
+            unlink($destinationPath.'/'.$filename);
+        }
+
+        // Generate unique filename and move new file
+        $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+        $file->move($destinationPath, $filename);
+    }
+
+    // 2. Update the courrier
+    $courrier->update([
+        'type_courrier' => $request->type_courrier,
+        'objet' => $request->objet,
+        'reference_arrive' => $request->reference_arrive,
+        'reference_bo' => $request->reference_bo,
+        'reference_visa' => $request->reference_visa,
+        'reference_dec' => $request->reference_dec,
+        'reference_depart' => $request->reference_depart,
+        'date_reception' => $request->date_reception,
+        'date_depart' => $request->date_depart,
+        'date_enregistrement' => $request->date_enregistrement,
+        'priorite' => $request->priorite,
+        'id_expediteur' => $expediteurId,
+        'fichier_scan' => $filename,
+        'Nbr_piece' => $request->Nbr_piece,
+    ]);
+
+    // Handle entite_id for depart, decision, interne courriers
+    if (in_array($courrier->type_courrier, ['depart', 'decision', 'interne'])) {
+        $courrier->entite_id = $request->filled('entite_id') ? $request->entite_id : null;
+        $courrier->save();
+    }
+
+    // === DESTINATAIRES MANAGEMENT ===
+    // First, detach all existing destinataires
+    $courrier->courrierDestinatairePivot()->detach();
+
+    // Handle entity destinataires (interne)
+    if ($request->has('destinataires_entite')) {
+        $ids = [];
+        foreach ($request->destinataires_entite as $idDestinataire) {
+            if ($idDestinataire && is_numeric($idDestinataire)) {
+                $destinataire = CourrierDestinataire::create([
+                    'entite_id'      => $idDestinataire,
+                    'type_courrier'  => 'interne',
+                ]);
+                $ids[] = $destinataire->id;
+            }
+        }
+        if (!empty($ids)) {
+            $courrier->courrierDestinatairePivot()->attach($ids);
+        }
+    }
+
+    // Handle external destinataires (selected from existing)
+    if ($request->has('destinataires_externe')) {
+        $courrier->courrierDestinatairePivot()->attach($request->destinataires_externe);
+    }
+
+    // Handle manually added external destinataires
+    if ($request->has('dest_nom')) {
+        $ids = [];
+        foreach ($request->dest_nom as $index => $nom) {
+            if (!empty($nom)) {
+                $destinataire = CourrierDestinataire::create([
+                    'nom'            => $nom,
+                    'type_source'    => $request->dest_type_source[$index] ?? null,
+                    'adresse'        => $request->dest_adresse[$index] ?? null,
+                    'CIN'            => $request->dest_CIN[$index] ?? null,
+                    'telephone'      => $request->dest_telephone[$index] ?? null,
+                    'type_courrier'  => 'externe',
+                ]);
+                $ids[] = $destinataire->id;
+            }
+        }
+        if (!empty($ids)) {
+            $courrier->courrierDestinatairePivot()->attach($ids);
+        }
+    }
+
+    // Redirect based on courrier type
+    switch ($request->type_courrier) {
+        case 'visa':
+            return redirect()->route('courriers.visa')->with('success', 'Courrier mis à jour avec succès.');
+        case 'depart':
+            return redirect()->route('courriers.depart')->with('success', 'Courrier mis à jour avec succès.');
+        case 'decision':
+            return redirect()->route('courriers.decision')->with('success', 'Courrier mis à jour avec succès.');
+        case 'interne':
+            return redirect()->route('courriers.interne')->with('success', 'Courrier mis à jour avec succès.');
+        case 'arrive':
+            return redirect()->route('courriers.arrive')->with('success', 'Courrier mis à jour avec succès.');
+        default:
+            return back()->with('success', 'Courrier mis à jour avec succès.');
+    }
+}
 
     public function showDestinataires(Courrier $courrier): View
 {
