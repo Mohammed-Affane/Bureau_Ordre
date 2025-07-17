@@ -1,15 +1,17 @@
 <?php
 
+
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Courriers\CourrierController;
 use App\Http\Controllers\Admin\EntiteController;
+use App\Http\Controllers\Courriers\CourrierController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Courriers\TypeCourrierController;
 use App\Http\Controllers\Exports\ExportCourrierController;
+use App\Http\Controllers\BO\AffectationController;
 
 
 Route::get('/', function () {
@@ -19,7 +21,9 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
 //-------affectation route 
-  Route::get('courriers.affecte', [CourrierController::class, 'affecte'])->name('courriers.affecte');
+//   Route::get('courriers.affecte', [CourrierController::class, 'affecte'])->name('courriers.affecte');
+
+    Route::get('/affectations/{courrier}/create', [AffectationController::class, 'create'])->name('affectations.create');
   //-------
     Route::get('/courriers/{courrier}/destinataires', [CourrierController::class, 'showDestinataires'])
     ->name('courriers.destinataires');
