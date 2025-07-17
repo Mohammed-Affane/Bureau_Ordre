@@ -55,55 +55,5 @@
     
     <!-- Scripts -->
     @stack('scripts')
-
-    {{-- code for component actions {create-modifier-supprimer-affecter  --}}
-    
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.action-dropdown').forEach(select => {
-        select.addEventListener('change', function() {
-            const action = this.value;
-            const container = this.closest('.action-container');
-            const courrierId = container.dataset.courrierId;
-            
-            this.selectedIndex = 0;
-            
-            switch(action) {
-                case 'show':
-                    window.location.href = `/courriers/${courrierId}`;
-                    break;
-                case 'edit':
-                    window.location.href = `/courriers/${courrierId}/edit`;
-                    break;
-                case 'affecte':
-                    window.location.href = `/courriers/${courrierId}/affecte`;
-                break;
-                case 'delete':
-                    if(confirm('Êtes-vous sûr de vouloir supprimer ce courrier ?')) {
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = `/courriers/${courrierId}`;
-                        
-                        const csrf = document.createElement('input');
-                        csrf.type = 'hidden';
-                        csrf.name = '_token';
-                        csrf.value = document.querySelector('meta[name="csrf-token"]').content;
-                        
-                        const method = document.createElement('input');
-                        method.type = 'hidden';
-                        method.name = '_method';
-                        method.value = 'DELETE';
-                        
-                        form.appendChild(csrf);
-                        form.appendChild(method);
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
-                    break;
-            }
-        });
-    });
-});
-</script>
 </body>
 </html>
