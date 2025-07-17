@@ -55,5 +55,6 @@
     
     <!-- Scripts -->
     @stack('scripts')
+
 </body>
 </html>
