@@ -317,14 +317,6 @@
             flatpickr("#date_from", { dateFormat: "Y-m-d" });
             flatpickr("#date_to", { dateFormat: "Y-m-d" });
         }
-
-
-
-
-
-        
-      
-
     </script>
     @endpush
 </x-app-layout>

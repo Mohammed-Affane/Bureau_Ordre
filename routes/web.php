@@ -18,9 +18,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
-//-------affectation route 
-  Route::get('courriers.affecte', [CourrierController::class, 'affecte'])->name('courriers.affecte');
-  //-------
+
     Route::get('/courriers/{courrier}/destinataires', [CourrierController::class, 'showDestinataires'])
     ->name('courriers.destinataires');
     Route::get('courriers.arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive');
@@ -30,18 +28,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
     Route::get('courriers.search', [TypeCourrierController::class, 'searchCourrier'])->name('courriers.search');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-
+    Route::get('courriers/{courrier}', [\App\Http\Controllers\BO\CourrierController::class, 'showAffectForm'])->name('affecter');
+    Route::post('courriers/{courrier}/affecter', [\App\Http\Controllers\BO\CourrierController::class, 'affectToCAB'])->name('affecter.store');
     
-
-Route::prefix('export')->group(function () {
-    
-    Route::get('/courriers/{type}/pdf', [ExportCourrierController::class, 'exportPdf'])
-        ->name('export.courriers.pdf');
-    Route::get('/courriers/{type}/excel', [ExportCourrierController::class, 'exportExcel'])
-        ->name('export.courriers.excel');
+    Route::prefix('export')->group(function () {
+        
+        Route::get('/courriers/{type}/pdf', [ExportCourrierController::class, 'exportPdf'])
+            ->name('export.courriers.pdf');
+        Route::get('/courriers/{type}/excel', [ExportCourrierController::class, 'exportExcel'])
+            ->name('export.courriers.excel');
+            
 
 });
-
 });
 
 // Admin Routes
@@ -61,6 +59,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(function () {
     Route::get('dashboard', fn () => view('dashboards.bo.index'))->name('dashboard');
     Route::get('history', fn () => view('bo.history'))->name('history');
+
 });
 
 // Cab Routes
@@ -69,6 +68,7 @@ Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(func
     Route::get('pending', fn () => view('cab.pending'))->name('pending');
     Route::get('assignments', fn () => view('cab.assignments'))->name('assignments');
     Route::get('history', fn () => view('cab.history'))->name('history');
+
 });
 
 // DAI Routes
