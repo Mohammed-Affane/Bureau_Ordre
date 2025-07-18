@@ -27,15 +27,15 @@ return new class extends Migration
              // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
             $table->foreign('id_courrier')
                 ->references('id')->on('courriers')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreign('id_affecte_a_utilisateur')
                 ->references('id')->on('users')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
-                $table->foreign('id_affecte_par_utilisateur')
+            $table->foreign('id_affecte_par_utilisateur')
                 ->references('id')->on('users')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
         
             $table->timestamps();

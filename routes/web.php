@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\EntiteController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Courriers\TypeCourrierController;
 use App\Http\Controllers\Exports\ExportCourrierController;
-
+use App\Http\Controllers\Affectations\AffectationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,9 +28,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
     Route::get('courriers.search', [TypeCourrierController::class, 'searchCourrier'])->name('courriers.search');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::get('courriers/{courrier}', [\App\Http\Controllers\BO\CourrierController::class, 'showAffectForm'])->name('affecter');
-    Route::post('courriers/{courrier}/affecter', [\App\Http\Controllers\BO\CourrierController::class, 'affectToCAB'])->name('affecter.store');
-    
     Route::prefix('export')->group(function () {
         
         Route::get('/courriers/{type}/pdf', [ExportCourrierController::class, 'exportPdf'])
@@ -64,7 +61,7 @@ Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(functio
 
 // Cab Routes
 Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.cab'))->name('dashboard');
+    Route::get('dashboard', fn () => view('dashboards.cab.index'))->name('dashboard');
     Route::get('pending', fn () => view('cab.pending'))->name('pending');
     Route::get('assignments', fn () => view('cab.assignments'))->name('assignments');
     Route::get('history', fn () => view('cab.history'))->name('history');
@@ -80,7 +77,7 @@ Route::middleware(['auth', 'role:dai'])->prefix('dai')->name('dai.')->group(func
 
 // SG Routes
 Route::middleware(['auth', 'role:sg'])->prefix('sg')->name('sg.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.sg'))->name('dashboard');
+    Route::get('dashboard', fn () => view('dashboards.sg.index'))->name('dashboard');
     Route::get('pending', fn () => view('sg.pending'))->name('pending');
     Route::get('divisions', fn () => view('sg.divisions'))->name('divisions');
     Route::get('tracking', fn () => view('sg.tracking'))->name('tracking');
