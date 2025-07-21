@@ -48,7 +48,7 @@
                         </div>
 
                         <!-- Références conditionnelles -->
-                        @if($courrier->type_courrier == 'arrive')
+                        @if($courrier->type_courrier == 'arrive' || $courrier->type_courrier == 'visa')
                             @if($courrier->reference_arrive)
                                 <div class="bg-green-50 p-4 rounded-xl">
                                     <div class="flex items-center mb-2">
@@ -78,7 +78,7 @@
                             @endif
                         @endif
 
-                        @if($courrier->type_courrier == 'depart')
+                        @if($courrier->type_courrier == 'depart' || $courrier->type_courrier == 'interne')
                             @if($courrier->reference_depart)
                                 <div class="bg-red-50 p-4 rounded-xl">
                                     <div class="flex items-center mb-2">

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id(); // BIGINT UNSIGNED PRIMARY KEY
 
             // Références (en integers si c’est bien ce que tu veux)
-            $table->unsignedBigInteger('reference_arrive')->nullable();
-            $table->unsignedBigInteger('reference_bo')->nullable();
-            $table->unsignedBigInteger('reference_visa')->nullable();
-            $table->unsignedBigInteger('reference_dec')->nullable();
-            $table->unsignedBigInteger('reference_depart')->nullable();
+            $table->unsignedBigInteger('reference_arrive')->nullable()->index();
+            $table->unsignedBigInteger('reference_bo')->nullable()->index();
+            $table->unsignedBigInteger('reference_visa')->nullable()->index();
+            $table->unsignedBigInteger('reference_dec')->nullable()->index();
+            $table->unsignedBigInteger('reference_depart')->nullable()->index();
 
             // Infos principales
             $table->enum('type_courrier', ['arrive', 'depart', 'visa', 'decision','interne']);
@@ -33,10 +33,12 @@ return new class extends Migration
 
             $table->enum('statut', ['en_attente','en_cours', 'arriver','cloture', 'archiver'])->default('en_attente')->nullable();
 
+            $table->date('delais')->nullable();
+            
             // Clés étrangères
-            $table->unsignedBigInteger('id_expediteur')->nullable();
-            $table->unsignedBigInteger('id_agent_en_charge')->nullable();
-            $table->unsignedBigInteger('entite_id')->nullable();
+            $table->unsignedBigInteger('id_expediteur')->nullable()->index();
+            $table->unsignedBigInteger('id_agent_en_charge')->nullable()->index();
+            $table->unsignedBigInteger('entite_id')->nullable()->index();
 
             // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
             $table->foreign('id_expediteur')
