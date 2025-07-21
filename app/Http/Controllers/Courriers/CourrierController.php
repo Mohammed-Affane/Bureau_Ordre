@@ -230,6 +230,16 @@ class CourrierController extends Controller
         // Get all expediteurs for dropdown
         $expediteurs = Expediteur::all();
 
+         // Prepare file information
+        $existingFile = null;
+        if ($courrier->fichier_scan) {
+            $existingFile = [
+                'name' => $courrier->fichier_scan,
+                'url' => $this->getFileUrl($courrier),
+                'type' => $this->getFileType($courrier->fichier_scan)
+            ];
+        }
+
         return view('courriers.edit', [
             'courrier' => $courrier,
             'expediteurs' => $expediteurs,
@@ -239,7 +249,39 @@ class CourrierController extends Controller
             'selectedDestinatairesExterne' => $destinatairesExterne,
             'destinatairesManuels' => $destinatairesManuels,
             'typeCourrier' => $courrier->type_courrier,
+            'existingFile' => $existingFile,
         ]);
+    }
+
+        private function getFileUrl(Courrier $courrier)
+    {
+        switch ($courrier->type_courrier) {
+            case 'arrive':
+                return asset('fichiers_scans_arrive/' . $courrier->fichier_scan);
+            case 'depart':
+                return asset('fichiers_scans_depart/' . $courrier->fichier_scan);
+            case 'decision':
+                return asset('fichiers_scans_decision/' . $courrier->fichier_scan);
+            case 'visa':
+                return asset('fichiers_scans_visa/' . $courrier->fichier_scan);
+            case 'interne':
+                return asset('fichiers_scans_interne/' . $courrier->fichier_scan);
+            default:
+                return asset('fichiers_scans/' . $courrier->fichier_scan);
+        }
+    }
+
+    private function getFileType($filename)
+    {
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        
+        if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'])) {
+            return 'image';
+        } elseif ($extension === 'pdf') {
+            return 'application/pdf';
+        }
+        
+        return 'unknown';
     }
 
     public function update(CourrierRequest $request, Courrier $courrier): RedirectResponse
@@ -250,19 +292,8 @@ class CourrierController extends Controller
     if ($request->type_courrier === 'arrive') {
         // If user manually filled expediteur info
         if ($request->filled('exp_nom')) {
-            // If courrier already has an expediteur, update it
-            if ($courrier->id_expediteur) {
-                $expediteur = Expediteur::find($courrier->id_expediteur);
-                $expediteur->update([
-                    'nom'          => $request->exp_nom,
-                    'type_source'  => $request->exp_type_source,
-                    'adresse'      => $request->exp_adresse,
-                    'telephone'    => $request->exp_telephone,
-                    'CIN'          => $request->exp_CIN,
-                ]);
-            } else {
-                // Create new expediteur
-                $expediteur = Expediteur::create([
+                // If courrier already has an expediteur, update it
+    $expediteur = Expediteur::create([
                     'nom'          => $request->exp_nom,
                     'type_source'  => $request->exp_type_source,
                     'adresse'      => $request->exp_adresse,
@@ -270,7 +301,6 @@ class CourrierController extends Controller
                     'CIN'          => $request->exp_CIN,
                 ]);
                 $expediteurId = $expediteur->id;
-            }
         }
         // User selected existing expediteur
         elseif ($request->filled('id_expediteur')) {

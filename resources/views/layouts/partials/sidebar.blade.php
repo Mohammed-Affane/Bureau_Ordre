@@ -98,6 +98,7 @@
                                         ['name' => 'À Traiter', 'route' => 'division.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'En Cours', 'route' => 'division.progress', 'icon' => 'clock'],
                                         ['name' => 'Terminés', 'route' => 'division.completed', 'icon' => 'check-circle'],
+                                        ['name'=>'Mes Courrier','route'=>'division.courrier.index','icon'=>'inbox']
                                     ];
                             }
                         @endphp

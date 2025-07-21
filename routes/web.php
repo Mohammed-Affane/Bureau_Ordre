@@ -99,7 +99,7 @@ Route::middleware(['auth', 'role:sg'])->prefix('sg')->name('sg.')->group(functio
 
 // Chef Division Routes (Default)
 Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('division.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.division'))->name('dashboard');
+    Route::get('dashboard', fn () => view('dashboards.division.index'))->name('dashboard');
     Route::get('pending', fn () => view('division.pending'))->name('pending');
     Route::get('progress', fn () => view('division.progress'))->name('progress');
     Route::get('completed', fn () => view('division.completed'))->name('completed');
