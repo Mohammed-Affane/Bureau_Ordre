@@ -268,14 +268,14 @@
             </td>
 
 
-                
-                
+            
    <td class="px-4 py-3 whitespace-nowrap">
 
   <x-Actions type='arrive' :courrier="$courrier"  />
 
 
       </td>
+      
   
 </div>
            

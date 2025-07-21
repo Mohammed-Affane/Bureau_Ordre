@@ -14,7 +14,7 @@ return new class extends Migration
 
         Schema::create('affectations', function (Blueprint $table) {
             $table->id();
-            $table->string('statut_affectation')->nullable();
+            $table->enum('statut_affectation',['a_cab','a_sg','a_div'])->nullable();
             $table->date('date_affectation')->nullable();
             $table->text('Instruction')->nullable();
 

@@ -49,19 +49,6 @@ class User extends Authenticatable
 
     // ---------------------------------Relations-------------------
 
-
-     //  Un utilisateur peut appartenir à plusieurs entités (via table pivot utilisateur_entites)
-    public function entites()
-    {
-        return $this->belongsToMany(Entite::class, 'utilisateur_entite', 'id_utilisateur', 'id_entite');
-    }
-
-//  Un utilisateur peut être responsable de plusieurs entités (division/service)
-    public function entitesResponsables()
-    {
-        return $this->hasMany(Entite::class, 'responsable_id');
-    }
-
   // 1 utilisateur peut avoir plusieurs courriers à sa charge
     public function courriersEnCharges()
     {
@@ -77,5 +64,10 @@ class User extends Authenticatable
     public function affectationsRecues()
     {
         return $this->hasMany(Affectation::class, 'id_affecte_a_utilisateur');
+    }
+
+     public function entite()
+    {
+        return $this->hasOne(Entite::class, 'responsable_id');
     }
 }
