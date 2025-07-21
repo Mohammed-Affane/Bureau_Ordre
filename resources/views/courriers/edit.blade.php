@@ -349,76 +349,78 @@
         <section class="document-section">
             <h3 class="text-lg font-semibold mb-4">Document du courrier</h3>
             
-            <div x-data="documentUploadController()" class="space-y-4">
-    <!-- Upload Area -->
-    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors"
-         :class="{ 'border-blue-500 bg-blue-50': dragover }"
-         x-on:dragover.prevent="dragover = true"
-         x-on:dragleave="dragover = false"
-         x-on:drop.prevent="handleDrop($event)">
-        
-        <div class="text-sm text-gray-600">
-            <label for="document_files" class="cursor-pointer">
-                <span class="font-medium text-indigo-600 hover:text-indigo-500">Cliquez pour télécharger</span>
-                ou glissez-déposez votre fichier
-            </label>
-            <input 
-                type="file" 
-                id="document_files" 
-                name="fichier_scan" 
-                accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp"
-                class="sr-only"
-                x-on:change="handleFileSelect($event)">
-        </div>
-        
-        <p class="text-xs text-gray-500 mt-2">
-            PDF, JPG, PNG, GIF, BMP, TIFF, WebP (max 2MB)
-        </p>
-    </div>
-    
-    <!-- Selected File Preview -->
-    <div x-show="selectedFile" class="mt-4">
-        <div class="bg-gray-50 rounded-lg p-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <!-- Image preview -->
-                    <template x-if="selectedFile && selectedFile.type.startsWith('image/')">
-                        <img :src="selectedFile.preview" 
-                             class="w-16 h-16 object-cover rounded-lg border">
-                    </template>
+            <div x-data="documentUploadController({{ $existingFile ? json_encode($existingFile) : 'null' }})" class="space-y-4">
+                <!-- Upload Area -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors"
+                    :class="{ 'border-blue-500 bg-blue-50': dragover }"
+                    x-on:dragover.prevent="dragover = true"
+                    x-on:dragleave="dragover = false"
+                    x-on:drop.prevent="handleDrop($event)"
+                    x-show="!selectedFile">
                     
-                    <!-- PDF icon -->
-                    <template x-if="selectedFile && selectedFile.type === 'application/pdf'">
-                        <div class="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M4 18h12V6l-4-4H4v16zm8-14v4h4l-4-4z"/>
-                            </svg>
+                    <div class="text-sm text-gray-600">
+                        <label for="document_files" class="cursor-pointer">
+                            <span class="font-medium text-indigo-600 hover:text-indigo-500">Cliquez pour télécharger</span>
+                            ou glissez-déposez votre fichier
+                        </label>
+                        <input 
+                            type="file" 
+                            id="document_files" 
+                            name="fichier_scan" 
+                            accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp"
+                            class="sr-only"
+                            x-on:change="handleFileSelect($event)">
+                    </div>
+                    
+                    <p class="text-xs text-gray-500 mt-2">
+                        PDF, JPG, PNG, GIF, BMP, TIFF, WebP (max 2MB)
+                    </p>
+                </div>
+                
+                <!-- Selected File Preview -->
+                <div x-show="selectedFile" class="mt-4">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <!-- Image preview -->
+                                <template x-if="selectedFile && selectedFile.type.startsWith('image/')">
+                                    <img :src="selectedFile.url || selectedFile.preview" 
+                                        class="w-16 h-16 object-cover rounded-lg border">
+                                </template>
+                                
+                                <!-- PDF icon -->
+                                <template x-if="selectedFile && selectedFile.type === 'application/pdf'">
+                                    <div class="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M4 18h12V6l-4-4H4v16zm8-14v4h4l-4-4z"/>
+                                        </svg>
+                                    </div>
+                                </template>
+                                
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900" x-text="selectedFile.name"></p>
+                                    <p class="text-xs text-gray-500" x-text="selectedFile.size ? formatFileSize(selectedFile.size) : 'Fichier existant'"></p>
+                                </div>
+                            </div>
+                            
+                            <button type="button" 
+                                    x-on:click="removeFile()"
+                                    class="text-red-600 hover:text-red-800 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
                         </div>
-                    </template>
-                    
-                    <div>
-                        <p class="text-sm font-medium text-gray-900" x-text="selectedFile?.name"></p>
-                        <p class="text-xs text-gray-500" x-text="formatFileSize(selectedFile?.size)"></p>
                     </div>
                 </div>
                 
-                <button type="button" 
-                        x-on:click="removeFile()"
-                        class="text-red-600 hover:text-red-800 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
+                <!-- Error Messages -->
+                @error('fichier_scan')
+                    <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                @enderror
             </div>
-        </div>
-    </div>
-    
-    <!-- Error Messages -->
-    @error('fichier_scan')
-        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
-    @enderror
-</div>
         </section>
+
 
 
         <!-- Submit -->
@@ -431,79 +433,82 @@
     </form>
 </x-app-layout>
 <script>
-
-function documentUploadController() {
+function documentUploadController(existingFile = null) {
     return {
-        selectedFile: null,
         dragover: false,
-        
+        selectedFile: existingFile ? {
+            name: existingFile.name,
+            url: existingFile.url,
+            type: existingFile.type,
+            size: null // No size for existing files
+        } : null,
+
         handleDrop(e) {
             this.dragover = false;
-            const files = Array.from(e.dataTransfer.files);
-            if (files.length > 0) {
-                this.processFile(files[0]); // Only take the first file
-            }
+            const file = e.dataTransfer.files[0];
+            this.processFile(file);
         },
-        
+
         handleFileSelect(e) {
-            const files = Array.from(e.target.files);
-            if (files.length > 0) {
-                this.processFile(files[0]); // Only take the first file
-            }
+            const file = e.target.files[0];
+            this.processFile(file);
         },
-        
+
         processFile(file) {
-            const validTypes = [
-                'application/pdf',
-                'image/jpeg',
-                'image/png',
-                'image/gif',
-                'image/bmp',
-                'image/tiff',
-                'image/webp'
-            ];
-            
+            if (!file) return;
+
+            // Validate file type and size
+            const validTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp'];
             if (!validTypes.includes(file.type)) {
-                alert(`Le fichier ${file.name} n'est pas d'un type valide.`);
+                alert('Type de fichier non supporté');
                 return;
             }
-            
-            if (file.size > 2 * 1024 * 1024) { // 2MB to match backend validation
-                alert(`Le fichier ${file.name} dépasse la taille maximale de 2MB.`);
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Le fichier est trop volumineux (max 2MB)');
                 return;
             }
-            
+
             // Create preview for images
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    file.preview = e.target.result;
-                    this.selectedFile = file;
+                    this.selectedFile = {
+                        name: file.name,
+                        preview: e.target.result,
+                        type: file.type,
+                        size: file.size,
+                        file: file
+                    };
+                    this.updateFileInput(file);
                 };
                 reader.readAsDataURL(file);
             } else {
-                this.selectedFile = file;
+                this.selectedFile = {
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    file: file
+                };
+                this.updateFileInput(file);
             }
-            
-            // Set the file input value programmatically
-            this.updateFileInput(file);
         },
-        
+
         updateFileInput(file) {
             const fileInput = document.getElementById('document_files');
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
             fileInput.files = dataTransfer.files;
         },
-        
+
         removeFile() {
             this.selectedFile = null;
             const fileInput = document.getElementById('document_files');
             fileInput.value = '';
         },
-        
+
         formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
+            if (!bytes) return '0 Bytes';
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -511,8 +516,10 @@ function documentUploadController() {
         }
     };
 }
+
+// Keep your existing resetSelect function
 function resetSelect() {
-        const select = document.getElementById('destinataires');
-        Array.from(select.options).forEach(option => option.selected = false);
-    }
+    const select = document.getElementById('destinataires');
+    Array.from(select.options).forEach(option => option.selected = false);
+}
 </script>
