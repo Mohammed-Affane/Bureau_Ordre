@@ -16,6 +16,7 @@ class RolePermissionSeeder extends Seeder
         $bo = Role::create(['name' => 'bo']);
         $cab = Role::create(['name' => 'cab']);
         $sg = Role::create(['name' => 'sg']);
+        $dai = Role::create(['name' => 'dai']);
         $chef_division = Role::create(['name' => 'chef_division']);
 
         // Create permissions
