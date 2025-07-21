@@ -19,9 +19,9 @@ return new class extends Migration
             $table->text('Instruction')->nullable();
 
              // Clés étrangères
-            $table->unsignedBigInteger('id_courrier')->nullable();
-            $table->unsignedBigInteger('id_affecte_a_utilisateur')->nullable();
-             $table->unsignedBigInteger('id_affecte_par_utilisateur')->nullable();
+            $table->unsignedBigInteger('id_courrier');
+            $table->unsignedBigInteger('id_affecte_a_utilisateur');
+             $table->unsignedBigInteger('id_affecte_par_utilisateur');
 
 
              // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
