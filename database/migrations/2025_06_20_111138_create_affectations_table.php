@@ -19,23 +19,23 @@ return new class extends Migration
             $table->text('Instruction')->nullable();
 
              // Clés étrangères
-            $table->unsignedBigInteger('id_courrier')->nullable();
-            $table->unsignedBigInteger('id_affecte_a_utilisateur')->nullable();
-             $table->unsignedBigInteger('id_affecte_par_utilisateur')->nullable();
+            $table->unsignedBigInteger('id_courrier');
+            $table->unsignedBigInteger('id_affecte_a_utilisateur');
+             $table->unsignedBigInteger('id_affecte_par_utilisateur');
 
 
              // Déclaration des clés étrangères manuellement (car on utilise unsignedBigInteger)
             $table->foreign('id_courrier')
                 ->references('id')->on('courriers')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreign('id_affecte_a_utilisateur')
                 ->references('id')->on('users')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
-                $table->foreign('id_affecte_par_utilisateur')
+            $table->foreign('id_affecte_par_utilisateur')
                 ->references('id')->on('users')
-                ->onDelete('set null')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
         
             $table->timestamps();

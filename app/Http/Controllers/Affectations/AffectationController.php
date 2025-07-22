@@ -43,32 +43,37 @@ class AffectationController extends Controller
         ));
     }
 
-    public function store(Request $request, $courrierId)
-    {
-        $request->validate([
-            'id_affecte_a_utilisateur' => 'required|exists:users,id',
-            'instruction_cab' => 'nullable|string|max:255',
-            'instruction_sg' => 'nullable|string|max:255',
-        ]);
+public function store(Request $request, $courrierId)
+{
+    $request->validate([
+        'id_affecte_a_utilisateur' => 'required|array',
+        'id_affecte_a_utilisateur.*' => 'exists:users,id',
+        'instruction_cab' => 'nullable|string|max:255',
+        'instruction_sg' => 'nullable|string|max:255',
+    ]);
 
-        $courrier = Courrier::findOrFail($courrierId);
-        $currentUser = Auth::user();
+    $courrier = Courrier::findOrFail($courrierId);
+    $currentUser = Auth::user();
 
-        if (!$currentUser) {
-            abort(403, 'Unauthorized');
-        }
+    if (!$currentUser) {
+        abort(403, 'Unauthorized');
+    }
 
-        $currentUserRole = $currentUser->roles->first()->name ?? null;
-        if (!$currentUserRole) {
-            abort(403, 'User has no assigned role');
-        }
+    $currentUserRole = $currentUser->roles->first()->name ?? null;
+    if (!$currentUserRole) {
+        abort(403, 'User has no assigned role');
+    }
 
-        $affecteA = User::findOrFail($request->id_affecte_a_utilisateur);
+    $assignableRoles = $this->getAssignableRoles($currentUserRole);
+    $errors = [];
+
+    foreach ($request->id_affecte_a_utilisateur as $userId) {
+        $affecteA = User::findOrFail($userId);
         $affecteARole = $affecteA->roles->first()->name ?? null;
 
-        $assignableRoles = $this->getAssignableRoles($currentUserRole);
         if (!$affecteARole || !in_array($affecteARole, $assignableRoles)) {
-            return back()->with('error', 'Vous ne pouvez pas affecter à cet utilisateur.');
+            $errors[] = "Vous ne pouvez pas affecter à l'utilisateur {$affecteA->name} (rôle: {$affecteARole}).";
+            continue;
         }
 
         // Store the appropriate instruction based on current user's role
@@ -79,23 +84,47 @@ class AffectationController extends Controller
             $instruction = "SG: " . $request->instruction_sg;
         }
 
+        // Determine status based on current user's role
+        $status_affectation = '';
+        switch ($currentUserRole) {
+            case 'bo':
+                $status_affectation = 'a_cab';
+                break;
+            case 'cab':
+                $status_affectation = 'a_sg';
+                break;
+            case 'sg':
+                $status_affectation = 'a_div';
+                break;
+            default:
+                $status_affectation = null;
+                break;
+        }
+
         Affectation::create([
             'id_courrier' => $courrier->id,
             'id_affecte_a_utilisateur' => $affecteA->id,
             'id_affecte_par_utilisateur' => $currentUser->id,
             'Instruction' => $instruction,
-            'statut_affectation' => 'affecter a cab',
+            'statut_affectation' => $status_affectation,
             'date_affectation' => now(),
         ]);
-        if($currentUserRole ==='sg' && $request->instruction_sg){
-            $courrier->update(['statut'=>'arriver']);
-        }else{
-            $courrier->update(['statut' => 'en_cours']);
-        };
-        
-
-        return redirect()->route("courriers.$courrier->type_courrier")->with('success', 'Courrier affecté avec succès.');
     }
+
+    if (!empty($errors)) {
+        return back()->withErrors($errors);
+    }
+
+    // Update courrier status
+    if ($currentUserRole === 'sg' && $request->instruction_sg) {
+        $courrier->update(['statut' => 'arriver']);
+    } else {
+        $courrier->update(['statut' => 'en_cours']);
+    }
+
+    return redirect()->route("courriers.$courrier->type_courrier")
+        ->with('success', 'Courrier affecté avec succès à ' . count($request->id_affecte_a_utilisateur) . ' utilisateur(s).');
+}
 
     private function getAssignableRoles(string $role): array
     {

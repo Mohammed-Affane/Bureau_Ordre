@@ -15,17 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolePermissionSeeder::class,
+            UnifiedUserAndEntiteSeeder::class,
+            CourriersSeeder::class,
         ]);
-        $this->call(EntiteAndUserSeeder::class);
-
-        
-        // Create admin user
-        $user = \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('123456789')
-        ]);
-        
-        $user->assignRole('admin');
     }
 }

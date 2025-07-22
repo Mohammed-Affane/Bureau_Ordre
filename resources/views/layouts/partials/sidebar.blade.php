@@ -61,6 +61,13 @@
                                         ['name' => 'À Traiter', 'route' => 'cab.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'Affectations', 'route' => 'cab.assignments', 'icon' => 'arrow-right'],
                                         ['name' => 'Historique', 'route' => 'cab.history', 'icon' => 'clock'],
+                                        ['name'=>'Courriers','route'=>'courriers.index','icon'=>'inbox','submenu'=>[
+                                            ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
+                                            ['name' => 'Départs', 'route' => 'courriers.depart'],
+                                            ['name' => 'Internes', 'route' => 'courriers.interne'],
+                                            ['name' => 'Visas', 'route' => 'courriers.visa'],
+                                            ['name' => 'Décisions', 'route' => 'courriers.decision'],
+                                        ]],
                                     ];
                                     break;
                                 case 'dai':
@@ -76,6 +83,13 @@
                                         ['name' => 'À Affecter', 'route' => 'sg.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'Divisions', 'route' => 'sg.divisions', 'icon' => 'building-office'],
                                         ['name' => 'Suivi', 'route' => 'sg.tracking', 'icon' => 'eye'],
+                                        ['name'=>'Courriers','route'=>'courriers.index','icon'=>'inbox','submenu'=>[
+                                            ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
+                                            ['name' => 'Départs', 'route' => 'courriers.depart'],
+                                            ['name' => 'Internes', 'route' => 'courriers.interne'],
+                                            ['name' => 'Visas', 'route' => 'courriers.visa'],
+                                            ['name' => 'Décisions', 'route' => 'courriers.decision'],
+                                        ]],
                                     ];
                                     break;
                                 default: // Chef de division
@@ -84,6 +98,7 @@
                                         ['name' => 'À Traiter', 'route' => 'division.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'En Cours', 'route' => 'division.progress', 'icon' => 'clock'],
                                         ['name' => 'Terminés', 'route' => 'division.completed', 'icon' => 'check-circle'],
+                                        ['name'=>'Mes Courrier','route'=>'division.courrier.index','icon'=>'inbox']
                                     ];
                             }
                         @endphp

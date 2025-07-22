@@ -1,4 +1,4 @@
-<div class="relative inline-block" x-data="{ open: false }" data-courrier-id="{{ $courrier->id }}">
+<div class="relative inline-block" x-data="{ open: false }" data-courrier-id="{{ $courrier->id }} ">
     <button @click="open = !open" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         <span>Actions</span>
         <svg class="w-5 h-5 ml-2 -mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -23,15 +23,35 @@
                 </svg>
                 Voir
             </a>
-             <a href="/courriers/{{ $courrier->id }}/edit" @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/edit`" class="flex items-center px-4 py-2 text-sm text-yellow-600 hover:bg-yellow-100" role="menuitem">
+
+            @php
+    $userRole = Auth::user()->roles()->first()->name;
+    $showActions = false;
+
+    if (($userRole == 'bo' && $courrier->statut == 'en_attente')|| $userRole == 'admin') {
+        $showActions = true;
+    } elseif (in_array($userRole, ['cab', 'sg'])) {
+        foreach ($courrier->affectations as $affectation) {
+            if (($userRole == 'cab' && $affectation->statut_affectation == 'a_cab') ||
+                ($userRole == 'sg' && $affectation->statut_affectation == 'a_sg')) {
+                $showActions = true;
+                break;
+            }
+        }
+    }
+@endphp
+
+@if($showActions)
+
+
+<a href="/courriers/{{ $courrier->id }}/edit" @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/edit`" class="flex items-center px-4 py-2 text-sm text-yellow-600 hover:bg-yellow-100" role="menuitem">
                 <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                 </svg>
                 Modifier
             </a>
             
-             {{-- @if((Auth::user()->roles()->first()->name=='bo' && $courrier->statut=='en_attente')
-             ||(Auth::user()->roles()->first()->name=='cab'&& $courrier->statut=='en_cours')) --}}
+
              
             <a href="/courriers/{{ $courrier->id }}/affectations" @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/affectations`" class="flex items-center px-4 py-2 text-sm text-green-600 hover:bg-green-100" role="menuitem">
                 <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,13 +59,18 @@
                 </svg>
                 Affecter
             </a>
-            {{-- @endif --}}
+
             <button @click="open = false; deleteCourrier($el.closest('[data-courrier-id]').dataset.courrierId)" class="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem">
                 <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                 </svg>
                 Supprimer
             </button>
+            
+
+@endif
+            
+             
         </div>
     </div>
 </div>
