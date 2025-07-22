@@ -233,17 +233,14 @@
                                 </span>
                             </label>
                             <div class="relative">
-                                <select name="id_affecte_a_utilisateur" 
-                                        class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-0 transition-all duration-200 hover:border-gray-300 shadow-sm appearance-none cursor-pointer">
+                                 <select name="id_affecte_a_utilisateur[]" 
+                                        multiple
+                                        class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-0 transition-all duration-200 hover:border-gray-300 shadow-sm appearance-none cursor-pointer select2-multiple">
                                     @foreach($users as $u)
                                         <option value="{{ $u->id }}">{{ $u->name }} - {{ $u->roles()->first()->name }}</option>
                                     @endforeach
                                 </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </div>
+                                
                             </div>
                         </div>
 

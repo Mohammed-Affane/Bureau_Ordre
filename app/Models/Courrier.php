@@ -39,7 +39,7 @@ protected $casts = [
 // Affectations liées à ce courrier
     public function affectations()
     {
-        return $this->hasMany(Affectation::class, 'id_courrier');
+        return $this->hasMany(Affectation::class, 'id_courrier', 'id');
     }
     //relation entre entite et courrier
 
