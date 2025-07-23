@@ -33,7 +33,7 @@ return new class extends Migration
 
             $table->enum('statut', ['en_attente','en_cours', 'arriver','cloture', 'archiver'])->default('en_attente')->nullable();
 
-            $table->int('delais')->default(60)->nullable();
+            $table->integer('delais')->default(60)->nullable();
             
             // Clés étrangères
             $table->unsignedBigInteger('id_expediteur')->nullable()->index();

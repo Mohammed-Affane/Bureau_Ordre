@@ -11,7 +11,7 @@ trait CourrierFilterTrait
      */
     protected function applyCourrierFilters($query, $typeCourrier)
     {
-        return $query->with(['expediteur', 'agent'])
+        return $query->with(['expediteur', 'agent','affectations'])
             ->where('type_courrier', $typeCourrier)
             ->when(request('search'), function($q) {
                 $q->where(function($query) {

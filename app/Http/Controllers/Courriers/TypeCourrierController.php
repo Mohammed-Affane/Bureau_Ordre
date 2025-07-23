@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Courriers;
 
-use App\Http\Controllers\Controller;
+use PDF;
 use App\Models\Courrier;
-use App\Http\Traits\CourrierFilterTrait;
+use App\Models\Affectation;
+use Illuminate\Http\Request;
 use App\Exports\CourriersExport;
 use App\Exports\CourriersPdfExport;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
-use PDF;
+use App\Http\Traits\CourrierFilterTrait;
 
 class TypeCourrierController extends Controller
 {
@@ -24,18 +25,24 @@ class TypeCourrierController extends Controller
     {
         
 
+
         $query = $this->applyCourrierFilters(Courrier::query(), 'arrive');
-        $courriers = $query->paginate($this->perPage);
+        $courriers = $query->paginate($this->perPage)->appends($request->all());
+
+  
+
+        
+        
         return view('courriers.typesCourriers.arrive', compact('courriers'));
     }
 
     /**
      * Display outgoing mail courriers
      */
-    public function courrierDepart()
+    public function courrierDepart(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'depart');
-        $courriers = $query->paginate($this->perPage);
+        $courriers = $query->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.depart', compact('courriers'));
     }
 
@@ -45,7 +52,7 @@ class TypeCourrierController extends Controller
     public function courrierInterne(Request $request)
     {
        $query = $this->applyCourrierFilters(Courrier::query(), 'interne');
-        $courriers = $query->paginate($this->perPage);
+        $courriers = $query->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.interne', compact('courriers'));
     }
 
@@ -55,7 +62,7 @@ class TypeCourrierController extends Controller
     public function courrierVisa(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'visa');
-        $courriers = $query->paginate($this->perPage);
+        $courriers = $query->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.visa', compact('courriers'));
     }
 
@@ -65,7 +72,7 @@ class TypeCourrierController extends Controller
     public function courrierDecision(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'decision');
-        $courriers = $query->paginate($this->perPage);
+        $courriers = $query->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.decision', compact('courriers'));
     }
 

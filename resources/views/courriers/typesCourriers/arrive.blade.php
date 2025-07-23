@@ -1,3 +1,4 @@
+
 <x-app-layout>
     <div class="py-8">
         <div class="w-full px-4 sm:px-6 lg:px-8">
@@ -5,6 +6,8 @@
                 <div class="p-6">
                     <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
                         <div>
+
+                            
                             <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrive</h1>
                             <p class="text-sm text-gray-500 mt-1">Tous les courriers enregistrés dans le bureau d'ordre</p>
                         </div>
@@ -168,8 +171,7 @@
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
 
-    
-                
+          
         <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_bo }}</td>
@@ -266,15 +268,19 @@
                     {{ ucfirst(str_replace('_', ' ', $courrier->priorite)) }}
                 </span>
             </td>
-
+         
 
             
    <td class="px-4 py-3 whitespace-nowrap">
 
-  <x-Actions type='arrive' :courrier="$courrier"  />
+
+  <x-Actions type='arrive' :courrier="$courrier"  /> 
 
 
-      </td>
+
+   </td>
+
+
       
   
 </div>
@@ -285,6 +291,8 @@
             <td colspan="18" class="px-6 py-4 text-center text-gray-500">Aucun courrier trouvé.</td>
         </tr>
     @endforelse
+
+     
 </tbody>
                         </table>
                     </div>
