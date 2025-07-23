@@ -1,4 +1,4 @@
-<x-app-layout>
+{{-- <x-app-layout>
     <x-slot name="title">Dashboard Division</x-slot>
     <x-slot name="breadcrumbs">
         [['title' => 'Dashboard Division', 'url' => route('division.dashboard')]]
@@ -162,7 +162,6 @@
         </div>
     </div>
 </div>
-@endsection
 <!-- End of Division Dashboard Content -->
 <div class="container mt-8">
     <div class="row">
@@ -204,6 +203,7 @@
                     </div>
 
 
+                </x-app-layout>
 
 
 
@@ -211,5 +211,6 @@
 
 
 
+ --}}
 
-
+ test

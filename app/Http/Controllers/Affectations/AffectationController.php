@@ -71,6 +71,7 @@ public function store(Request $request, $courrierId)
         $affecteA = User::findOrFail($userId);
         $affecteARole = $affecteA->roles->first()->name ?? null;
 
+
         if (!$affecteARole || !in_array($affecteARole, $assignableRoles)) {
             $errors[] = "Vous ne pouvez pas affecter à l'utilisateur {$affecteA->name} (rôle: {$affecteARole}).";
             continue;
@@ -84,22 +85,22 @@ public function store(Request $request, $courrierId)
             $instruction = "SG: " . $request->instruction_sg;
         }
 
-        // Determine status based on current user's role
-        $status_affectation = '';
-        switch ($currentUserRole) {
-            case 'bo':
-                $status_affectation = 'a_cab';
-                break;
-            case 'cab':
-                $status_affectation = 'a_sg';
-                break;
-            case 'sg':
-                $status_affectation = 'a_div';
-                break;
-            default:
-                $status_affectation = null;
-                break;
-        }
+        // Determine status based on current user's role and target role
+$status_affectation = null;
+
+if ($currentUserRole === 'bo') {
+    $status_affectation = 'a_cab';
+} elseif ($currentUserRole === 'cab') {
+    if ($affecteARole === 'sg') {
+        $status_affectation = 'a_sg';
+    } elseif (in_array($affecteARole, ['chef_division', 'dai'])) {
+        $status_affectation = 'a_div';
+    }
+} elseif ($currentUserRole === 'sg') {
+    if (in_array($affecteARole, ['chef_division', 'dai'])) {
+        $status_affectation = 'a_div';
+    }
+}
 
         Affectation::create([
             'id_courrier' => $courrier->id,
