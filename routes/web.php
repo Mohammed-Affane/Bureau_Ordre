@@ -13,7 +13,7 @@ use App\Http\Controllers\Courriers\CourrierController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Courriers\TypeCourrierController;
 use App\Http\Controllers\Exports\ExportCourrierController;
-
+use App\Http\Controllers\Division\DivisionCourrierController;
 
 
 Route::get('/', function () {
@@ -103,6 +103,7 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
     Route::get('pending', fn () => view('division.pending'))->name('pending');
     Route::get('progress', fn () => view('division.progress'))->name('progress');
     Route::get('completed', fn () => view('division.completed'))->name('completed');
+    Route::get('courriers', [DivisionCourrierController::class, 'index'])->name('index');
 });
 
 require __DIR__.'/auth.php';

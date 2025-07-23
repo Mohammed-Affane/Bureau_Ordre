@@ -5,7 +5,7 @@
         'bo' => ['route' => 'bo.dashboard', 'label' => "Bureau d'Ordre Dashboard"],
         'cab' => ['route' => 'cab.dashboard', 'label' => "Cabinet Dashboard"],
         'sg' => ['route' => 'sg.dashboard', 'label' => "Secrétariat Général Dashboard"],
-        'chef_division' => ['route' => 'division.dashboard', 'label' => "Chef Division Dashboard"],
+        'division' => ['route' => 'division.dashboard', 'label' => "Chef Division Dashboard"],
     ];
 
     $userRole = $user->getRoleNames()->first(); // Spatie method returns a collection
