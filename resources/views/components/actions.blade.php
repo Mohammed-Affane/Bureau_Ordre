@@ -42,12 +42,13 @@
        
     }
 
+
     if (($userRole === 'bo' && $courrier->statut === 'en_attente') || $userRole === 'admin') {
         $showActions = true;
     } elseif ($userRole === 'cab' && $hasCabAffectation && !$hasSGAffectation) {
         // Cabinet peut agir si a_cab présent et pas encore à SG
         $showActions = true;
-    } elseif ($userRole === 'sg' && $hasSGAffectation && !$courrier->statut === 'arrive') {
+    } elseif ($userRole === 'sg' && $hasSGAffectation ) {
         // SG peut agir seulement si a_sg est présent
         $showActions = true;
     }
