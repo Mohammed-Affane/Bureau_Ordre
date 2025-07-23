@@ -80,7 +80,7 @@
                                         <a href="{{ url('/cab/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Cabinet</a>
                                     @elseif(auth()->user()->hasRole('sg'))
                                         <a href="{{ url('/sg/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Secrétariat Général</a>
-                                        @elseif(auth()->user()->hasRole('chef_division'))
+                                    @elseif(auth()->user()->hasRole('chef_division'))
                                         <a href="{{ url('/division/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Chef Division</a>
                                     @else
                                         <span class="text-sm text-blue-600">Role not assigned</span>

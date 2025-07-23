@@ -1,109 +1,216 @@
+{{-- <x-app-layout>
+    <x-slot name="title">Dashboard Division</x-slot>
+    <x-slot name="breadcrumbs">
+        [['title' => 'Dashboard Division', 'url' => route('division.dashboard')]]
+    </x-slot>
 
-<x-app-layout>
-    <div class="page-heading">
-        <h3>Division Statistics</h3>
-    </div>
-    <div class="page-content">
-        <section class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-3 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="stats-icon purple">
-                                            <i class="iconly-boldShow"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Total Courriers</h6>
-                                        <h6 class="font-extrabold mb-0"></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <h2 class="text-2xl font-bold text-gray-900">Bienvenue Chef de Division</h2>
+    <p class="mt-2 text-gray-600">Gérez les courriers en traitement, en cours et clôturés.</p>
+    <div class="container mt-8">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Courriers en Traitement</h3>
                     </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-3 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="stats-icon blue">
-                                            <i class="iconly-boldProfile"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Pending</h6>
-                                        <h6 class="font-extrabold mb-0"></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-3 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="stats-icon green">
-                                            <i class="iconly-boldAdd-User"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Processed</h6>
-                                        <h6 class="font-extrabold mb-0"></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-3 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="stats-icon red">
-                                            <i class="iconly-boldBookmark"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Urgent</h6>
-                                        <h6 class="font-extrabold mb-0"></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Objet</th>
+                                    <th>Date de Réception</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($courriers as $courrier)
+                                    <tr>
+                                        <td>{{ $courrier->objet }}</td>
+                                        <td>{{ $courrier->created_at->format('Y-m-d') }}</td>
+                                        <td>
+                                            <a href="{{ route('courriers.show', $courrier->id) }}" class="btn btn-sm btn-info">View</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Recent Courriers</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-lg">
-                                        <thead>
-                                            <tr>
-                                                <th>Reference</th>
-                                                <th>Subject</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        
-                                        </tbody>
-                                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+<!-- End of Division Dashboard Content -->
+<div class="container mt-8">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Courriers en Cours</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Objet</th>
+                                <th>Date de Dépôt</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($courriers as $courrier)
+                                <tr>
+                                    <td>{{ $courrier->objet }}</td>
+                                    <td>{{ $courrier->created_at->format('Y-m-d') }}</td>
+                                    <td>
+                                        <a href="{{ route('courriers.show', $courrier->id) }}" class="btn btn-sm btn-info">View</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+<!-- End of Division Dashboard Content -->
+<div class="container mt-8">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Courriers Clôturés</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Objet</th>
+                                <th>Date de Clôture</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($courriers as $courrier)
+                                <tr>
+                                    <td>{{ $courrier->objet }}</td>
+                                    <td>{{ $courrier->created_at->format('Y-m-d') }}</td>
+                                    <td>
+                                        <a href="{{ route('courriers.show', $courrier->id) }}" class="btn btn-sm btn-info">View</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Objet</th>
+                                <th>Date de Clôture</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+<!-- End of Division Dashboard Content -->
+<div class="container mt-8">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Statistiques</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-gray-500">Courriers en Traitement</p>
+                                    <p class="text-lg font-medium text-gray-900">{{ $courriers->count() }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Courriers en Cours</p>
+                                    <p class="text-lg font-medium text-gray-900">{{ $courriers->count() }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Courriers Clôturés</p>
+                                    <p class="text-lg font-medium text-gray-900">{{ $courriers->count() }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-gray-900">65%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-gray-900">25%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-red-600">10%</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
-</x-app-layout>
+</div>
+<!-- End of Division Dashboard Content -->
+<div class="container mt-8">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Statistiques</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-gray-900">65%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-gray-900">25%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-red-600">10%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-gray-900">65%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-gray-900">25%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temps moyen d'affectation</p>
+                                    <p class="text-lg font-medium text-red-600">10%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </x-app-layout>
+
+
+
+
+
+
+
+ --}}
+
+ test

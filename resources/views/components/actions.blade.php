@@ -24,22 +24,35 @@
                 Voir
             </a>
 
-            @php
+   @php
     $userRole = Auth::user()->roles()->first()->name;
     $showActions = false;
 
-    if (($userRole == 'bo' && $courrier->statut == 'en_attente')|| $userRole == 'admin') {
-        $showActions = true;
-    } elseif (in_array($userRole, ['cab', 'sg'])) {
-        foreach ($courrier->affectations as $affectation) {
-            if (($userRole == 'cab' && $affectation->statut_affectation == 'a_cab') ||
-                ($userRole == 'sg' && $affectation->statut_affectation == 'a_sg')) {
-                $showActions = true;
-                break;
-            }
+    $hasCabAffectation = false;
+    $hasSGAffectation = false;
+
+
+    foreach ($courrier->affectations as $affectation) {
+        if ($affectation->statut_affectation === 'a_cab') {
+            $hasCabAffectation = true;
         }
+        if ($affectation->statut_affectation === 'a_sg') {
+            $hasSGAffectation = true;
+        }
+       
+    }
+
+    if (($userRole === 'bo' && $courrier->statut === 'en_attente') || $userRole === 'admin') {
+        $showActions = true;
+    } elseif ($userRole === 'cab' && $hasCabAffectation && !$hasSGAffectation) {
+        // Cabinet peut agir si a_cab présent et pas encore à SG
+        $showActions = true;
+    } elseif ($userRole === 'sg' && $hasSGAffectation && !$courrier->statut === 'arrive') {
+        // SG peut agir seulement si a_sg est présent
+        $showActions = true;
     }
 @endphp
+
 
 @if($showActions)
 
