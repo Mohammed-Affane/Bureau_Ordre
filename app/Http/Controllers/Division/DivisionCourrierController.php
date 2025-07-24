@@ -9,23 +9,39 @@ use App\Models\Entite;
 
 class DivisionCourrierController extends Controller{
 
-    public function index(){
+ public function index()
+{
+    // 1. Récupérer l'entité dont l'user est responsable
+    $entite = auth()->user()->entite;
 
-    $entiteId = Entite::where('responsable_id', auth()->user()->id)->first()->id;
+    if (!$entite) {
+        return redirect()->back()
+               ->with('error', 'Vous n\'êtes responsable d\'aucune division');
+    }
 
-    $courriers = Courrier::where('entite_id', $entiteId)
-        ->whereIn('type_courrier', ['arrive', 'interne'])
-        ->whereHas('affectations', function ($query) {
-            $query->where('statut_affectation', 'a_div');
+    // 2. Récupérer les courriers pour cette entité
+    $courriers = Courrier::where(function($query) use ($entite) {
+            // Courriers où l'entité est destinataire direct
+            $query->WhereHas('affectations', function($q) {
+                    $q->where('id_affecte_a_utilisateur', auth()->id());
+                });
+                // OU courriers affectés à l'user responsable
+               
         })
-        ->with(['affectations' => function ($query) {
-            $query->where('statut_affectation', 'a_div');
-        }])
-        ->latest()
+        ->with([
+            'expediteur',
+            'courrierDestinatairePivot.entite',
+            'affectations' => function($query) {
+                $query->with(['affecteA', 'affectePar'])
+                      ->where('id_affecte_a_utilisateur', auth()->id());
+            }
+        ])
+        ->orderBy('date_reception', 'desc')
         ->paginate(20);
 
-    return view('dashboards.division.courriers.index', compact('courriers'));
-
-
-    }
+    return view('dashboards.division.courriers.index', [
+        'courriers' => $courriers,
+        'entite' => $entite
+    ]);
+}
 }

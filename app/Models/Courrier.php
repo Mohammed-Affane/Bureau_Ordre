@@ -51,7 +51,8 @@ protected $casts = [
     // relation pivot 
     public function courrierDestinatairePivot()
     {
-        return $this->belongsToMany(CourrierDestinataire::class, 'courrier_destinataire_pivot', 'id_courrier', 'id_destinataire_courrier');
+        return $this->belongsToMany(CourrierDestinataire::class,
+         'courrier_destinataire_pivot', 'id_courrier', 'id_destinataire_courrier');
     }
 
 

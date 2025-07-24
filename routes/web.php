@@ -47,7 +47,6 @@ Route::middleware(['auth'])->group(function () {
             ->name('export.courriers.pdf');
         Route::get('/courriers/{type}/excel', [ExportCourrierController::class, 'exportExcel'])
             ->name('export.courriers.excel');
-            
 
 });
 });
