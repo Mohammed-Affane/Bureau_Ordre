@@ -243,7 +243,7 @@
                 @endif
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception->format('d/m/Y') }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception ? $courrier->date_reception->format('d/m/Y'):'-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
             <a href="{{ route('courriers.destinataires', $courrier->id) }}"
@@ -320,7 +320,7 @@
             }
         });
 
-        // Initialize date pickers if using flatpickr
+        // Initialize date pickers if using flatpickr 
         if (typeof flatpickr !== 'undefined') {
             flatpickr("#date_from", { dateFormat: "Y-m-d" });
             flatpickr("#date_to", { dateFormat: "Y-m-d" });
