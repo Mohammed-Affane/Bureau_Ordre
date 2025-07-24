@@ -83,7 +83,7 @@ Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(func
 
 // DAI Routes
 Route::middleware(['auth', 'role:dai'])->prefix('dai')->name('dai.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.dai'))->name('dashboard');
+    Route::get('dashboard', fn () => view('dashboards.dai.index'))->name('dashboard');
     Route::get('pending', fn () => view('dai.pending'))->name('pending');
     Route::get('closed', fn () => view('dai.closed'))->name('closed');
 });

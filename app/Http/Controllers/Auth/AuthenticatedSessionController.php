@@ -38,9 +38,9 @@ class AuthenticatedSessionController extends Controller
         } else if ($user->hasRole('sg')) {
             return redirect()->intended(route('sg.dashboard', absolute: false));
         } else if ($user->hasRole('chef_division')) {
-            return redirect()->intended(route('chef_division.dashboard', absolute: false));
+            return redirect()->intended(route('division.dashboard', absolute: false));
         }
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('dai.dashboard', absolute: false));
     }
 
     /**
