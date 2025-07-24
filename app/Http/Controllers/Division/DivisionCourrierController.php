@@ -25,7 +25,6 @@ class DivisionCourrierController extends Controller{
             $query->WhereHas('affectations', function($q) {
                     $q->where('id_affecte_a_utilisateur', auth()->id());
                 });
-                // OU courriers affectés à l'user responsable
                
         })
         ->with([

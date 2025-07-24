@@ -93,15 +93,16 @@ if ($currentUserRole === 'bo') {
 } elseif ($currentUserRole === 'cab') {
     if ($affecteARole === 'sg') {
         $status_affectation = 'a_sg';
-    } elseif (in_array($affecteARole, ['chef_division', 'dai'])) {
+    }
+    elseif (in_array($affecteARole, ['chef_division', 'dai'])) {
         $status_affectation = 'a_div';
     }
+
 } elseif ($currentUserRole === 'sg') {
     if (in_array($affecteARole, ['chef_division', 'dai'])) {
         $status_affectation = 'a_div';
     }
 }
-
         Affectation::create([
             'id_courrier' => $courrier->id,
             'id_affecte_a_utilisateur' => $affecteA->id,
@@ -117,9 +118,10 @@ if ($currentUserRole === 'bo') {
     }
 
     // Update courrier status
-    if ($currentUserRole === 'sg' && $request->instruction_sg) {
+    if (($currentUserRole === 'sg' && $request->instruction_sg)||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
         $courrier->update(['statut' => 'arriver']);
-    } else {
+    }
+     else {
         $courrier->update(['statut' => 'en_cours']);
     }
 
