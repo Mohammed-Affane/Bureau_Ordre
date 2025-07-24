@@ -1,3 +1,4 @@
+
 <x-app-layout>
     <div class="py-8">
         <div class="w-full px-4 sm:px-6 lg:px-8">
@@ -5,7 +6,9 @@
                 <div class="p-6">
                     <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
                         <div>
-                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Internes</h1>
+
+                            
+                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrive</h1>
                             <p class="text-sm text-gray-500 mt-1">Tous les courriers enregistrés dans le bureau d'ordre</p>
                         </div>
                          {{-- Export Dropdown --}}
@@ -25,14 +28,15 @@
                                       <!-- Dropdown panel -->
                                       <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-menu">
                                           <div class="py-1" role="none">
-                                               <a href="{{ route('export.courriers.excel', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
+                                              <!-- Export to Excel -->
+                                              <a href="{{ route('export.courriers.excel', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                                                   <svg class="mr-3 h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                   </svg>
                                                   Excel
                                               </a> 
-                                              <a target="_blank"  href="{{ route('export.courriers.pdf', ['type' => 'interne']) . '?' . http_build_query(request()->query()) }}" 
+                                              <a target="_blank" href="{{ route('export.courriers.pdf', ['type' => 'arrive']) . '?' . http_build_query(request()->query()) }}" 
                                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                                                   <svg class="mr-3 h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -49,13 +53,16 @@
                                           </div>
                                       </div>
                                   </div>
-
+        {{-- /////////////////////////////// --}}
+                        
                         <a href="{{ route('courriers.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Nouveau courrier</a>
-                    </div>
-                                              </div>
+                 </div>
+        </div>
+
+
                      <!-- Search and Filter Section -->
                     <div class="mb-6 bg-gray-50 p-4 rounded-lg">
-                        <form method="GET" action="{{ route('courriers.interne') }}">
+                        <form method="GET" action="{{ route('courriers.arrive') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <!-- Search Input -->
                                 <div>
@@ -128,7 +135,7 @@
                                     </svg>
                                     Filtrer
                                 </button>
-                                <a href="{{ route('courriers.interne') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="{{ route('courriers.arrive') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     Réinitialiser
                                 </a>
                             </div>
@@ -141,29 +148,33 @@
                         Résultats filtrés : {{ $courriers->total() }} courrier(s) trouvé(s)
                     </div>
                     @endif
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                <tr>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Départ</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Départ</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Enregistrement</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr Pièces</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recepteurs</th>
-
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entite Expediteur</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
-    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-</tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence BO</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Enregistrement</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr Pièces</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Réception</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expéditeur</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recepteurs</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        </tr>
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
+
+          
         <tr>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_depart }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_bo }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 @php
                     $statusClasses = [
@@ -179,8 +190,8 @@
                     {{ ucfirst(str_replace('_', ' ', $courrier->statut)) }}
                 </span>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_depart?$courrier->date_depart->format('d/m/Y'):'-' }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement?$courrier->date_enregistrement->format('d/m/Y'):'-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
+
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 @if($courrier->fichier_scan)
@@ -232,8 +243,10 @@
                 @endif
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception ? $courrier->date_reception->format('d/m/Y'):'-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <a href="{{ route('courriers.destinataires', $courrier->id) }}"
+            <a href="{{ route('courriers.destinataires', $courrier->id) }}"
    class="text-blue-600 visited:text-purple-600 ...">
    Voir les destinataires
 </a>
@@ -241,9 +254,8 @@
 
 
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->agent->name ?? '-' }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
+             <td class="px-6 py-4 whitespace-nowrap">
             @php
             $prioriteClasses = [
                         'normale' => 'bg-gray-100 text-gray-800',
@@ -256,18 +268,31 @@
                     {{ ucfirst(str_replace('_', ' ', $courrier->priorite)) }}
                 </span>
             </td>
-            <td class="px-4 py-3 whitespace-nowrap">
+         
 
-  <x-Actions type='interne' :courrier="$courrier"  />
+            
+   <td class="px-4 py-3 whitespace-nowrap">
 
 
-      </td>
+  <x-Actions type='arrive' :courrier="$courrier"  /> 
+
+
+
+   </td>
+
+
+      
+  
+</div>
+           
         </tr>
     @empty
         <tr>
             <td colspan="18" class="px-6 py-4 text-center text-gray-500">Aucun courrier trouvé.</td>
         </tr>
     @endforelse
+
+     
 </tbody>
                         </table>
                     </div>
@@ -278,6 +303,9 @@
             </div>
         </div>
     </div>
+
+
+
     @push('scripts')
     <script>
         // Show/hide custom date range based on selection
@@ -292,7 +320,7 @@
             }
         });
 
-        // Initialize date pickers if using flatpickr
+        // Initialize date pickers if using flatpickr 
         if (typeof flatpickr !== 'undefined') {
             flatpickr("#date_from", { dateFormat: "Y-m-d" });
             flatpickr("#date_to", { dateFormat: "Y-m-d" });

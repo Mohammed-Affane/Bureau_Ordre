@@ -4,7 +4,7 @@
     <title>Liste des Courriers - {{ ucfirst($type) }}</title>
     <style>
         body {
-            font-family: 'Tajawal', sans-serif;
+            font-family: 'Almarai', sans-serif;
             font-size: 12px;
             width: 100%;
             margin: 0;
