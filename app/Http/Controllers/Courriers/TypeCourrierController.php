@@ -24,8 +24,6 @@ class TypeCourrierController extends Controller
     public function courrierArrivee(Request $request)
     {
         
-
-
         $query = $this->applyCourrierFilters(Courrier::query(), 'arrive');
         $courriers = $query->paginate($this->perPage)->appends($request->all());
 
