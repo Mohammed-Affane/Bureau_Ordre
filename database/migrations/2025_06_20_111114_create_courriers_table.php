@@ -27,11 +27,11 @@ return new class extends Migration
             $table->date('date_reception')->nullable();
             $table->date('date_depart')->nullable();
             $table->string('fichier_scan')->nullable();
-            $table->date('date_enregistrement')->nullable();
+            $table->date('date_enregistrement')->nullable();// date de creation du courrier
             $table->integer('Nbr_piece')->default(1)->nullable();
             $table->enum('priorite', ['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])->nullable();
 
-            $table->enum('statut', ['en_attente','en_cours', 'arriver','cloture', 'archiver'])->default('en_attente')->nullable();
+            $table->enum('statut', ['en_attente','en_cours','en_traitement','arriver','cloture', 'archiver'])->default('en_attente')->nullable();
 
             $table->integer('delais')->default(60)->nullable();
             

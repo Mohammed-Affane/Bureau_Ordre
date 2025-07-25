@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('statut_affectation',['a_cab','a_sg','a_div'])->nullable();
             $table->date('date_affectation')->nullable();
             $table->text('Instruction')->nullable();
+            $table->boolean('traite')->default(false);
 
              // Clés étrangères
             $table->unsignedBigInteger('id_courrier');

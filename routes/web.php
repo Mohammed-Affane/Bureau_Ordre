@@ -14,7 +14,8 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Courriers\TypeCourrierController;
 use App\Http\Controllers\Exports\ExportCourrierController;
 use App\Http\Controllers\Division\DivisionCourrierController;
-
+use App\Http\Controllers\CAB\CabCourrierController;
+use App\Http\Controllers\SG\SgCourrierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -78,6 +79,9 @@ Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(func
     Route::get('pending', fn () => view('cab.pending'))->name('pending');
     Route::get('assignments', fn () => view('cab.assignments'))->name('assignments');
     Route::get('history', fn () => view('cab.history'))->name('history');
+    Route::get('courriers.interne',[CabCourrierController::class,'cabCourrierInterne'])->name('courriers.interne');
+    Route::get('courriers.arrive',[CabCourrierController::class,'cabCourrierArrive'])->name('courriers.arrive');
+
 
 });
 
@@ -94,6 +98,8 @@ Route::middleware(['auth', 'role:sg'])->prefix('sg')->name('sg.')->group(functio
     Route::get('pending', fn () => view('sg.pending'))->name('pending');
     Route::get('divisions', fn () => view('sg.divisions'))->name('divisions');
     Route::get('tracking', fn () => view('sg.tracking'))->name('tracking');
+    Route::get('courriers.interne',[SgCourrierController::class,'sgCourrierInterne'])->name('courriers.interne');
+    Route::get('courriers.arrive',[SgCourrierController::class,'sgCourrierArrive'])->name('courriers.arrive');
 });
 
 // Chef Division Routes (Default)
