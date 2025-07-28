@@ -117,8 +117,9 @@ if ($currentUserRole === 'bo') {
         return back()->withErrors($errors);
     }
 
-    if (($currentUserRole === 'sg' && $status_affectation === 'a_div' )||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
+    // Update courrier status
 
+    if (($currentUserRole === 'sg' && $status_affectation === 'a_div' )||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
         $courrier->update(['statut' => 'arriver']);
     }
      elseif($currentUserRole === 'cab'||$request->instruction_cab) {
@@ -126,22 +127,14 @@ if ($currentUserRole === 'bo') {
     }else{
         $courrier->update(['statut' => 'en_cours']);
     }
-    if($currentUserRole!=='bo'){
 
-  
-
-        return redirect()->route("$currentUserRole.courriers.$courrier->type_courrier")
+    if($currentUserRole !== 'bo'){
+        return redirect()->route(''.$currentUserRole.'.courriers.'.$courrier->type_courrier)
         ->with('success', 'Courrier affecté avec succès à ' . count($request->id_affecte_a_utilisateur) . ' utilisateur(s).');
-
-    }
-    else{
-
-         return redirect()->route("courriers.$courrier->type_courrier")
+    }else{
+        return redirect()->route('courriers.'.$courrier->type_courrier)
         ->with('success', 'Courrier affecté avec succès à ' . count($request->id_affecte_a_utilisateur) . ' utilisateur(s).');
-
     }
-
-    
 }
 
     private function getAssignableRoles(string $role): array

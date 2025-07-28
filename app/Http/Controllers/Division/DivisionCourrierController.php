@@ -94,7 +94,6 @@ public function index(Request $request)
         'searchParams' => $request->all() // Pass all search params to view
     ]);
 }
-
 public function divisionCourrierInterne(Request $request)
 {
     $courriers = Courrier::where('type_courrier','interne')
@@ -119,5 +118,4 @@ public function divisionCourrierArrive(Request $request)
         'courriers'=>$courriers,
     ]);
 }
-
 }
