@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -33,7 +33,8 @@ return new class extends Migration
 
             $table->enum('statut', ['en_attente','en_cours','en_traitement','arriver','cloture', 'archiver'])->default('en_attente')->nullable();
 
-            $table->integer('delais')->default(60)->nullable();
+             $table->date('delais')->nullable();
+
             
             // Clés étrangères
             $table->unsignedBigInteger('id_expediteur')->nullable()->index();
