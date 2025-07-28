@@ -109,6 +109,8 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
     Route::get('progress', fn () => view('division.progress'))->name('progress');
     Route::get('completed', fn () => view('division.completed'))->name('completed');
     Route::get('courriers', [DivisionCourrierController::class, 'index'])->name('index');
+    Route::get('courriers.interne',[DivisionCourrierController::class,'divisionCourrierInterne'])->name('courriers.interne');
+    Route::get('courriers.arrive',[DivisionCourrierController::class,'divisionCourrierArrive'])->name('courriers.arrive');
 });
 
 require __DIR__.'/auth.php';

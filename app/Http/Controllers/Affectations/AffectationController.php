@@ -118,11 +118,8 @@ if ($currentUserRole === 'bo') {
     }
 
     // Update courrier status
-<<<<<<< HEAD
+
     if (($currentUserRole === 'sg' && $status_affectation === 'a_div' )||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
-=======
-    if (($currentUserRole === 'sg' || $request->instruction_sg)) {
->>>>>>> 8bc2a896bc772fa56edb94a28d442e5f10448bd2
         $courrier->update(['statut' => 'arriver']);
     }
      elseif($currentUserRole === 'cab'||$request->instruction_cab) {

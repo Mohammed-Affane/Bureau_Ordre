@@ -94,4 +94,28 @@ public function index(Request $request)
         'searchParams' => $request->all() // Pass all search params to view
     ]);
 }
+public function divisionCourrierInterne(Request $request)
+{
+    $courriers = Courrier::where('type_courrier','interne')
+    ->where('statut','arriver')
+    ->whereHas('affectations', function($query) {
+        $query->where('id_affecte_a_utilisateur', auth()->id());
+    })
+    ->paginate(10);
+    return view('dashboards.division.courriers.interne',[
+        'courriers'=>$courriers,
+    ]);
+}
+public function divisionCourrierArrive(Request $request)
+{
+    $courriers = Courrier::where('type_courrier','arrive')
+    ->where('statut','arriver')
+    ->whereHas('affectations', function($query) {
+        $query->where('id_affecte_a_utilisateur', auth()->id());
+    })
+    ->paginate(10);
+    return view('dashboards.division.courriers.arrive',[
+        'courriers'=>$courriers,
+    ]);
+}
 }
