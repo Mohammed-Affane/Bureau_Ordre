@@ -128,8 +128,13 @@ if ($currentUserRole === 'bo') {
         $courrier->update(['statut' => 'en_cours']);
     }
 
-    return redirect()->back()
+    if($currentUserRole !== 'bo'){
+        return redirect()->route(''.$currentUserRole.'.courriers.'.$courrier->type_courrier)
         ->with('success', 'Courrier affecté avec succès à ' . count($request->id_affecte_a_utilisateur) . ' utilisateur(s).');
+    }else{
+        return redirect()->route('courriers.'.$courrier->type_courrier)
+        ->with('success', 'Courrier affecté avec succès à ' . count($request->id_affecte_a_utilisateur) . ' utilisateur(s).');
+    }
 }
 
     private function getAssignableRoles(string $role): array
