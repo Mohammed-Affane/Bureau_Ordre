@@ -118,7 +118,7 @@ if ($currentUserRole === 'bo') {
     }
 
     // Update courrier status
-    if (($currentUserRole === 'sg' && $request->instruction_sg)||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
+    if (($currentUserRole === 'sg' && $status_affectation === 'a_div' )||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
         $courrier->update(['statut' => 'arriver']);
     }
      else {

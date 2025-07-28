@@ -12,7 +12,9 @@ class Affectation extends Model
         'id_affecte_par_utilisateur',
         'statut_affectation',
         'Instruction',
-        'date_affectation'
+        'date_affectation',
+        'traite',
+        'actions'
     ];
 
     public function courrier()
