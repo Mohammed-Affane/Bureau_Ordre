@@ -6,8 +6,10 @@ use App\Models\Courrier;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Entite;
+use App\Http\Traits\CourrierFilterTrait;
 
 class DivisionCourrierController extends Controller{
+  use CourrierFilterTrait;
 
 public function index(Request $request)
 {
@@ -96,11 +98,12 @@ public function index(Request $request)
 }
 public function divisionCourrierInterne(Request $request)
 {
-    $courriers = Courrier::where('type_courrier','interne')
+    $query = Courrier::where('type_courrier','interne')
     ->where('statut','arriver')
     ->whereHas('affectations', function($query) {
         $query->where('id_affecte_a_utilisateur', auth()->id());
-    })
+    });
+    $courriers = $this->applyCourrierFilters($query, 'interne')
     ->paginate(10);
     return view('dashboards.division.courriers.interne',[
         'courriers'=>$courriers,
@@ -108,11 +111,12 @@ public function divisionCourrierInterne(Request $request)
 }
 public function divisionCourrierArrive(Request $request)
 {
-    $courriers = Courrier::where('type_courrier','arrive')
+    $query = Courrier::where('type_courrier','arrive')
     ->where('statut','arriver')
     ->whereHas('affectations', function($query) {
         $query->where('id_affecte_a_utilisateur', auth()->id());
-    })
+    });
+    $courriers = $this->applyCourrierFilters($query, 'arrive')
     ->paginate(10);
     return view('dashboards.division.courriers.arrive',[
         'courriers'=>$courriers,

@@ -80,47 +80,4 @@ class TypeCourrierController extends Controller
         return Excel::download(new CourriersExport($type), "courriers_{$type}.xlsx");
     }
 
-    // /**
-    //  * Export to PDF for specific type
-    //  */
-    // public function exportPdf($type)
-    // {
-    //     $title = $this->getTypeTitle($type);
-    //     return Excel::download(
-    //         new CourriersPdfExport($type, $title), 
-    //         "courriers_{$type}.pdf", 
-    //         \Maatwebsite\Excel\Excel::DOMPDF
-    //     );
-    // }
-
-    // /**
-    //  * Direct PDF export
-    //  */
-    // public function exportDirectPdf($type)
-    // {
-    //     $query = $this->applyCourrierFilters(Courrier::query(), $type);
-    //     $courriers = $query->with(['expediteur', 'agent', 'entiteExpediteur'])->get();
-    //     $title = $this->getTypeTitle($type);
-        
-    //     $pdf = PDF::loadView('courriers.exports.courriers', compact('courriers', 'title'))
-    //         ->setPaper('A4', 'landscape');
-            
-    //     return $pdf->download("courriers_{$type}.pdf");
-    // }
-
-    // /**
-    //  * Get translated title for type
-    //  */
-    // protected function getTypeTitle($type)
-    // {
-    //     $titles = [
-    //         'arrive' => 'Courriers d\'Arrivée',
-    //         'depart' => 'Courriers de Départ',
-    //         'interne' => 'Courriers Internes',
-    //         'visa' => 'Courriers de Visa',
-    //         'decision' => 'Courriers de Décision'
-    //     ];
-        
-    //     return $titles[$type] ?? 'Liste des Courriers';
-    // }
 }

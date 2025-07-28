@@ -8,7 +8,7 @@
                         <div>
 
                             
-                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrive CAB</h1>
+                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrive Division</h1>
                             <p class="text-sm text-gray-500 mt-1">Tous les courriers enregistrés dans le bureau d'ordre</p>
                         </div>
                          {{-- Export Dropdown --}}
@@ -62,7 +62,7 @@
 
                      <!-- Search and Filter Section -->
                     <div class="mb-6 bg-gray-50 p-4 rounded-lg">
-                        <form method="GET" action="{{ route('courriers.arrive') }}">
+                        <form method="GET" action="{{ route('division.courriers.arrive') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <!-- Search Input -->
                                 <div>
@@ -135,7 +135,7 @@
                                     </svg>
                                     Filtrer
                                 </button>
-                                <a href="{{ route('courriers.arrive') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="{{ route('division.courriers.arrive') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     Réinitialiser
                                 </a>
                             </div>
