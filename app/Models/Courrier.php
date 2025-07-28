@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+
 
 class Courrier extends Model
 {
@@ -11,9 +12,9 @@ class Courrier extends Model
         'reference_arrive', 'reference_bo','reference_visa','reference_dec' ,'reference_depart',
         'type_courrier','objet','date_reception','date_enregistrement','Nbr_piece',
         'priorite','id_expediteur','id_agent_en_charge','fichier_scan','statut',
-        'date_depart','entite_id'
+        'date_depart','entite_id','delais'
     ];
-    // app/Models/Courrier.php
+
 
 protected $casts = [
     'date_reception' => 'datetime',
@@ -62,15 +63,5 @@ protected $casts = [
         }
         });
     }
-
-
-
-    
-
-
-
-
-
-    
 
 }
