@@ -430,15 +430,23 @@ class CourrierController extends Controller
 }
 
     public function showDestinataires(Courrier $courrier): View
-{
-    // Charger les relations avec entité
-    $courrier->load('courrierDestinatairePivot.entite');
+    {
+        // Charger les relations avec entité
+        $courrier->load('courrierDestinatairePivot.entite');
 
-    return view('courriers.destinataires', compact('courrier'));
-}
-public function affecte(){
-    dd('test');
-}
+        return view('courriers.destinataires', compact('courrier'));
+    }
+    public function showAffectations(Courrier $courrier): View
+    {
+        $courrier = Courrier::with(['affectations.affectePar', 'affectations.affecteA'])->findOrFail($courrier);
+
+        return view('courriers.affectations', compact('courrier'));
+    }
+
+
+               
+                
+
 
 
 }

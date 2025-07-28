@@ -31,6 +31,10 @@ Route::middleware(['auth'])->group(function () {
     ->name('courriers.destinataires');
 
     Route::get('courriers.arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive');
+    
+    Route::get('/courriers/{courrier}/affecte', [CourrierController::class, 'showAffectations'])
+    ->name('courriers.affecte');
+
     Route::get('courriers.depart', [TypeCourrierController::class, 'courrierDepart'])->name('courriers.depart');
     Route::get('courriers.interne', [TypeCourrierController::class, 'courrierInterne'])->name('courriers.interne');
     Route::get('courriers.visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa');
@@ -109,6 +113,9 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
     Route::get('progress', fn () => view('division.progress'))->name('progress');
     Route::get('completed', fn () => view('division.completed'))->name('completed');
     Route::get('courriers', [DivisionCourrierController::class, 'index'])->name('index');
+
+    Route::get('courriers', [DivisionCourrierController::class, 'index'])->name('courriers.interne');
+    Route::get('courriers', [DivisionCourrierController::class, 'index'])->name('courriers.arrive');
 });
 
 require __DIR__.'/auth.php';
