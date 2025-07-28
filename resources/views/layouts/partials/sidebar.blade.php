@@ -104,11 +104,7 @@
                                         ['name' => 'À Traiter', 'route' => 'division.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'En Cours', 'route' => 'division.progress', 'icon' => 'clock'],
                                         ['name' => 'Terminés', 'route' => 'division.completed', 'icon' => 'check-circle'],
-<<<<<<< HEAD
-                                        ['name'=>'Mes Courrier internes','route'=>'division.courriers.index','icon'=>'inbox'],
-=======
                                         ['name'=>'Mes Courrier internes','route'=>'division.courriers.interne','icon'=>'inbox'],
->>>>>>> a3e0219b1732ab679278ccfa45f093ff82019843
                                         ['name'=>'Mes Courrier arrives','route'=>'division.courriers.arrive','icon'=>'inbox'],
                                     ];
                             }
