@@ -5,7 +5,7 @@
         'bo' => ['route' => 'bo.dashboard', 'label' => "Bureau d'Ordre Dashboard"],
         'cab' => ['route' => 'cab.dashboard', 'label' => "Cabinet Dashboard"],
         'sg' => ['route' => 'sg.dashboard', 'label' => "Secrétariat Général Dashboard"],
-        'division' => ['route' => 'division.dashboard', 'label' => "Chef Division Dashboard"],
+        'chef_division' => ['route' => 'division.dashboard', 'label' => "Chef Division Dashboard"],
         'dai' => ['route' => 'dai.dashboard', 'label' => "Chef Division d'Intégration et d'Analyse Dashboard"],
     ];
 

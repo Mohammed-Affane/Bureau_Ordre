@@ -6,19 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Courrier;
 use App\Models\Affectation;
 use Illuminate\Http\Request;
+use App\Http\Traits\CourrierFilterTrait;
 
 class CabCourrierController extends Controller
 {
+    use CourrierFilterTrait;
     public function cabCourrierInterne()
     {
-        $courriers = Courrier::where('type_courrier', 'interne')
+        $query= Courrier::where('type_courrier', 'interne')
                 ->where('statut', 'en_cours')
                 ->whereHas('affectations', function($query) {
                 $query->where('statut_affectation', 'a_cab');
             })
             ->with(['affectations' => function($query) {
                 $query->where('statut_affectation', 'a_cab');
-            }])
+            }]);
+        $courriers =$this->applyCourrierFilters($query,'interne')
             ->paginate(10);
 
         return view('dashboards.cab.courriers.interne',[
@@ -28,15 +31,16 @@ class CabCourrierController extends Controller
 
     public function cabCourrierArrive()
     {
-        // Get incoming mails with their affectations where status is a_cab
-        $courriers = Courrier::where('type_courrier', 'arrive')
-            ->where('statut', 'en_cours')
-            ->whereHas('affectations', function($query) {
+        // Get incoming mails with their affectations where status is a_cab\]
+              $query= Courrier::where('type_courrier', 'arrive')
+                ->where('statut', 'en_cours')
+                ->whereHas('affectations', function($query) {
                 $query->where('statut_affectation', 'a_cab');
             })
             ->with(['affectations' => function($query) {
                 $query->where('statut_affectation', 'a_cab');
-            }])
+            }]);
+        $courriers =$this->applyCourrierFilters($query,'arrive')
             ->paginate(10);
 
         return view('dashboards.cab.courriers.arrive',[
