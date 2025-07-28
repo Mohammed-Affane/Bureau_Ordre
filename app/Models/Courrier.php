@@ -2,7 +2,7 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 
 class Courrier extends Model
 {
@@ -54,6 +54,21 @@ protected $casts = [
         return $this->belongsToMany(CourrierDestinataire::class,
          'courrier_destinataire_pivot', 'id_courrier', 'id_destinataire_courrier');
     }
+    protected static function booted()
+    {
+        static::creating(function ($courrier) {
+        if (!$courrier->delais) {
+            $courrier->delais = Carbon::now()->addDays(60);
+        }
+        });
+    }
+
+
+
+    
+
+
+
 
 
     
