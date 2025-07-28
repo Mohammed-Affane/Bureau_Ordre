@@ -118,14 +118,20 @@ if ($currentUserRole === 'bo') {
     }
 
     // Update courrier status
+<<<<<<< HEAD
     if (($currentUserRole === 'sg' && $status_affectation === 'a_div' )||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
+=======
+    if (($currentUserRole === 'sg' || $request->instruction_sg)) {
+>>>>>>> 8bc2a896bc772fa56edb94a28d442e5f10448bd2
         $courrier->update(['statut' => 'arriver']);
     }
-     else {
+     elseif($currentUserRole === 'cab'||$request->instruction_cab) {
+        $courrier->update(['statut' => 'en_traitement']);
+    }else{
         $courrier->update(['statut' => 'en_cours']);
     }
 
-    return redirect()->route("courriers.$courrier->type_courrier")
+    return redirect()->back()
         ->with('success', 'Courrier affecté avec succès à ' . count($request->id_affecte_a_utilisateur) . ' utilisateur(s).');
 }
 
@@ -133,7 +139,7 @@ if ($currentUserRole === 'bo') {
     {
         return match ($role) {
             'bo' => ['cab'],
-            'cab' => ['dai', 'sg', 'chef_division'],
+            'cab' => ['dai', 'sg'],
             'sg' => ['dai', 'chef_division'],
             'admin'=>['cab','dai', 'sg', 'chef_division'],
             default => [],
