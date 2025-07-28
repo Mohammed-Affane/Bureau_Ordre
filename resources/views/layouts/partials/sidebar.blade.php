@@ -61,6 +61,8 @@
                                         ['name' => 'À Traiter', 'route' => 'cab.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'Affectations', 'route' => 'cab.assignments', 'icon' => 'arrow-right'],
                                         ['name' => 'Historique', 'route' => 'cab.history', 'icon' => 'clock'],
+                                        ['name'=>'Mes Courrier internes','route'=>'cab.courriers.interne','icon'=>'inbox'],
+                                        ['name'=>'Mes Courrier arrives','route'=>'cab.courriers.arrive','icon'=>'inbox'],
                                         ['name'=>'Courriers','route'=>'courriers.index','icon'=>'inbox','submenu'=>[
                                             ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
                                             ['name' => 'Départs', 'route' => 'courriers.depart'],
@@ -75,6 +77,8 @@
                                         ['name' => 'Dashboard', 'route' => 'dai.dashboard', 'icon' => 'home'],
                                         ['name' => 'À Traiter', 'route' => 'dai.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'Clôturés', 'route' => 'dai.closed', 'icon' => 'check-circle'],
+                                        ['name'=>'Mes Courrier internes','route'=>'dai.index','icon'=>'inbox'],
+                                        ['name'=>'Mes Courrier arrives','route'=>'dai.arrive','icon'=>'inbox'],
                                     ];
                                     break;
                                 case 'sg':
@@ -83,6 +87,8 @@
                                         ['name' => 'À Affecter', 'route' => 'sg.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'Divisions', 'route' => 'sg.divisions', 'icon' => 'building-office'],
                                         ['name' => 'Suivi', 'route' => 'sg.tracking', 'icon' => 'eye'],
+                                        ['name'=>'Mes Courrier internes','route'=>'sg.courriers.interne','icon'=>'inbox'],
+                                        ['name'=>'Mes Courrier arrives','route'=>'sg.courriers.arrive','icon'=>'inbox'],
                                         ['name'=>'Courriers','route'=>'courriers.index','icon'=>'inbox','submenu'=>[
                                             ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
                                             ['name' => 'Départs', 'route' => 'courriers.depart'],
@@ -98,7 +104,8 @@
                                         ['name' => 'À Traiter', 'route' => 'division.pending', 'icon' => 'exclamation-circle'],
                                         ['name' => 'En Cours', 'route' => 'division.progress', 'icon' => 'clock'],
                                         ['name' => 'Terminés', 'route' => 'division.completed', 'icon' => 'check-circle'],
-                                        ['name'=>'Mes Courrier','route'=>'division.index','icon'=>'inbox']
+                                        ['name'=>'Mes Courrier internes','route'=>'division.index','icon'=>'inbox'],
+                                        ['name'=>'Mes Courrier arrives','route'=>'division.arrive','icon'=>'inbox'],
                                     ];
                             }
                         @endphp

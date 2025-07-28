@@ -28,35 +28,16 @@
     $userRole = Auth::user()->roles()->first()->name;
     $showActions = false;
 
-    $hasCabAffectation = false;
-    $hasSGAffectation = false;
-    $hasDAIAffectation = false;
 
-
-    foreach ($courrier->affectations as $affectation) {
-        if ($affectation->statut_affectation === 'a_cab') {
-            $hasCabAffectation = true;
-        }
-        if ($affectation->statut_affectation === 'a_sg') {
-            $hasSGAffectation = true;
-        }
-        if ($affectation->statut_affectation === 'a_div') {
-            $hasDAIAffectation = true;
-        }
-       
-    }
-    
-
-
-    if (($userRole === 'bo' && $courrier->statut === 'en_attente') || $userRole === 'admin') {
-        $showActions = true;
-    } elseif ($userRole === 'cab' && $hasCabAffectation && !$hasSGAffectation && !$hasDAIAffectation) {
-        // Cabinet peut agir si a_cab présent et pas encore à SG
-        $showActions = true;
-    } elseif ($userRole === 'sg' && $hasSGAffectation && $courrier->statut !== 'arriver' ) {
-        // SG peut agir seulement si a_sg est présent
-        $showActions = true;
-    }
+if($userRole === 'cab'&& $courrier->statut === 'en_cours'){
+    $showActions = true;
+}
+if($userRole === 'bo'&& $courrier->statut === 'en_attente'){
+    $showActions = true;
+}
+if($userRole === 'sg'&& $courrier->statut === 'en_traitement'){
+    $showActions = true;
+}
 @endphp
 
 
