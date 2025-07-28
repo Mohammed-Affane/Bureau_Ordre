@@ -25,10 +25,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
     
 //-------affectation route 
-//   Route::get('courriers.affecte', [CourrierController::class, 'affecte'])->name('courriers.affecte');
 
     Route::get('/courriers/{courrier}/destinataires', [CourrierController::class, 'showDestinataires'])
     ->name('courriers.destinataires');
+
+    Route::get('/courriers/{courrier}/affecte', [CourrierController::class, 'showAffectations'])
+    ->name('courriers.affecte');
 
     Route::get('courriers.arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive');
     Route::get('courriers.depart', [TypeCourrierController::class, 'courrierDepart'])->name('courriers.depart');
@@ -114,7 +116,6 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
 });
 
 require __DIR__.'/auth.php';
-
 
 
 
