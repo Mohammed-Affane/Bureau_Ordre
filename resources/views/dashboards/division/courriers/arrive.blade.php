@@ -290,19 +290,10 @@
             
          
 
-            
-   <td class="px-4 py-3 whitespace-nowrap">
-
-
-  <x-Actions type='arrive' :courrier="$courrier" :courrierInstruct='$courrierInstruct'  /> 
-
-
-
-   </td>
 
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->delais?->format('d/m/Y') ?? '-' }}</td>
             <td class="px-4 py-3 whitespace-nowrap">
-                <x-Actions type='arrive' :courrier="$courrier"  /> 
+                <x-Actions type='arrive' :courrier="$courrier" :courrierInstruct='$courrierInstruct'    /> 
             </td>
 
 </div>
