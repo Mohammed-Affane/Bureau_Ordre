@@ -323,6 +323,19 @@
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
                 </div>
+                <div class="form-group">
+                    <label for="delais" class="block font-medium text-gray-700 mb-1">Date de délais</label>
+                    <input 
+                        type="date" 
+                        name="delais" 
+                        id="delais" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('delais') }}"
+                        min="{{ date('Y-m-d') }}">
+                    @error('delais')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
         </section>
 
