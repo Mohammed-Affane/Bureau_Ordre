@@ -153,11 +153,11 @@
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recepteurs</th>
-
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entite Expediteur</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Affecter Par/A qui</th>
+    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Date Delais</th>
     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
 </tr>
 </thead>
@@ -259,19 +259,15 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
             <a href="{{ route('courriers.affecte', $courrier->id) }}"
-   class="text-blue-600 visited:text-purple-600 ...">
-   Voir les Affectations
-</a>
-
-
-
+                class="text-blue-600 visited:text-purple-600 ...">
+                Voir les Affectations
+            </a>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->delais?->format('d/m/Y') ?? '-' }}</td>
             </td>
             <td class="px-4 py-3 whitespace-nowrap">
-
-  <x-Actions type='interne' :courrier="$courrier"  />
-
-
-      </td>
+                <x-Actions type='interne' :courrier="$courrier"  />
+            </td>
         </tr>
     @empty
         <tr>

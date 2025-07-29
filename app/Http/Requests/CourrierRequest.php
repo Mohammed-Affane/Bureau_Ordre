@@ -34,6 +34,9 @@ class CourrierRequest extends FormRequest
             // Priorité
             'priorite' => ['required', 'string', Rule::in(['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])],
             
+            // Date Delais
+            'delais' => ['nullable', 'date', 'after:date_enregistrement'],
+            
             // Références conditionnelles selon le type
             'reference_arrive' => ['nullable', 'integer', 'min:1'],
             'reference_bo' => ['nullable', 'integer', 'min:1'],
@@ -79,7 +82,9 @@ class CourrierRequest extends FormRequest
             'dest_telephone.*' => ['nullable', 'string', 'max:20'],
             
             // Fichier scan
-            'fichier_scan' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'],
+           'fichier_scan' => $this->isMethod('POST') 
+            ? ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048']
+            : ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'],
         ];
     }
 
@@ -107,6 +112,7 @@ class CourrierRequest extends FormRequest
             'Nbr_piece.max' => 'Le nombre de pièces ne peut pas dépasser 999.',
             
             'priorite.in' => 'La priorité sélectionnée n\'est pas valide.',
+            'delais.after' => 'La date de délais doit être postérieure à la date d\'enregistrement.',
 
             
             'reference_arrive.integer' => 'La référence d\'arrivée doit être un nombre entier.',
@@ -158,6 +164,7 @@ class CourrierRequest extends FormRequest
             'date_depart' => 'date de départ',
             'Nbr_piece' => 'nombre de pièces',
             'priorite' => 'priorité',
+            'delais' => 'date de délais',
             'id_expediteur' => 'expéditeur',
             'entite_id' => 'entité expéditrice',
             'reference_arrive' => 'référence d\'arrivée',

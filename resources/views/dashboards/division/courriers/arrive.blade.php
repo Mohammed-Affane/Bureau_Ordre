@@ -166,6 +166,8 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instruction SG</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Delais</th>
+
             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
 </thead>
@@ -269,6 +271,7 @@
                 </span>
             </td>
 
+
            @php  
 
     $courrierInstruct = $courrier->affectations
@@ -297,9 +300,11 @@
 
    </td>
 
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->delais?->format('d/m/Y') ?? '-' }}</td>
+            <td class="px-4 py-3 whitespace-nowrap">
+                <x-Actions type='arrive' :courrier="$courrier"  /> 
+            </td>
 
-      
-  
 </div>
            
         </tr>

@@ -33,6 +33,7 @@ class CourriersSeeder extends Seeder
 
             for ($j = 0; $j < $recordsInBatch; $j++) {
                 $type = $types[array_rand($types)];
+                $dateEnregistrement = $faker->dateTimeBetween('-2 years', 'now');
 
                 $row = [
                     'reference_arrive'     => null,
@@ -42,11 +43,12 @@ class CourriersSeeder extends Seeder
                     'reference_depart'     => null,
                     'date_reception'       => null,
                     'date_depart'          => null,
+                    'delais'              => $faker->dateTimeBetween($dateEnregistrement, '+3 months')->format('Y-m-d'), // Always set
 
                     'type_courrier'        => $type,
                     'objet'                => $this->generateObjet($type, $faker),
                     'fichier_scan'         => $faker->boolean(80) ? 'documents/' . $faker->word . '.pdf' : null,
-                    'date_enregistrement'  => $faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
+                    'date_enregistrement'  => $dateEnregistrement->format('Y-m-d'),
                     'Nbr_piece'            => $faker->numberBetween(1, 10),
                     'priorite'             => $priorites[array_rand($priorites)],
                     'statut'               => 'en_attente',
