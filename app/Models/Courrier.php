@@ -20,7 +20,7 @@ protected $casts = [
     'date_reception' => 'datetime',
     'date_enregistrement' => 'datetime',
     'date_depart' => 'datetime',
-    // other casts...
+    'delais' => 'datetime',
 ];
 
 // Expéditeur externe
