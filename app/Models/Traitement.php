@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Traitement extends Model
 {
-    protected $fillable = ['id_affectation', 'action', 'commentaire', 'date_traitement'];
+    protected $fillable = ['id_affectation', 'action', 'commentaire', 'date_traitement','statut'];
 
     public function affectation()
     {

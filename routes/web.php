@@ -113,6 +113,14 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
     Route::get('courriers', [DivisionCourrierController::class, 'index'])->name('index');
     Route::get('courriers.interne',[DivisionCourrierController::class,'divisionCourrierInterne'])->name('courriers.interne');
     Route::get('courriers.arrive',[DivisionCourrierController::class,'divisionCourrierArrive'])->name('courriers.arrive');
+
+
+     Route::get('/affectations/{affectation}/traiter', [DivisionCourrierController::class, 'showTraitement'])
+         ->name('affectations.traitement.show');
+         
+    Route::post('/affectations/{affectation}/traiterstore', [DivisionCourrierController::class, 'storeTraitement'])
+         ->name('affectations.traitement.store');
+
 });
 
 require __DIR__.'/auth.php';

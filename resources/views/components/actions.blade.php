@@ -1,3 +1,4 @@
+
 <div class="relative inline-block" x-data="{ open: false }" data-courrier-id="{{ $courrier->id }} ">
     <button @click="open = !open" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         <span>Actions</span>
@@ -27,6 +28,7 @@
    @php
     $userRole = Auth::user()->roles()->first()->name;
     $showActions = false;
+    $showTraitement=false;
 
 
 if($userRole === 'cab'&& $courrier->statut === 'en_cours'){
@@ -38,13 +40,38 @@ if($userRole === 'bo'&& $courrier->statut === 'en_attente'){
 if($userRole === 'sg'&& $courrier->statut === 'en_traitement'){
     $showActions = true;
 }
+if($userRole === 'chef_division'&& $courrier->statut === 'arriver'){
+    $showTraitement = true;
+}
 @endphp
+
+
+
+   @if($showTraitement)
+   
+    @php
+        $affectation = $courrier->affectations->where('id_affecte_a_utilisateur', Auth::id())->first();
+   
+    
+   @endphp
+
+    
+    @if($affectation && $courrierInstruct)
+        <a href="{{ route('division.affectations.traitement.show', $affectation->id) }}" 
+           class="flex items-center px-4 py-2 text-sm text-blue-600 hover:bg-blue-100" role="menuitem">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            {{ $affectation->traitements ? 'Modifier traitement' : 'Traiter' }}
+        </a>
+    @endif
+@endif
 
 
 @if($showActions)
 
 
-<a href="/courriers/{{ $courrier->id }}/edit" @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/edit`" class="flex items-center px-4 py-2 text-sm text-yellow-600 hover:bg-yellow-100" role="menuitem">
+            <a href="/courriers/{{ $courrier->id }}/edit" @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/edit`" class="flex items-center px-4 py-2 text-sm text-yellow-600 hover:bg-yellow-100" role="menuitem">
                 <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                 </svg>
@@ -66,10 +93,9 @@ if($userRole === 'sg'&& $courrier->statut === 'en_traitement'){
                 </svg>
                 Supprimer
             </button>
-            
-
 @endif
-            
+
+   
              
         </div>
     </div>

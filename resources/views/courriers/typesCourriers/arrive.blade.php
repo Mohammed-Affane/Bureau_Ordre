@@ -174,6 +174,8 @@
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
+        
+   
 
           
         <tr>
