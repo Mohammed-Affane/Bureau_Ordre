@@ -165,14 +165,15 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recepteurs</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instruction SG</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Delais</th>
+
             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
 
-          
         <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_bo }}</td>
@@ -269,10 +270,41 @@
                     {{ ucfirst(str_replace('_', ' ', $courrier->priorite)) }}
                 </span>
             </td>
+
+
+           @php  
+
+    $courrierInstruct = $courrier->affectations
+    ->where('id_affecte_a_utilisateur', Auth::id())
+    ->whereNotNull('Instruction')->filter(function($affectation) {
+
+        return !empty(trim($affectation->Instruction));
+    })->first();
+
+@endphp
+
+           <td class="px-6 py-4 whitespace-nowrap">
+    {{ $courrierInstruct ? $courrierInstruct->Instruction : "-" }}
+</td>
+
+            
+         
+
+            
+   <td class="px-4 py-3 whitespace-nowrap">
+
+
+  <x-Actions type='arrive' :courrier="$courrier" :courrierInstruct='$courrierInstruct'  /> 
+
+
+
+   </td>
+
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->delais?->format('d/m/Y') ?? '-' }}</td>
             <td class="px-4 py-3 whitespace-nowrap">
                 <x-Actions type='arrive' :courrier="$courrier"  /> 
             </td>
+
 </div>
            
         </tr>
@@ -280,6 +312,8 @@
         <tr>
             <td colspan="18" class="px-6 py-4 text-center text-gray-500">Aucun courrier trouvé.</td>
         </tr>
+
+
     @endforelse
 
      

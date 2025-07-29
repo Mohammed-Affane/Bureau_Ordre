@@ -12,12 +12,15 @@ class Actions extends Component
      * Create a new component instance.
      */
       public $type;
+      public $courrier;
+    public $courrierInstruct;
 
-    public function __construct($type='arrive', $courrier = null)
+    public function __construct($type='arrive', $courrier = null, $courrierInstruct = null)
     {
      
         $this->type=$type;
         $this->courrier=$courrier;
+        $this->courrierInstruct = $courrierInstruct;
    
     }
 
@@ -29,7 +32,9 @@ class Actions extends Component
     {
         return view('components.actions', [
         'courrier' => $this->courrier,
-        'type' => $this->type
+        'type' => $this->type,
+        'courrierInstruct' => $this->courrierInstruct,
+
     ]);
     }
 }

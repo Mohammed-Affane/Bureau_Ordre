@@ -13,8 +13,6 @@ class Affectation extends Model
         'statut_affectation',
         'Instruction',
         'date_affectation',
-        'traite',
-        'actions'
     ];
 
     public function courrier()
@@ -31,8 +29,14 @@ class Affectation extends Model
     {
         return $this->belongsTo(User::class, 'id_affecte_par_utilisateur');
     }
-    public function traitements()
+
+     public function traitement()
     {
-        return $this->hasMany(Traitement::class, 'id_affectation');
+        return $this->hasOne(Traitement::class);
+    }
+
+    public function isTraite()
+    {
+        return $this->traitement && $this->traitement->statut !== 'brouillon';
     }
 }

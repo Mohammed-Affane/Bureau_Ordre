@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('traitements', function (Blueprint $table) {
             $table->id();
-            $table->string('action');
-            $table->text('commentaire')->nullable();
+            $table->text('action')->nullable();
             $table->date('date_traitement')->nullable();
+            $table->enum('statut', ['brouillon', 'valide', 'envoyé_au_SG'])->default('brouillon');
             
 
             // Clés étrangères

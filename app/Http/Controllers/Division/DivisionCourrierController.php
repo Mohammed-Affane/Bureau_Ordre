@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Division;
 
-use App\Models\Courrier;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Entite;
+use App\Models\Courrier;
+use App\Models\Affectation;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\CourrierFilterTrait;
 
 class DivisionCourrierController extends Controller{
@@ -105,6 +107,7 @@ public function divisionCourrierInterne(Request $request)
     });
     $courriers = $this->applyCourrierFilters($query, 'interne')
     ->paginate(10);
+    
     return view('dashboards.division.courriers.interne',[
         'courriers'=>$courriers,
     ]);
@@ -122,4 +125,18 @@ public function divisionCourrierArrive(Request $request)
         'courriers'=>$courriers,
     ]);
 }
+public function showTraitement(Affectation $affectation)
+
+{
+
+   // Vérifier que l'affectation est bien pour l'utilisateur connecté
+        if ($affectation->id_affecte_a_utilisateur !== Auth::id()) {
+            abort(403, "Vous n'êtes pas autorisé à traiter cette affectation");
+        }
+
+        return view('courriers.traitements', compact('affectation'));
+
+}
+
+
 }

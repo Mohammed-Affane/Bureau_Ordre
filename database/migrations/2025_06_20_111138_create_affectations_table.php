@@ -18,9 +18,6 @@ return new class extends Migration
             $table->date('date_affectation')->nullable();
             $table->text('Instruction')->nullable();
 
-            $table->boolean('traite')->default(0);
-            $table->text('actions')->nullable();
-
 
              // Clés étrangères
             $table->unsignedBigInteger('id_courrier');
