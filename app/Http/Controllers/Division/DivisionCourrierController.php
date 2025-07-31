@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Division;
 
 use App\Models\Entite;
 use App\Models\Courrier;
+use App\Models\Traitement;
 use App\Models\Affectation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -137,6 +138,21 @@ public function showTraitement(Affectation $affectation)
         return view('courriers.traitements', compact('affectation'));
 
 }
+public function storeTraitement(Request $request, Traitement $Traitement,Affectation $affectation)
+{
+    $validated = $request->validate([
+        'action' => 'required|string|max:2000',
+        'statut' => 'required|in:brouillon,validé',
+    ]);
 
+    $Traitement->action = $validated['action'];
+    $Traitement->statut = $validated['statut']; // or another field name
+    $Traitement->date_traitement = now(); // optional: track date of processing
+    $Traitement->id_affectation = $affectation->id;
+    $Traitement->save();
+
+    return redirect()->route('division.courriers.arrive')
+        ->with('success', 'Traitement du courrier enregistré avec succès.');
+}
 
 }
