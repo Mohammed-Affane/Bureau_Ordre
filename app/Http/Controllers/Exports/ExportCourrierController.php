@@ -14,28 +14,44 @@ use App\Exports\CourriersExport;
 
 class ExportCourrierController extends Controller
 {
-    public function exportPdf(Request $request, $type)
-    {
-        // Get filtered courriers based on request parameters
-         $query = Courrier::where('type_courrier', $type)
-             ->with(['expediteur', 'agent', 'entiteExpediteur','courrierDestinatairePivot' 
-         ]);
-         $this->applyFilters($query, $request);
+   public function exportPdf(Request $request, $type)
+{
+    set_time_limit(0);
+    ini_set('memory_limit', '512M');
 
-          $courriers = $query->get();
+    $query = Courrier::where('type_courrier', $type)
+        ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
 
-          
-        $html = view('courriers.exports.courriersPDF',[
-             'courriers' => $courriers,
-             'type' => $type,
-             'filters' => $request->all(),
-         ])->render();
+    $this->applyFilters($query, $request);
+
+    $html = '';
+
+    // Add the PDF header layout
+    $html .= view('courriers.exports.partials.pdfHeader', [
+        'type' => $type,
+        'filters' => $request->all(),
+    ])->render();
+
+    // Chunk and render each block
+    $query->chunk(300, function ($courriersChunk) use (&$html, $type, $request) {
+        $html .= view('courriers.exports.partials.courriersPDFChunk', [
+            'courriers' => $courriersChunk,
+            'type' => $type,
+            'filters' => $request->all(),
+        ])->render();
+
+        // Optional page break between chunks
+        $html .= '<div style="page-break-after: always;"></div>';
+    });
+
     $pdfContent = GpdfFacade::generate($html);
+
     return response($pdfContent, 200, [
         'Content-Type' => 'application/pdf',
-        'Content-Disposition' => 'attachment; filename="courriers-'.$type.'.pdf"',
+        'Content-Disposition' => 'attachment; filename="courriers-' . $type . '.pdf"',
     ]);
-    }
+}
+
     
     public function exportExcel(Request $request, $type)
     {
