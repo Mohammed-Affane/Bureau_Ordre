@@ -18,8 +18,8 @@
 
 
                     <div class="mb-4">
-                        <label for="commentaire" class="block text-sm font-medium text-gray-700">Actions</label>
-                        <textarea name="commentaire" id="commentaire" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>{{ old('commentaire') }}</textarea>
+                        <label for="action" class="block text-sm font-medium text-gray-700">Actions</label>
+                        <textarea name="action" id="commentaire" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>{{ old('commentaire') }}</textarea>
                     </div>
 
                     <div class="mb-4">

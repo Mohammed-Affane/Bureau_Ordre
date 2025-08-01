@@ -75,6 +75,7 @@
                                         <option value="">Tous les statuts</option>
                                         <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente</option>
                                         <option value="en_cours" {{ request('statut') == 'en_cours' ? 'selected' : '' }}>En cours</option>
+                                        <option value="en_traitement" {{ request('statut') == 'en_traitement' ? 'selected' : '' }}>En Traitement</option>
                                         <option value="arriver" {{ request('statut') == 'arriver' ? 'selected' : '' }}>Arrivé</option>
                                         <option value="cloture" {{ request('statut') == 'cloture' ? 'selected' : '' }}>Clôturé</option>
                                         <option value="archiver" {{ request('statut') == 'archiver' ? 'selected' : '' }}>Archivé</option>
