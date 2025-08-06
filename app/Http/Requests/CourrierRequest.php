@@ -7,69 +7,45 @@ use Illuminate\Validation\Rule;
 
 class CourrierRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            // Type de courrier - obligatoire
+        // CAB users - limited validation
+        if (auth()->user()->hasRole('cab')) {
+            return [
+                'priorite' => ['required', 'string', Rule::in(['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])],
+                'delais' => ['nullable', 'date', 'after:date_enregistrement'],
+            ];
+        }
+
+        // Base rules for all users
+        $rules = [
             'type_courrier' => ['required', 'string', Rule::in(['arrive', 'depart', 'visa', 'decision', 'interne'])],
-            
-            // Informations du courrier - obligatoires
             'objet' => ['required', 'string', 'max:255'],
             'date_enregistrement' => ['required', 'date', 'before_or_equal:today'],
             'Nbr_piece' => ['required', 'integer', 'min:1', 'max:999'],
-            
-            // Priorité
-            'priorite' => ['required', 'string', Rule::in(['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])],
-            
-            // Date Delais
-            'delais' => ['nullable', 'date', 'after:date_enregistrement'],
-            
-            // Références conditionnelles selon le type
             'reference_arrive' => ['nullable', 'integer', 'min:1'],
             'reference_bo' => ['nullable', 'integer', 'min:1'],
             'reference_visa' => ['nullable', 'integer', 'min:1'],
             'reference_dec' => ['nullable', 'integer', 'min:1'],
             'reference_depart' => ['nullable', 'integer', 'min:1'],
-            
-            // Dates conditionnelles
             'date_reception' => ['nullable', 'date', 'before_or_equal:today'],
             'date_depart' => ['nullable', 'date', 'before_or_equal:today'],
-            
-            // Expéditeur existant (pour courrier arrivé)
             'id_expediteur' => ['nullable', 'integer', 'exists:expediteurs,id'],
-            
-            // Nouvel expéditeur (pour courrier arrivé)
             'exp_nom' => ['nullable', 'string', 'max:255'],
             'exp_type_source' => ['nullable', 'string', Rule::in(['citoyen', 'administration'])],
             'exp_adresse' => ['nullable', 'string', 'max:500'],
             'exp_telephone' => ['nullable', 'string', 'max:20'],
             'exp_CIN' => ['nullable', 'string', 'max:50'],
-            
-            // Entité expéditrice (pour courrier départ/décision/interne)
             'entite_id' => ['nullable', 'integer', 'exists:entites,id'],
-            
-            // Destinataires internes
             'destinataires_entite' => ['nullable', 'array'],
             'destinataires_entite.*' => ['integer', 'exists:entites,id'],
-            
-            // Destinataires externes existants
             'destinataires_externe' => ['nullable', 'array'],
             'destinataires_externe.*' => ['integer', 'exists:courrier_destinataires,id'],
-            
-            // Nouveaux destinataires externes
             'dest_nom' => ['nullable', 'array'],
             'dest_nom.*' => ['nullable', 'string', 'max:255'],
             'dest_type_source' => ['nullable', 'array'],
@@ -80,14 +56,17 @@ class CourrierRequest extends FormRequest
             'dest_CIN.*' => ['nullable', 'string', 'max:50'],
             'dest_telephone' => ['nullable', 'array'],
             'dest_telephone.*' => ['nullable', 'string', 'max:20'],
-            
-            // Fichier scan
-           'fichier_scan' => $this->isMethod('POST') 
-            ? ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048']
-            : ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'],
         ];
-    }
 
+        // File is only required for new courriers (store action)
+        if ($this->isMethod('POST')) {
+            $rules['fichier_scan'] = ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'];
+        } else {
+            $rules['fichier_scan'] = ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'];
+        }
+
+        return $rules;
+    }
     /**
      * Get custom validation messages.
      */
@@ -186,41 +165,48 @@ class CourrierRequest extends FormRequest
     /**
      * Configure the validator instance.
      */
-    public function withValidator($validator): void
+   public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             $this->validateConditionalFields($validator);
         });
     }
 
-    /**
-     * Validate conditional fields based on courier type.
-     */
     protected function validateConditionalFields($validator): void
     {
         $type = $this->input('type_courrier');
 
-        // Validation pour courrier arrivé
-        if ($type === 'arrive') {
-            // Doit avoir soit un expéditeur existant, soit un nouvel expéditeur
+        // Expediteur validation for arrive/visa
+        if (in_array($type, ['arrive', 'visa'])) {
+            // Require either existing expediteur or new expediteur details
             if (!$this->filled('id_expediteur') && !$this->filled('exp_nom')) {
                 $validator->errors()->add('id_expediteur', 'Vous devez sélectionner un expéditeur existant ou créer un nouveau.');
             }
 
-            // Si CIN est fourni, vérifier que le type_source est 'citoyen'
+            // Validate CIN requires citoyen type
             if ($this->filled('exp_CIN') && $this->input('exp_type_source') !== 'citoyen') {
                 $validator->errors()->add('exp_type_source', 'Le type de source doit être "citoyen" si un CIN est fourni.');
             }
         }
 
-        // Validation pour courrier départ/décision/interne
+        // Entite required for depart/decision/interne
         if (in_array($type, ['depart', 'decision', 'interne'])) {
             if (!$this->filled('entite_id')) {
                 $validator->errors()->add('entite_id', 'L\'entité expéditrice est obligatoire pour ce type de courrier.');
             }
         }
 
-        // Validation pour les nouveaux destinataires externes
+        // Destinataires validation
+        $requiresDestinataires = in_array($type, ['depart', 'decision', 'interne', 'visa']);
+        $hasDestinataires = $this->filled('destinataires_entite') || 
+                           $this->filled('destinataires_externe') || 
+                           $this->hasFilledDestinatairesManuels();
+
+        if ($requiresDestinataires && !$hasDestinataires) {
+            $validator->errors()->add('destinataires', 'Au moins un destinataire doit être sélectionné.');
+        }
+
+        // Validate manual destinataires
         if ($this->has('dest_nom')) {
             foreach ($this->input('dest_nom', []) as $index => $nom) {
                 if (!empty($nom)) {
@@ -234,41 +220,21 @@ class CourrierRequest extends FormRequest
                 }
             }
         }
-
-        // Validation des destinataires (au moins un destinataire requis)
-        $hasDestinataires = $this->filled('destinataires_entite') || 
-                           $this->filled('destinataires_externe') || 
-                           $this->hasFilledDestinatairesManuels();
-
-        if (!$hasDestinataires) {
-            $validator->errors()->add('destinataires', 'Au moins un destinataire doit être sélectionné.');
-        }
     }
 
-    /**
-     * Check if manual destinataires are filled.
-     */
     protected function hasFilledDestinatairesManuels(): bool
     {
-        if (!$this->has('dest_nom')) {
-            return false;
-        }
+        if (!$this->has('dest_nom')) return false;
 
         foreach ($this->input('dest_nom', []) as $nom) {
-            if (!empty(trim($nom))) {
-                return true;
-            }
+            if (!empty(trim($nom))) return true;
         }
 
         return false;
     }
 
-    /**
-     * Prepare the data for validation.
-     */
     protected function prepareForValidation(): void
     {
-        // Nettoyer les données avant validation
         $this->merge([
             'objet' => trim($this->input('objet', '')),
             'exp_nom' => trim($this->input('exp_nom', '')),
@@ -277,10 +243,9 @@ class CourrierRequest extends FormRequest
             'exp_CIN' => trim($this->input('exp_CIN', '')),
         ]);
 
-        // Nettoyer les noms des destinataires manuels
         if ($this->has('dest_nom')) {
-            $destNoms = array_map('trim', $this->input('dest_nom', []));
-            $this->merge(['dest_nom' => $destNoms]);
+            $cleanedDestNoms = array_map('trim', $this->input('dest_nom', []));
+            $this->merge(['dest_nom' => $cleanedDestNoms]);
         }
     }
 }
