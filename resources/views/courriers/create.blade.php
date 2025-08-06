@@ -66,7 +66,7 @@
         </div>
         <div >
             <div class="grid grid-cols-1 md:grid-cols gap-4">
-                <div x-show="type === 'interne' || type === 'arrive' ">
+                <div x-show="type === 'interne'">
                     <label>Destinataires internes</label>
                     <select id="destinataires" name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                         @foreach($entites as $entite)
@@ -225,6 +225,20 @@
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
+                    <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de réception</label>
+                    <input 
+                        type="date" 
+                        name="date_reception" 
+                        id="date_reception" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                        value="{{ old('date_reception') }}"
+                        max="{{ date('Y-m-d') }}">
+                    @error('date_reception')
+                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
                 
                 <div class="form-group"  x-show="type === 'arrive'">
                     <label for="reference_bo" class="block font-medium text-gray-700 mb-1">
@@ -243,19 +257,7 @@
                     @enderror
                 </div>
                 
-                <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
-                    <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de réception</label>
-                    <input 
-                        type="date" 
-                        name="date_reception" 
-                        id="date_reception" 
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
-                        value="{{ old('date_reception') }}"
-                        max="{{ date('Y-m-d') }}">
-                    @error('date_reception')
-                        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
-                    @enderror
-                </div>
+
                 
                 <div class="form-group" x-show="type === 'depart' || type === 'interne'|| type === 'decision'" >
                     <label for="date_depart" class="block font-medium text-gray-700 mb-1">Date de Depart</label>
@@ -308,7 +310,7 @@
                     @enderror
                 </div>
                 
-                <div class="form-group">
+               <!--  <div class="form-group">
                     <label for="priorite" class="block font-medium text-gray-700 mb-1">Priorité</label>
                     <select 
                         name="priorite" 
@@ -322,8 +324,8 @@
                     @error('priorite')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
-                </div>
-                <div class="form-group">
+                </div> -->
+<!--                 <div class="form-group">
                     <label for="delais" class="block font-medium text-gray-700 mb-1">Date de délais</label>
                     <input 
                         type="date" 
@@ -335,7 +337,7 @@
                     @error('delais')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> -->
             </div>
         </section>
 

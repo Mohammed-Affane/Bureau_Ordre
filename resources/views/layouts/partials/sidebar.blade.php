@@ -42,7 +42,6 @@
                                     break;
                                 case 'bo':
                                     $menuItems = [
-                                        ['name' => 'Dashboard', 'route' => 'bo.dashboard', 'icon' => 'home'],
                                         ['name' => 'Nouveau Courrier', 'route' => 'courriers.create', 'icon' => 'plus'],
                                         ['name' => 'Courriers', 'route' => 'courriers.index', 'icon' => 'inbox', 'submenu' => [
                                             ['name' => 'Arrivés', 'route' => 'courriers.arrive'],

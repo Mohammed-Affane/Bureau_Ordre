@@ -14,71 +14,71 @@ use App\Exports\CourriersExport;
 
 class ExportCourrierController extends Controller
 {
-   public function exportPdf(Request $request, $type)
-{
-    set_time_limit(0);
-    ini_set('memory_limit', '512M');
+    public function exportPdf(Request $request, $type)
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '512M');
 
-    $query = Courrier::where('type_courrier', $type)
-        ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
+        $query = Courrier::where('type_courrier', $type)
+            ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
 
-    $this->applyFilters($query, $request);
+        $this->applyFilters($query, $request);
 
-    $html = '';
+        // ❗ Check if there are any records
+        if (!$query->exists()) {
+            return back()->with('error', 'Aucun courrier trouvé pour l\'export PDF.');
+        }
 
-    // Add the PDF header layout
-    $html .= view('courriers.exports.partials.pdfHeader', [
-        'type' => $type,
-        'filters' => $request->all(),
-    ])->render();
-
-    // Chunk and render each block
-    $query->chunk(300, function ($courriersChunk) use (&$html, $type, $request) {
-        $html .= view('courriers.exports.partials.courriersPDFChunk', [
-            'courriers' => $courriersChunk,
+        $html = view('courriers.exports.partials.pdfHeader', [
             'type' => $type,
             'filters' => $request->all(),
         ])->render();
 
-        // Optional page break between chunks
-        $html .= '<div style="page-break-after: always;"></div>';
-    });
+        $query->chunk(300, function ($courriersChunk) use (&$html, $type, $request) {
+            $html .= view('courriers.exports.partials.courriersPDFChunk', [
+                'courriers' => $courriersChunk,
+                'type' => $type,
+                'filters' => $request->all(),
+            ])->render();
 
-    $pdfContent = GpdfFacade::generate($html);
+            $html .= '<div style="page-break-after: always;"></div>';
+        });
 
-    return response($pdfContent, 200, [
-        'Content-Type' => 'application/pdf',
-        'Content-Disposition' => 'attachment; filename="courriers-' . $type . '.pdf"',
-    ]);
-}
+        $html .= '</body></html>';
 
-    
+        $pdfContent = GpdfFacade::generate($html);
+
+        return response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="courriers-' . $type . '.pdf"',
+        ]);
+    }
+
+
+        
     public function exportExcel(Request $request, $type)
     {
-            // Start with a fresh query
-        $query = Courrier::query()->where('type_courrier', $type)
-            ->with([
-                'expediteur',
-                'agent',
-                'entiteExpediteur',
-                'courrierDestinatairePivot'
-            ]);
+        $query = Courrier::query()
+            ->where('type_courrier', $type)
+            ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
 
-        // Apply filters BEFORE getting the results
         $this->applyFilters($query, $request);
 
-        // Get the filtered results
         $courriers = $query->get();
-           
-        // Generate filename with timestamp
-        $filename = "courriers-{$type}-" . now()->format('Ymd-His') . ".xlsx";
 
+        // ❗ Don't export if nothing is found
+        if ($courriers->isEmpty()) {
+            return back()->with('error', 'Aucun courrier trouvé pour l\'export Excel.');
+        }
+
+        $filename = "courriers-{$type}-" . now()->format('Ymd-His') . ".xlsx";
 
         return Excel::download(
             new CourriersExport($courriers, $type, $request->all()),
             $filename
         );
     }
+
 
     protected function applyFilters($query, $request)
     {
