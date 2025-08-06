@@ -326,7 +326,7 @@
                     @enderror
                 </div>
                 @endunless
-                
+                @unless(auth()->user()->hasRole('bo'))
                 <div class="form-group">
                     <label for="priorite" class="block font-medium text-gray-700 mb-1">Priorité</label>
                     <select 
@@ -356,6 +356,7 @@
                     @enderror
                 </div>
             </div>
+            @endunless
         </section>
 
         @unless(auth()->user()->hasRole('cab'))
