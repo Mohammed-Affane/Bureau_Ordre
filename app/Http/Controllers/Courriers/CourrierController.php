@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Courriers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Entite;
 use App\Models\Courrier;
@@ -46,6 +47,7 @@ class CourrierController extends Controller
     // Update the store method to use CourrierRequest instead of Request
     public function store(CourrierRequest $request): RedirectResponse
     {
+
         $expediteurId = null;
 
         // 1. Cas du courrier arrivé avec ajout manuel d'expéditeur
@@ -444,15 +446,8 @@ class CourrierController extends Controller
    public function showAffectations(Courrier $courrier): View
 {
     $courrier->load('affectations.affectePar', 'affectations.affecteA');
-
-
     return view('courriers.affectations', compact('courrier'));
 }
-
-
-               
-                
-
 
 
 }

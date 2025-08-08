@@ -32,7 +32,7 @@ class CourrierRequest extends FormRequest
             'Nbr_piece' => ['required', 'integer', 'min:1', 'max:999'],
             
             // Priorité
-            'priorite' => ['required', 'string', Rule::in(['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])],
+            'priorite' => ['nullable', 'string', Rule::in(['normale', 'urgent', 'confidentiel', 'A reponse obligatoire'])],
             
             // Date Delais
             'delais' => ['nullable', 'date', 'after:date_enregistrement'],
@@ -214,12 +214,13 @@ class CourrierRequest extends FormRequest
         }
 
         // Validation pour courrier départ/décision/interne
-        if (in_array($type, ['depart', 'decision', 'interne'])) {
-            if (!$this->filled('entite_id')) {
+        if (in_array($type, ['depart', 'decision', 'interne'])) 
+        {
+            if (!$this->filled('entite_id'))
+            {
                 $validator->errors()->add('entite_id', 'L\'entité expéditrice est obligatoire pour ce type de courrier.');
             }
         }
-
         // Validation pour les nouveaux destinataires externes
         if ($this->has('dest_nom')) {
             foreach ($this->input('dest_nom', []) as $index => $nom) {

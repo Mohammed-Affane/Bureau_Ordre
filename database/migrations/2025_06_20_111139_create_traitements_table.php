@@ -25,10 +25,6 @@ return new class extends Migration
             $table->foreign('id_affectation')
                 ->references('id')->on('affectations')
                 ->onDelete('set null')->onUpdate('cascade');
-
-
-
-
             $table->timestamps();
         });
     }
