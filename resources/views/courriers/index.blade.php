@@ -51,7 +51,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
-                @if($courrier->fichier_scan)
+                 @if($courrier->fichier_scan)
                     @php
                         $basePath = 'fichiers_scans_' . $courrier->type_courrier;
                         $filePath = public_path($basePath . '/' . $courrier->fichier_scan);
@@ -86,18 +86,6 @@
                                 </svg>
                             </div>
                         @endif
-                    @else
-                        <!-- File not found -->
-                        <div class="flex items-center justify-center w-10 h-10 bg-red-100 rounded">
-                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </div>
-                    @endif
-                @else
-                    <!-- No file -->
-                    <span class="text-gray-400 text-sm">-</span>
-                @endif
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->type_courrier }}</td>                                             
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>

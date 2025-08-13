@@ -147,26 +147,26 @@
                             <thead class="bg-gray-50">
                                <tr>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Visa</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Enregistrement</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr Pièces</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Réception</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Visa</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Enregistrement</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr Pièces</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expéditeur</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recepteurs</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent en charge</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Delais</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+
 </tr>
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
         <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception->format('d/m/Y') }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_visa }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
+
             <td class="px-6 py-4 whitespace-nowrap">
                 @php
                     $statusClasses = [
@@ -182,9 +182,14 @@
                     {{ ucfirst(str_replace('_', ' ', $courrier->statut)) }}
                 </span>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
+          
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
+        
+
+
+              <td class="px-6 py-4 whitespace-nowrap">
                 @if($courrier->fichier_scan)
                     @php
                         $basePath = 'fichiers_scans_' . $courrier->type_courrier;
@@ -233,31 +238,8 @@
                     <span class="text-gray-400 text-sm">-</span>
                 @endif
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception->format('d/m/Y') }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-                <a href="{{ route('courriers.destinataires', $courrier->id) }}"
-   class="text-blue-600 visited:text-purple-600 ...">
-   Voir les destinataires
-</a>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->agent->name ?? '-' }}</td>
 
-            <td class="px-6 py-4 whitespace-nowrap">
-            @php
-            $prioriteClasses = [
-                        'normale' => 'bg-gray-100 text-gray-800',
-                        'urgent' => 'bg-red-100 text-red-800',
-                        'confidentiel' => 'bg-indigo-100 text-indigo-800',
-                        'A reponse obligatoire' => 'bg-orange-100 text-orange-800',
-                    ];
-            @endphp
-                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $prioriteClasses[$courrier->priorite] ?? 'bg-gray-100 text-gray-800' }}">
-                    {{ ucfirst(str_replace('_', ' ', $courrier->priorite)) }}
-                </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->delais?->format('d/m/Y') ?? '-' }}</td>
+
             <td class="px-4 py-3 whitespace-nowrap">
                 <x-Actions type='visa' :courrier="$courrier"  />
             </td>
