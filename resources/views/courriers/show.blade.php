@@ -15,12 +15,26 @@
                             </svg>
                             Retour
                         </a>
-                        <a href="{{ route('courriers.edit', $courrier) }}" class="px-4 py-2 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700 flex items-center">
+                        
+                        @if ((auth()->user()->hasRole('bo') && $courrier->statut==='en_attente')
+                        ||
+                        (auth()->user()->hasRole('cab') && $courrier->statut==='en_cours')
+                        ||
+                        (auth()->user()->hasRole('sg') && $courrier->statut==='en_traitements')
+                        ||
+                        (auth()->user()->hasRole('chef_division') && $courrier->statut==='arriver')
+                        ||
+                        (auth()->user()->hasRole('dai') && $courrier->statut==='en_traitements')
+                        )
+                         <a href="{{ route('courriers.edit', $courrier) }}" class="px-4 py-2 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                             </svg>
                             Modifier
                         </a>
+                            
+                        @endif
+                       
                     </div>
                 </div>
             </div>
@@ -102,6 +116,11 @@
                                     <dt class="text-gray-600">Enregistrement:</dt>
                                     <dd class="font-medium">{{ $courrier->date_enregistrement ? \Carbon\Carbon::parse($courrier->date_enregistrement)->format('d/m/Y') : '-' }}</dd>
                                 </div>
+
+                                <div class="flex justify-between">
+                                    <dt class="text-gray-600">Delais:</dt>
+                                    <dd class="font-medium">{{ $courrier->delais ? \Carbon\Carbon::parse($courrier->delais)->format('d/m/Y') : '-' }}</dd>
+                                </div>
                             </dl>
                         </div>
                     </div>
@@ -121,20 +140,10 @@
                                 <div>
                                     <h5 class="text-sm font-medium text-gray-500">Destinataires</h5>
                                     @if($courrier->courrierDestinatairePivot->count() > 0)
-                                        <ul class="mt-1 space-y-2">
-                                            @foreach ($courrier->courrierDestinatairePivot as $dest)
-                                                <li class="flex items-start">
-                                                    <svg class="flex-shrink-0 h-5 w-5 text-gray-400 mt-0.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                                                    </svg>
-                                                    @if ($dest->entite)
-                                                        <span>{{ $dest->entite->nom }}</span>
-                                                    @else
-                                                        <span class="italic">{{ $dest->nom }}</span>
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                       <a href="{{ route('courriers.destinataires', $courrier->id) }}"
+class="text-blue-600 visited:text-purple-600 ...">
+   Voir les destinataires
+</a>
                                     @else
                                         <p class="mt-1 text-gray-500">-</p>
                                     @endif
@@ -143,6 +152,14 @@
                                 <div>
                                     <h5 class="text-sm font-medium text-gray-500">Agent en charge</h5>
                                     <p class="mt-1 font-medium">{{ $courrier->agent->name ?? '-' }}</p>
+                                </div>
+
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-500">Affecter Par/A qui</h5>
+                                    <p class="mt-1 font-medium"> <a href="{{ route('courriers.affecte', $courrier->id) }}"
+   class="text-blue-600 visited:text-purple-600 ...">
+   Voir les Affectations
+</a></p>
                                 </div>
                             </div>
                         </div>
@@ -159,6 +176,9 @@
                                     <dt class="text-gray-600">Nombre de pièces:</dt>
                                     <dd class="font-medium">{{ $courrier->Nbr_piece ?? '-' }}</dd>
                                 </div>
+
+
+                                
                             </dl>
                         </div>
                     </div>
