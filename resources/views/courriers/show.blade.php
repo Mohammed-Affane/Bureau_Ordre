@@ -20,9 +20,7 @@
                         ||
                         (auth()->user()->hasRole('cab') && $courrier->statut==='en_cours')
                         ||
-                        (auth()->user()->hasRole('sg') && $courrier->statut==='en_traitements')
-                        ||
-                        (auth()->user()->hasRole('chef_division') && $courrier->statut==='arriver')
+                        (auth()->user()->hasRole('sg') && $courrier->statut==='en_traitement')
                         ||
                         (auth()->user()->hasRole('dai') && $courrier->statut==='en_traitements')
                         )
