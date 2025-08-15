@@ -17,9 +17,9 @@ use App\Http\Controllers\Division\DivisionCourrierController;
 use App\Http\Controllers\CAB\CabCourrierController;
 use App\Http\Controllers\SG\SgCourrierController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+    Route::get('/', function () {
+        return redirect()->route('login');
+    });
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('courriers', CourrierController::class);
