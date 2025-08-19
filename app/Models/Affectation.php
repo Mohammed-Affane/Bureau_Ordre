@@ -30,9 +30,9 @@ class Affectation extends Model
         return $this->belongsTo(User::class, 'id_affecte_par_utilisateur');
     }
 
-     public function traitement()
+     public function traitements()
     {
-        return $this->hasOne(Traitement::class);
+        return $this->hasMany(Traitement::class,'id_affectation');
     }
 
     public function isTraite()

@@ -142,11 +142,10 @@ public function storeTraitement(Request $request, Traitement $Traitement,Affecta
 {
     $validated = $request->validate([
         'action' => 'required|string|max:2000',
-        'statut' => 'required|in:brouillon,validé',
     ]);
 
     $Traitement->action = $validated['action'];
-    $Traitement->statut = $validated['statut']; // or another field name
+    $Traitement->statut = 'valide';// or another field name
     $Traitement->date_traitement = now(); // optional: track date of processing
     $Traitement->id_affectation = $affectation->id;
     $Traitement->save();
