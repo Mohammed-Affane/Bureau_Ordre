@@ -95,7 +95,11 @@
                                             ['name' => 'Visas', 'route' => 'courriers.visa'],
                                             ['name' => 'Décisions', 'route' => 'courriers.decision'],
                                         ]],
+
+                                       ['name'=>'Traitements','route'=>'sg.traitements.arrive','icon'=>'inbox'],
                                     ];
+
+                                    
                                     break;
                                 default: // Chef de division
                                     $menuItems = [

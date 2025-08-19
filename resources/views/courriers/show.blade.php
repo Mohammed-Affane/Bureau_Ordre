@@ -22,7 +22,7 @@
                         ||
                         (auth()->user()->hasRole('sg') && $courrier->statut==='en_traitement')
                         ||
-                        (auth()->user()->hasRole('dai') && $courrier->statut==='en_traitements')
+                        (auth()->user()->hasRole('dai') && $courrier->statut==='en_traitement')
                         )
                          <a href="{{ route('courriers.edit', $courrier) }}" class="px-4 py-2 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-700 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">

@@ -17,7 +17,7 @@
     <!-- Additional Styles -->
     @stack('styles')
 </head>
-<body class="font-sans antialiased bg-gray-50">
+<x-app
     <div class="min-h-screen">
         @auth
             <!-- Sidebar pour utilisateurs connectés -->
