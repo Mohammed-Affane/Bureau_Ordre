@@ -14,44 +14,73 @@ use App\Exports\CourriersExport;
 
 class ExportCourrierController extends Controller
 {
-    public function exportPdf(Request $request, $type)
-    {
-        set_time_limit(0);
-        ini_set('memory_limit', '512M');
+    
+public function exportPdf(Request $request, $type)
+{
+    set_time_limit(0);
+    ini_set('memory_limit', '512M');
 
-        $query = Courrier::where('type_courrier', $type)
-            ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
+    $query = Courrier::where('type_courrier', $type)
+        ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot'])
+        ->courrierByUserRole();
 
-        $this->applyFilters($query, $request);
+    // ✅ apply filters correctly
+    $this->applyFilters($query, $request);
 
-        // ❗ Check if there are any records
-        if (!$query->exists()) {
-            return back()->with('error', 'Aucun courrier trouvé pour l\'export PDF.');
-        }
+    //dd($query->toSql(), $query->getBindings(), $query->count());
 
-        $html = view('courriers.exports.partials.pdfHeader', [
+
+    $courriersCount = $query->count();
+    if ($courriersCount === 0) {
+        return back()->with('error', 'Aucun courrier trouvé pour l\'export PDF.');
+    }
+
+    // ✅ prepare header with correct date range label
+    $html = view('courriers.exports.partials.pdfHeader', [
+        'type' => $type,
+        'filters' => $request->all(),
+        'dateRangeLabel' => $this->getDateRangeLabel($request),
+    ])->render();
+
+    // ✅ chunk already-filtered results
+    $query->chunk(300, function ($courriersChunk) use (&$html, $type, $request) {
+        $html .= view('courriers.exports.partials.courriersPDFChunk', [
+            'courriers' => $courriersChunk,
             'type' => $type,
             'filters' => $request->all(),
         ])->render();
 
-        $query->chunk(300, function ($courriersChunk) use (&$html, $type, $request) {
-            $html .= view('courriers.exports.partials.courriersPDFChunk', [
-                'courriers' => $courriersChunk,
-                'type' => $type,
-                'filters' => $request->all(),
-            ])->render();
+        $html .= '<div style="page-break-after: always;"></div>';
+    });
 
-            $html .= '<div style="page-break-after: always;"></div>';
-        });
+    $html .= '</body></html>';
 
-        $html .= '</body></html>';
+    $pdfContent = GpdfFacade::generate($html);
 
-        $pdfContent = GpdfFacade::generate($html);
+    return response($pdfContent, 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'attachment; filename="courriers-' . $type . '.pdf"',
+    ]);
+}
 
-        return response($pdfContent, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="courriers-' . $type . '.pdf"',
-        ]);
+    protected function getDateRangeLabel($request)
+    {
+        switch ($request->date_range) {
+            case 'today':
+                return 'Aujourd\'hui';
+            case 'week':
+                return 'Cette semaine';
+            case 'month':
+                return 'Ce mois';
+            case 'year':
+                return 'Cette année';
+            case 'custom':
+                $from = $request->date_from ? \Carbon\Carbon::parse($request->date_from)->format('d/m/Y') : '';
+                $to   = $request->date_to ? \Carbon\Carbon::parse($request->date_to)->format('d/m/Y') : '';
+                return "Du $from au $to";
+            default:
+                return 'Non spécifié';
+        }
     }
 
 
@@ -60,7 +89,8 @@ class ExportCourrierController extends Controller
     {
         $query = Courrier::query()
             ->where('type_courrier', $type)
-            ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot']);
+            ->with(['expediteur', 'agent', 'entiteExpediteur', 'courrierDestinatairePivot'])
+            ->courrierByUserRole();
 
         $this->applyFilters($query, $request);
 
@@ -96,18 +126,18 @@ class ExportCourrierController extends Controller
             });
         }
 
-        if ($request->has('statut')) {
-            $query->where('statut', $request->statut);
-        }
-
-        if ($request->has('priorite')) {
-            $query->where('priorite', $request->priorite);
-        }
-
-        if ($request->has('date_range')) {
-            $this->applyDateRangeFilter($query, $request);
-        }
+       if ($request->filled('statut')) {
+        $query->where('statut', $request->statut);
     }
+
+    if ($request->filled('priorite')) {
+        $query->where('priorite', $request->priorite);
+    }
+
+    if ($request->filled('date_range')) {
+        $this->applyDateRangeFilter($query, $request);
+    }
+ }
 
     protected function applyDateRangeFilter($query, $request)
     {

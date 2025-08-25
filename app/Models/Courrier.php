@@ -64,4 +64,58 @@ protected $casts = [
         });
     }
 
+public function scopeCourrierByUserRole($query, $user = null)
+{
+    $user = $user ?: auth()->user();
+    if (!$user) {
+        return $query; // no user -> no extra filter
+    }
+
+    // SG: courriers affectés au SG
+    if ($user->hasRole('sg')) {
+        return $query->whereHas('affectations', function ($q) {
+            $q->where('statut_affectation', 'a_sg')
+              ->whereHas('AffecteA', function ($sub) {
+                  $sub->whereNull('deleted_at'); // optionnel, si SoftDeletes
+              });
+        });
+    }
+
+    // CAB: courriers affectés au CAB
+    if ($user->hasRole('cab')) {
+        return $query->whereHas('affectations', function ($q) {
+            $q->where('statut_affectation', 'a_cab')
+              ->whereHas('AffecteA', function ($sub) {
+                  $sub->whereNull('deleted_at');
+              });
+        });
+    }
+
+    // BO: si vous voulez que BO voie tout, ne filtrez pas
+    if ($user->hasRole('bo')) {
+        return $query;
+        // Si vous voulez restreindre : décommentez et adaptez
+        // return $query->whereHas('affectations', fn($q) => $q->where('statut_affectation', 'a_cab'));
+    }
+
+    // Chef de division (OPTION 2):
+    // Ici on ne dispose PAS d’un entite_id sur users.
+    // On filtre donc les courriers affectés à un utilisateur dont
+    // l’entité a pour responsable l’utilisateur courant (chef).
+    if ($user->hasRole('chef_division')) {
+        return $query->whereHas('affectations', function ($q) use ($user) {
+            $q->where('statut_affectation', 'a_div')
+              ->whereHas('AffecteA', function ($sub) use ($user) {
+                  $sub->whereHas('entite', function ($sub2) use ($user) {
+                      $sub2->where('responsable_id', $user->id);
+                  });
+              });
+        });
+    }
+
+    return $query;
+}
+
+
+
 }

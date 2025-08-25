@@ -78,7 +78,7 @@
                 <span class="filter-item">Priorité: {{ ucfirst($filters['priorite']) }}</span>
             @endif
             @if(isset($filters['date_range']))
-                <span class="filter-item">Période: {{ app()->make(\App\Http\Controllers\YourController::class)->getDateRangeLabel($filters) }}</span>
+                <span class="filter-item">Période: {{ $dateRangeLabel }}</span>
             @endif
         </div>
     @endif

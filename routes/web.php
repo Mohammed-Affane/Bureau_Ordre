@@ -102,6 +102,9 @@ Route::middleware(['auth', 'role:sg'])->prefix('sg')->name('sg.')->group(functio
     Route::get('tracking', fn () => view('sg.tracking'))->name('tracking');
     Route::get('courriers.interne',[SgCourrierController::class,'sgCourrierInterne'])->name('courriers.interne');
     Route::get('courriers.arrive',[SgCourrierController::class,'sgCourrierArrive'])->name('courriers.arrive');
+// Traitements
+    Route::get('traitements.arrive', [SgCourrierController::class, 'recusTraitement'])->name('traitements.arrive');
+
 });
 
 // Chef Division Routes (Default)
@@ -124,63 +127,3 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
 });
 
 require __DIR__.'/auth.php';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
