@@ -78,7 +78,8 @@ public function scopeCourrierByUserRole($query, $user = null)
               ->whereHas('AffecteA', function ($sub) {
                   $sub->whereNull('deleted_at'); // optionnel, si SoftDeletes
               });
-        });
+        })->where('statut', 'en_traitement');
+
     }
 
     // CAB: courriers affectés au CAB
@@ -88,7 +89,9 @@ public function scopeCourrierByUserRole($query, $user = null)
               ->whereHas('AffecteA', function ($sub) {
                   $sub->whereNull('deleted_at');
               });
-        });
+
+        })->where('statut', 'en_cours');
+
     }
 
     // BO: si vous voulez que BO voie tout, ne filtrez pas
@@ -110,7 +113,8 @@ public function scopeCourrierByUserRole($query, $user = null)
                       $sub2->where('responsable_id', $user->id);
                   });
               });
-        });
+         })->where('statut', 'arriver');
+
     }
 
     return $query;
