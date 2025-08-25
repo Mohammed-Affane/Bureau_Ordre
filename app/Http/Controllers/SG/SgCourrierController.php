@@ -62,7 +62,7 @@ public function recusTraitement(): View
     ->with(['affectations' => function($query) {
         $query->with(['traitements', 'affecteA', 'affectePar']);
     }])
-    ->get();
+    ->paginate(5);
 
     return view('dashboards.sg.traitements.arrive', compact('courriers'));
 }

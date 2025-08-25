@@ -56,9 +56,10 @@ if($userRole === 'chef_division'&& $courrier->statut === 'arriver'){
         $affectation = $courrier->affectations->where('id_affecte_a_utilisateur', Auth::id())->first();
    
     
+        
    @endphp
 
-    
+
     @if($affectation && $courrierInstruct)
         <a href="{{ route('division.affectations.traitement.show', $affectation->id) }}" 
            class="flex items-center px-4 py-2 text-sm text-blue-600 hover:bg-blue-100" role="menuitem">
