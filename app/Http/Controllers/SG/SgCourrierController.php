@@ -7,6 +7,7 @@ use App\Models\Courrier;
 use App\Models\Affectation;
 use Illuminate\Http\Request;
 use App\Http\Traits\CourrierFilterTrait;
+use Illuminate\View\View;
 
 class SgCourrierController extends Controller
 {
@@ -47,4 +48,22 @@ class SgCourrierController extends Controller
             'courriers'=>$courriers
         ]);
     }
+
+     // Controller
+public function recusTraitement(): View
+{
+    // Charger tous les courriers avec leurs affectations et traitements
+    $courriers = Courrier::whereHas('affectations', function ($query) {
+        // Filtrer uniquement les affectations vers une division
+        $query->whereHas('affecteA.roles', function ($q) {
+            $q->where('name', 'chef_division');
+        });
+    })
+    ->with(['affectations' => function($query) {
+        $query->with(['traitements', 'affecteA', 'affectePar']);
+    }])
+    ->paginate(5);
+
+    return view('dashboards.sg.traitements.arrive', compact('courriers'));
+}
 }

@@ -161,6 +161,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr Pièces</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expéditeur</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instruction CAB</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
@@ -196,61 +197,78 @@
             
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
+                 @php  
+
+    $courrierInstruct = $courrier->affectations
+    ->where('id_affecte_a_utilisateur', Auth::id())
+    ->whereNotNull('Instruction')->filter(function($affectation) {
+
+        return !empty(trim($affectation->Instruction));
+    })->first();
+
+@endphp
+
+           <td class="px-6 py-4 whitespace-nowrap">
+    {{ $courrierInstruct ? $courrierInstruct->Instruction : "-" }}
+</td>
             
            
             
          
 
 
-            <td class="px-6 py-4 whitespace-nowrap">
-                @if($courrier->fichier_scan)
-                    @php
-                        $basePath = 'fichiers_scans_' . $courrier->type_courrier;
-                        $filePath = public_path($basePath . '/' . $courrier->fichier_scan);
-                        $fileUrl = asset($basePath . '/' . $courrier->fichier_scan);
-                        $fileExtension = pathinfo($courrier->fichier_scan, PATHINFO_EXTENSION);
-                        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'];
-                    @endphp
-                    @if(file_exists($filePath))
-                        @if(in_array(strtolower($fileExtension), $imageExtensions))
-                            <!-- Display image -->
-                            <div class="relative group">
-                                <img src="{{ $fileUrl }}" 
-                                     alt="Fichier Scan" 
-                                     class="w-10 h-10 object-cover rounded cursor-pointer hover:scale-110 transition-transform"
-                                     onclick="openImageModal('{{ $fileUrl }}', '{{ $courrier->fichier_scan }}')">
-                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded transition-all"></div>
-                            </div>
-                        @elseif(strtolower($fileExtension) === 'pdf')
-                            <!-- Display PDF icon -->
-                            <div class="flex items-center justify-center w-10 h-10 bg-red-100 rounded cursor-pointer hover:bg-red-200 transition-colors"
-                                 onclick="window.open('{{ $fileUrl }}', '_blank')">
-                                <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M4 18h12V6l-4-4H4v16zm8-14v4h4l-4-4z"/>
-                                </svg>
-                            </div>
-                        @else
-                            <!-- Display generic file icon -->
-                            <div class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded cursor-pointer hover:bg-gray-200 transition-colors"
-                                 onclick="window.open('{{ $fileUrl }}', '_blank')">
-                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                            </div>
-                        @endif
-                    @else
-                        <!-- File not found -->
-                        <div class="flex items-center justify-center w-10 h-10 bg-red-100 rounded">
-                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </div>
-                    @endif
-                @else
-                    <!-- No file -->
-                    <span class="text-gray-400 text-sm">-</span>
-                @endif
-            </td>
+           <td class="px-6 py-4 whitespace-nowrap">
+    @if($courrier->fichier_scan)
+        @php
+            // Get the file extension
+            $fileExtension = pathinfo($courrier->fichier_scan, PATHINFO_EXTENSION);
+            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'];
+            
+            // Generate the storage URL using Laravel's storage system
+            $fileUrl = Storage::url($courrier->fichier_scan);
+            $filePath = storage_path('app/public/' . $courrier->fichier_scan);
+        @endphp
+
+        @if(file_exists($filePath))
+            @if(in_array(strtolower($fileExtension), $imageExtensions))
+                <!-- Display image -->
+                <div class="relative group">
+                    <img src="{{ asset($fileUrl) }}" 
+                         alt="Fichier Scan" 
+                         class="w-10 h-10 object-cover rounded cursor-pointer hover:scale-110 transition-transform"
+                         onclick="openImageModal('{{ asset($fileUrl) }}', '{{ basename($courrier->fichier_scan) }}')">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded transition-all"></div>
+                </div>
+            @elseif(strtolower($fileExtension) === 'pdf')
+                <!-- Display PDF icon -->
+                <div class="flex items-center justify-center w-10 h-10 bg-red-100 rounded cursor-pointer hover:bg-red-200 transition-colors"
+                     onclick="window.open('{{ asset($fileUrl) }}', '_blank')">
+                    <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 18h12V6l-4-4H4v16zm8-14v4h4l-4-4z"/>
+                    </svg>
+                </div>
+            @else
+                <!-- Display generic file icon -->
+                <div class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded cursor-pointer hover:bg-gray-200 transition-colors"
+                     onclick="window.open('{{ asset($fileUrl) }}', '_blank')">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+            @endif
+        @else
+            <!-- File not found -->
+            <div class="flex items-center justify-center w-10 h-10 bg-red-100 rounded">
+                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </div>
+        @endif
+    @else
+        <!-- No file -->
+        <span class="text-gray-400 text-sm">-</span>
+    @endif
+</td>
             
    <td class="px-4 py-3 whitespace-nowrap">
 

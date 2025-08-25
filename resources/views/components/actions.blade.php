@@ -30,6 +30,9 @@
     $showActions = false;
     $showTraitement=false;
 
+if($userRole === 'admin'){
+    $showActions = true;
+}
 
 if($userRole === 'cab'&& $courrier->statut === 'en_cours'){
     $showActions = true;
@@ -53,16 +56,17 @@ if($userRole === 'chef_division'&& $courrier->statut === 'arriver'){
         $affectation = $courrier->affectations->where('id_affecte_a_utilisateur', Auth::id())->first();
    
     
+        
    @endphp
 
-    
+
     @if($affectation && $courrierInstruct)
         <a href="{{ route('division.affectations.traitement.show', $affectation->id) }}" 
            class="flex items-center px-4 py-2 text-sm text-blue-600 hover:bg-blue-100" role="menuitem">
             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
             </svg>
-            {{ $affectation->traitements ? 'Modifier traitement' : 'Traiter' }}
+            {{ $affectation->traitements ? 'traiter Courrier' : 'Traiter' }}
         </a>
     @endif
 @endif
