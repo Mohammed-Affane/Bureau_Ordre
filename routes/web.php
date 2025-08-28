@@ -105,6 +105,10 @@ Route::middleware(['auth', 'role:sg'])->prefix('sg')->name('sg.')->group(functio
 // Traitements
     Route::get('traitements.arrive', [SgCourrierController::class, 'recusTraitement'])->name('traitements.arrive');
 
+
+    //cloture courrier 
+    Route::post('/courriers/{id}/cloturer', [SgCourrierController::class, 'cloturerCourrier'])->name('courriers.cloturer');
+
 });
 
 // Chef Division Routes (Default)
