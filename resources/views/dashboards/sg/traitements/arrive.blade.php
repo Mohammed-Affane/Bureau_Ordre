@@ -19,13 +19,8 @@
             --gray-800: #1f2937;
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.2);
-            --border-radius: 16px;
+            --border-radius: 12px;
             --border-radius-sm: 8px;
-        }
-
-        * {
-            box-sizing: border-box;
         }
 
         body {
@@ -42,6 +37,12 @@
             padding: 2rem 0;
             margin-bottom: 2rem;
             box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .page-title {
@@ -65,55 +66,25 @@
             font-weight: 400;
         }
 
-        /* Stats overview */
-        .stats-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
         .stat-card {
-            background: white;
-            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.5rem;
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-            border-left: 4px solid;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .stat-card.success {
-            border-left-color: var(--success-color);
-        }
-
-        .stat-card.warning {
-            border-left-color: var(--warning-color);
-        }
-
-        .stat-card.info {
-            border-left-color: var(--primary-color);
-        }
-
-        .stat-header {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
+            gap: 0.75rem;
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
         }
 
         .stat-icon svg {
@@ -121,338 +92,33 @@
             height: 1.5rem;
         }
 
-        .stat-icon.success {
-            background: var(--success-color);
-        }
-
-        .stat-icon.warning {
-            background: var(--warning-color);
-        }
-
-        .stat-icon.info {
-            background: var(--primary-color);
-        }
-
-        .stat-number {
-            font-size: 2rem;
+        .stat-content .stat-number {
+            font-size: 1.5rem;
             font-weight: 800;
-            color: var(--gray-800);
+            color: white;
         }
 
-        .stat-label {
-            color: var(--gray-600);
+        .stat-content .stat-label {
             font-size: 0.875rem;
-            font-weight: 500;
+            opacity: 0.9;
         }
 
-        /* Main content */
-        .courrier-container {
-            background: transparent;
-            min-height: 100vh;
-        }
-
-        .courrier-card {
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 2rem;
-            transition: all 0.3s ease;
-            overflow: hidden;
-            border: 1px solid var(--gray-200);
-        }
-
-        .courrier-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-3px);
-            border-color: var(--primary-color);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(30px, -30px);
-        }
-
-        .card-header-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-title {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 0 0 1.5rem 0;
-            line-height: 1.4;
-        }
-
-        .card-title svg {
-            margin-top: 0.2rem;
-            opacity: 0.8;
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-
-        .card-body {
-            padding: 2rem;
-        }
-
-        /* Status badges enhanced */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1.25rem;
-            border-radius: 50px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 2px solid;
-            transition: all 0.3s ease;
-        }
-
-        .status-badge:hover {
-            transform: scale(1.05);
-        }
-
-        .status-success {
-            background: var(--success-light);
-            color: var(--success-color);
-            border-color: var(--success-color);
-        }
-
-        .status-warning {
-            background: var(--warning-light);
-            color: var(--warning-color);
-            border-color: var(--warning-color);
-        }
-
-        .status-badge svg {
-            width: 1rem;
-            height: 1rem;
-        }
-
-        /* Enhanced button */
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: var(--border-radius-sm);
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 2rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: var(--shadow-sm);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary svg {
-            width: 1.1rem;
-            height: 1.1rem;
-        }
-
-        /* Enhanced affectation list */
-        .affectation-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 1rem;
-        }
-
-        .affectation-item {
-            background: var(--gray-50);
-            border: 2px solid var(--gray-200);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .affectation-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: var(--primary-color);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .affectation-item:hover {
-            background: white;
-            border-color: var(--primary-color);
-            transform: translateX(8px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .affectation-item:hover::before {
-            transform: scaleY(1);
-        }
-
-        .division-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .division-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .division-icon svg {
-            width: 1.2rem;
-            height: 1.2rem;
-        }
-
-        .division-name {
-            font-weight: 700;
-            color: var(--gray-800);
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .treatment-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding: 1rem;
-            background: white;
-            border-radius: var(--border-radius-sm);
-            border: 1px solid var(--gray-200);
-        }
-
-        .action-content {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex: 1;
-        }
-
-        .action-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--gray-100);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray-600);
-        }
-
-        .action-icon svg {
-            width: 1rem;
-            height: 1rem;
-        }
-
-        .action-text {
-            color: var(--gray-700);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* Enhanced treatment status badges */
-        .treatment-status {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: 2px solid;
-            transition: all 0.3s ease;
-        }
-
-        .treatment-status:hover {
-            transform: scale(1.05);
-        }
-
-        .status-valide {
-            background: var(--success-light);
-            color: var(--success-color);
-            border-color: var(--success-color);
-        }
-
-        .status-brouillon {
-            background: var(--warning-light);
-            color: var(--warning-color);
-            border-color: var(--warning-color);
-        }
-
-        .status-non-traite {
-            background: var(--danger-light);
-            color: var(--danger-color);
-            border-color: var(--danger-color);
-        }
-
-        .treatment-status svg {
-            width: 0.875rem;
-            height: 0.875rem;
-        }
-
-        /* Filter and search bar */
+        /* Controls Bar */
         .controls-bar {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             padding: 1.5rem;
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-sm);
         }
 
-        .search-box {
+        .search-container {
             flex: 1;
+            max-width: 400px;
             position: relative;
         }
 
@@ -461,7 +127,7 @@
             padding: 0.75rem 1rem 0.75rem 3rem;
             border: 2px solid var(--gray-200);
             border-radius: var(--border-radius-sm);
-            font-size: 1rem;
+            font-size: 0.875rem;
             transition: border-color 0.3s ease;
         }
 
@@ -483,8 +149,13 @@
             height: 1rem;
         }
 
+        .filter-controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+
         .filter-btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             background: var(--gray-100);
             border: 2px solid var(--gray-200);
             border-radius: var(--border-radius-sm);
@@ -493,6 +164,8 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
         .filter-btn:hover {
@@ -506,302 +179,755 @@
             height: 1rem;
         }
 
-        /* Responsive design */
+        /* Table Container */
+        .table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .courrier-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+        }
+
+        .table-header th {
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .table-row {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table-row:hover {
+            background: var(--gray-50);
+        }
+
+        .table-row.completed {
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .table-row td {
+            padding: 1.5rem 1rem;
+            vertical-align: top;
+        }
+
+        /* Reference Column */
+        .reference-cell {
+            font-weight: 600;
+            color: var(--primary-color);
+            min-width: 140px;
+        }
+
+        /* Object Column */
+        .object-cell {
+            max-width: 300px;
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid;
+            transition: all 0.3s ease;
+        }
+
+        .status-success {
+            background: var(--success-light);
+            color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .status-warning {
+            background: var(--warning-light);
+            color: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+
+        .status-badge svg {
+            width: 0.875rem;
+            height: 0.875rem;
+        }
+
+        /* Divisions Column */
+        .divisions-cell {
+            min-width: 200px;
+        }
+
+        .division-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--gray-50);
+            border-radius: var(--border-radius-sm);
+            border-left: 3px solid var(--gray-300);
+            transition: all 0.3s ease;
+        }
+
+        .division-item.completed {
+            background: var(--success-light);
+            border-left-color: var(--success-color);
+        }
+
+        .division-item.pending {
+            background: var(--warning-light);
+            border-left-color: var(--warning-color);
+        }
+
+        .division-name {
+            font-weight: 500;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+
+        .division-status {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .division-status.completed {
+            color: var(--success-color);
+        }
+
+        .division-status.pending {
+            color: var(--warning-color);
+        }
+
+        .division-status.untreated {
+            color: var(--danger-color);
+        }
+
+        .division-status svg {
+            width: 0.75rem;
+            height: 0.75rem;
+        }
+
+        /* Action Column */
+        .action-cell {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .btn-secondary {
+            background: var(--success-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color) 0%, var(--primary-color) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-top: 0.25rem;
+        }
+
+        /* Expandable Details */
+        .expandable-row {
+            display: none;
+        }
+
+        .expandable-row.show {
+            display: table-row;
+        }
+
+        .expandable-content {
+            padding: 1rem;
+            background: var(--gray-50);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .treatment-details {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .treatment-item {
+            background: white;
+            padding: 1rem;
+            border-radius: var(--border-radius-sm);
+            border-left: 3px solid var(--gray-300);
+        }
+
+        .treatment-item.completed {
+            border-left-color: var(--success-color);
+        }
+
+        .treatment-item.draft {
+            border-left-color: var(--warning-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: none;
+                margin-bottom: 1rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .page-title {
-                font-size: 1.5rem;
+            .main-container {
+                padding: 1rem;
             }
             
-            .stats-overview {
-                grid-template-columns: 1fr;
+            .page-header {
+                padding: 1.5rem 0;
             }
             
-            .card-header,
-            .card-body {
-                padding: 1.5rem;
-            }
-            
-            .card-title {
-                font-size: 1.125rem;
-            }
-            
-            .treatment-info {
+            .header-content {
                 flex-direction: column;
-                align-items: flex-start;
+                gap: 1rem;
+                text-align: center;
             }
             
-            .controls-bar {
-                flex-direction: column;
+            .table-wrapper {
+                font-size: 0.875rem;
             }
             
-            .search-box {
-                order: -1;
+            .table-header th,
+            .table-row td {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .object-cell {
+                max-width: 200px;
             }
         }
 
-        /* Loading animation for dynamic content */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .loading {
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        /* Print styles */
+        /* Print Styles */
         @media print {
-            .btn-primary,
-            .controls-bar {
+            .controls-bar,
+            .btn-primary {
                 display: none;
             }
             
-            .courrier-card {
-                break-inside: avoid;
+            .table-container {
                 box-shadow: none;
-                border: 1px solid var(--gray-300);
+            }
+            
+            .table-row:hover {
+                background: transparent;
             }
         }
     </style>
 
     <!-- Page Header -->
     <div class="page-header">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="page-title">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
-                </svg>
-                Gestion des Courriers
-            </h1>
-            <p class="page-subtitle">Suivi et validation des affectations divisionnaires</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="header-content">
+                <div>
+                    <h1 class="page-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                        </svg>
+                        Gestion des Courriers
+                    </h1>
+                    <p class="page-subtitle">Suivi et validation des affectations divisionnaires</p>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">{{ $courriers->total() }}</div>
+                        <div class="stat-label">Total Courriers</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="courrier-container">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            
-            
-                
-                <div class="stat-card info max-w-xl">
-                    <div class="stat-header">
-                        <div class="stat-icon info">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="stat-number">{{ $courriers->total() }}</div>
-                    </div>
-                    <div class="stat-label">Total Courriers</div>
-                </div>
-            </div>
-
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="main-container">
             <!-- Controls Bar -->
             <div class="controls-bar">
-                <div class="search-box">
+                <div class="search-container">
                     <span class="search-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                         </svg>
                     </span>
-                    <input type="text" class="search-input" placeholder="Rechercher un courrier...">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un courrier...">
                 </div>
-                <button class="filter-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                    </svg>
-                    Filtrer
-                </button>
-            
+                
+                <div class="filter-controls">
+                    <button class="filter-btn" onclick="filterByStatus('all')">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                        </svg>
+                        Tous
+                    </button>
+                    <button class="filter-btn" onclick="filterByStatus('completed')">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        Complétés
+                    </button>
+                    <button class="filter-btn" onclick="filterByStatus('pending')">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                        En cours
+                    </button>
+                </div>
             </div>
 
-            @foreach($courriers as $courrier)
-                @php
-                    // On filtre uniquement les affectations faites par SG Responsable
-                    $affectationsSG = $courrier->affectations->filter(function($affectation) {
-                        return $affectation->affectePar && $affectation->affectePar->name === 'SG Responsable';
-                    });
+            <!-- Table Container -->
+            <div class="table-container">
+                <div class="table-wrapper">
+                    <table class="courrier-table">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Référence</th>
+                                <th>Objet</th>
+                                <th>Statut Global</th>
+                                <th>Divisions/Services</th>
+                                <th>Progression</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($courriers as $courrier)
+                                @php
+                                    $affectationsSG = $courrier->affectations->filter(function($affectation) {
+                                        return $affectation->affectePar && $affectation->affectePar->name === 'SG Responsable';
+                                    });
 
-                    // Vérifie si toutes les affectations SG -> divisions sont traitées et validées
-                    $allDivisionsTreated = $affectationsSG->every(function($affectation) {
-                        return $affectation->traitements->isNotEmpty() &&
-                               $affectation->traitements->every(fn($t) => $t->statut === 'valide');
-                    });
-                @endphp
+                                    $allDivisionsTreated = $affectationsSG->every(function($affectation) {
+                                        return $affectation->traitements->isNotEmpty() &&
+                                               $affectation->traitements->every(fn($t) => $t->statut === 'valide');
+                                    });
 
-                <div class="courrier-card">
-                    <div class="card-header">
-                        <div class="card-header-content">
-                            <h2 class="card-title">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
-                                </svg>
-                                <div>
-                                    <div>{{ $courrier->reference_arrive }}</div>
-                                    <div style="font-weight: 400; opacity: 0.9; font-size: 1rem; margin-top: 0.5rem;">
-                                        {{ $courrier->objet }}
-                                    </div>
-                                </div>
-                            </h2>
+                                    $totalDivisions = $affectationsSG->count();
+                                    $completedDivisions = $affectationsSG->filter(function($affectation) {
+                                        return $affectation->traitements->isNotEmpty() &&
+                                               $affectation->traitements->every(fn($t) => $t->statut === 'valide');
+                                    })->count();
+                                    
+                                    $progressPercent = $totalDivisions > 0 ? ($completedDivisions / $totalDivisions) * 100 : 0;
+                                @endphp
 
-                            {{-- Indicateur global --}}
-                            @if($allDivisionsTreated)
-                                <div class="status-badge status-success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
-                                    Divisions/Services validé
-                                </div>
-                            @else
-                                <div class="status-badge status-warning">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                                    </svg>
-                                    En attente de validation
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        {{-- Bouton Clôturer (uniquement si SG et tout validé) --}}
-        @if(auth()->user()->name == 'SG Responsable' && $courrier->statut != 'cloture' && $allDivisionsTreated)
-    <form action="{{ route('sg.courriers.cloturer', $courrier->id) }}" method="POST">
-        @csrf
-        <button type="submit" class="btn-primary" onclick="return confirm('Êtes-vous sûr de vouloir clôturer ce courrier? Cette action est irréversible.')">
-           
-            Clôturer le courrier
-        </button>
-    </form>
- @elseif($courrier->statut == 'cloture')
-    <div class="status-badge status-success">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-        </svg>
-        Courrier clôturé
-    </div> 
-@endif
-
-                        
-
-                        {{-- Liste des affectations SG -> divisions --}}
-                        <ul class="affectation-list">
-                            @foreach($affectationsSG as $affectation)
-        
-                                <li class="affectation-item">
-                                    <div class="division-header">
-                                        <div class="division-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <h3 class="division-name">
-                                            {{ $affectation->affecteA->name }}
-                                        </h3>
-                                    </div>
-
-                                    @if($affectation->traitements->isNotEmpty())
-                                        @foreach($affectation->traitements as $traitement)
-                                            <div class="treatment-info">
-                                                <div class="action-content">
-                                                    <div class="action-icon">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
-                                                        </svg>
-                                                    </div>
-                                                    <span class="action-text">
-                                                        <strong>Action:</strong>
-                                                        <p>{{ $traitement->action }}</p> 
-                                                    </span>
-                                                </div>
-                                                <span class="treatment-status 
-                                                    @if($traitement->statut == 'valide') status-valide
-                                                    @elseif($traitement->statut == 'brouillon') status-brouillon
-                                                    @else status-non-traite @endif">
-                                                    @if($traitement->statut == 'valide')
+                                <tr class="table-row {{ $allDivisionsTreated ? 'completed' : '' }}" data-status="{{ $allDivisionsTreated ? 'completed' : 'pending' }}">
+                                    <td class="reference-cell">
+                                        {{ $courrier->reference_arrive }}
+                                    </td>
+                                    
+                                    <td class="object-cell">
+                                        {{ Str::limit($courrier->objet, 60) }}
+                                    </td>
+                                    
+                                    <td>
+                                        @if($courrier->statut == 'cloture')
+                                            <div class="status-badge status-success">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                </svg>
+                                                Clôturé
+                                            </div>
+                                        @elseif($allDivisionsTreated)
+                                            <div class="status-badge status-success">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                Validé
+                                            </div>
+                                        @else
+                                            <div class="status-badge status-warning">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                                </svg>
+                                                En cours
+                                            </div>
+                                        @endif
+                                    </td>
+                                    
+                                    <td class="divisions-cell">
+                                        @foreach($affectationsSG->take(2) as $affectation)
+                                            @php
+                                                $isCompleted = $affectation->traitements->isNotEmpty() && 
+                                                             $affectation->traitements->every(fn($t) => $t->statut === 'valide');
+                                                $hasDraft = $affectation->traitements->where('statut', 'brouillon')->isNotEmpty();
+                                                $isUntreated = $affectation->traitements->isEmpty();
+                                            @endphp
+                                            
+                                            <div class="division-item {{ $isCompleted ? 'completed' : ($hasDraft || !$isUntreated ? 'pending' : '') }}">
+                                                <span class="division-name">
+                                                    {{ Str::limit($affectation->affecteA->name, 20) }}
+                                                </span>
+                                                <div class="division-status {{ $isCompleted ? 'completed' : ($hasDraft ? 'pending' : 'untreated') }}">
+                                                    @if($isCompleted)
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                                         </svg>
-                                                    @elseif($traitement->statut == 'brouillon')
+                                                        Validé
+                                                    @elseif($hasDraft)
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                                         </svg>
+                                                        Brouillon
                                                     @else
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                                                         </svg>
+                                                        Non traité
                                                     @endif
-                                                    {{ ucfirst($traitement->statut) }}
-                                                </span>
+                                                </div>
                                             </div>
                                         @endforeach
-                                    @else
-                                        <div class="treatment-info">
-                                            <div class="action-content">
-                                                <div class="action-icon">
+                                        
+                                        @if($affectationsSG->count() > 2)
+                                            <div class="division-item">
+                                                <span class="division-name">+{{ $affectationsSG->count() - 2 }} autres...</span>
+                                                <button onclick="toggleDetails({{ $courrier->id }})" class="division-status pending" style="background: none; border: none; cursor: pointer;">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                     </svg>
-                                                </div>
-                                                <span class="action-text">
-                                                    Aucun traitement effectué
-                                                </span>
+                                                    Voir tout
+                                                </button>
                                             </div>
-                                            <span class="treatment-status status-non-traite">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                                </svg>
-                                                Non traité
-                                            </span>
+                                        @endif
+                                    </td>
+                                    
+                                    <td>
+                                        <div class="progress-container">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: {{ $progressPercent }}%"></div>
+                                            </div>
+                                            <div class="progress-text">
+                                                {{ $completedDivisions }}/{{ $totalDivisions }} complété
+                                            </div>
                                         </div>
-                                    @endif
-                                </li>
+                                    </td>
+                                    
+                                    <td class="action-cell">
+                                        @if(auth()->user()->name == 'SG Responsable' && $courrier->statut != 'cloture' && $allDivisionsTreated)
+                                            <form action="{{ route('sg.courriers.cloturer', $courrier->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="btn-primary" onclick="return confirm('Êtes-vous sûr de vouloir clôturer ce courrier? Cette action est irréversible.')">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                    </svg>
+                                                    Clôturer
+                                                </button>
+                                            </form>
+                                        @elseif($courrier->statut == 'cloture')
+                                            <div class="btn-secondary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                </svg>
+                                                Clôturé
+                                            </div>
+                                        @else
+                                            <button class="btn-primary" disabled>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                                </svg>
+                                                En attente
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+
+                                <!-- Expandable Details Row -->
+                                <tr class="expandable-row" id="details-{{ $courrier->id }}">
+                                    <td colspan="6">
+                                        <div class="expandable-content">
+                                            <h4 style="margin-bottom: 1rem; color: var(--gray-800); font-weight: 600;">Détails des traitements</h4>
+                                            <div class="treatment-details">
+                                                @foreach($affectationsSG as $affectation)
+                                                    <div class="treatment-item {{ $affectation->traitements->isNotEmpty() && $affectation->traitements->every(fn($t) => $t->statut === 'valide') ? 'completed' : ($affectation->traitements->where('statut', 'brouillon')->isNotEmpty() ? 'draft' : '') }}">
+                                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                                <div style="width: 32px; height: 32px; background: var(--primary-color); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1rem; height: 1rem;">
+                                                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div>
+                                                                    <div style="font-weight: 600; color: var(--gray-800);">{{ $affectation->affecteA->name }}</div>
+                                                                    <div style="font-size: 0.75rem; color: var(--gray-600);">Affecté le {{ $affectation->created_at->format('d/m/Y') }}</div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            @if($affectation->traitements->isNotEmpty())
+                                                                @php $latestTreatment = $affectation->traitements->last(); @endphp
+                                                                <div class="division-status {{ $latestTreatment->statut === 'valide' ? 'completed' : ($latestTreatment->statut === 'brouillon' ? 'pending' : 'untreated') }}">
+                                                                    @if($latestTreatment->statut === 'valide')
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                                        </svg>
+                                                                        Validé
+                                                                    @elseif($latestTreatment->statut === 'brouillon')
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                                                        </svg>
+                                                                        Brouillon
+                                                                    @endif
+                                                                </div>
+                                                            @else
+                                                                <div class="division-status untreated">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                    Non traité
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        
+                                                        @if($affectation->traitements->isNotEmpty())
+                                                            <div style="background: var(--gray-50); padding: 0.75rem; border-radius: var(--border-radius-sm); margin-top: 0.5rem;">
+                                                                <div style="font-size: 0.75rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; margin-bottom: 0.5rem;">Dernière Action</div>
+                                                                <div style="color: var(--gray-800); font-size: 0.875rem;">{{ $latestTreatment->action }}</div>
+                                                                <div style="font-size: 0.75rem; color: var(--gray-600); margin-top: 0.5rem;">
+                                                                    Traité le {{ $latestTreatment->updated_at->format('d/m/Y à H:i') }}
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div style="background: var(--danger-light); padding: 0.75rem; border-radius: var(--border-radius-sm); margin-top: 0.5rem; text-align: center;">
+                                                                <div style="color: var(--danger-color); font-size: 0.875rem; font-weight: 500;">
+                                                                    Aucun traitement effectué
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
-                        </ul>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
-            @endforeach
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-6">
+                {{ $courriers->links() }}
+            </div>
         </div>
-        <div class="mt-6">
-                        {{ $courriers->links() }}
-                    </div>
     </div>
 
     <script>
-        // Simple search functionality
-        document.querySelector('.search-input').addEventListener('input', function(e) {
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.courrier-card');
+            const rows = document.querySelectorAll('.table-row');
             
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                if (title.includes(searchTerm)) {
-                    card.style.display = 'block';
+            rows.forEach(row => {
+                const reference = row.querySelector('.reference-cell').textContent.toLowerCase();
+                const object = row.querySelector('.object-cell').textContent.toLowerCase();
+                
+                if (reference.includes(searchTerm) || object.includes(searchTerm)) {
+                    row.style.display = '';
+                    // Hide the corresponding expandable row if it's open
+                    const expandableRow = row.nextElementSibling;
+                    if (expandableRow && expandableRow.classList.contains('expandable-row') && expandableRow.classList.contains('show')) {
+                        expandableRow.style.display = '';
+                    }
                 } else {
-                    card.style.display = 'none';
+                    row.style.display = 'none';
+                    // Hide the corresponding expandable row
+                    const expandableRow = row.nextElementSibling;
+                    if (expandableRow && expandableRow.classList.contains('expandable-row')) {
+                        expandableRow.style.display = 'none';
+                    }
                 }
             });
         });
 
-        // Add loading state to buttons
-        // document.querySelectorAll('.btn-primary').forEach(button => {
-        //     button.addEventListener('click', function() {
-        //         const originalContent = this.innerHTML;
-        //         this.innerHTML = `
-        //             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="animate-spin">
-        //                 <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-        //             </svg>
-        //             Traitement...
-        //         `;
-        //         this.disabled = true;
+        // Filter functionality
+        function filterByStatus(status) {
+            const rows = document.querySelectorAll('.table-row');
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.style.background = 'var(--gray-100)';
+                btn.style.color = 'var(--gray-700)';
+                btn.style.borderColor = 'var(--gray-200)';
+            });
+            
+            event.target.style.background = 'var(--primary-color)';
+            event.target.style.color = 'white';
+            event.target.style.borderColor = 'var(--primary-color)';
+            
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
                 
-        //         // Restore original content after 3 seconds for demo purposes
-        //         setTimeout(() => {
-        //             this.innerHTML = originalContent;
-        //             this.disabled = false;
-        //         }, 3000);
-        //     });
-        // });
+                if (status === 'all' || rowStatus === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                    // Hide the corresponding expandable row
+                    const expandableRow = row.nextElementSibling;
+                    if (expandableRow && expandableRow.classList.contains('expandable-row')) {
+                        expandableRow.style.display = 'none';
+                        expandableRow.classList.remove('show');
+                    }
+                }
+            });
+        }
 
+        // Toggle details functionality
+        function toggleDetails(courrierId) {
+            const detailsRow = document.getElementById('details-' + courrierId);
+            const isVisible = detailsRow.classList.contains('show');
+            
+            // Hide all other expanded details
+            document.querySelectorAll('.expandable-row.show').forEach(row => {
+                if (row !== detailsRow) {
+                    row.classList.remove('show');
+                }
+            });
+            
+            // Toggle current details
+            if (isVisible) {
+                detailsRow.classList.remove('show');
+            } else {
+                detailsRow.classList.add('show');
+            }
+        }
 
+        // Close expanded details when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.division-item') && !e.target.closest('.expandable-content')) {
+                document.querySelectorAll('.expandable-row.show').forEach(row => {
+                    row.classList.remove('show');
+                });
+            }
+        });
+
+        // Add loading state to action buttons
+        document.querySelectorAll('.btn-primary[type="submit"]').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Don't show loading if user cancels confirmation
+                setTimeout(() => {
+                    if (this.closest('form').checkValidity()) {
+                        this.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1rem; height: 1rem; animation: spin 1s linear infinite;">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                            </svg>
+                            Traitement...
+                        `;
+                        this.disabled = true;
+                    }
+                }, 100);
+            });
+        });
+
+        // Add spin animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize first filter button as active
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstFilterBtn = document.querySelector('.filter-btn');
+            if (firstFilterBtn) {
+                firstFilterBtn.style.background = 'var(--primary-color)';
+                firstFilterBtn.style.color = 'white';
+                firstFilterBtn.style.borderColor = 'var(--primary-color)';
+            }
+        });
     </script>
 </x-app-layout>

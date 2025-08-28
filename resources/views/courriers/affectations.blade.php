@@ -164,7 +164,7 @@
                                                                             {{ \Carbon\Carbon::parse($affectation->date_affectation)->format('d/m/Y') }}
                                                                         </div>
                                                                         <div class="text-xs text-slate-500">
-                                                                            {{ \Carbon\Carbon::parse($affectation->date_affectation)->format('H:i') }}
+                                                                            {{ \Carbon\Carbon::parse($affectation->date_affectation)->format('h:m') }}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -228,29 +228,9 @@
                         <p class="text-slate-600 text-lg mb-8 leading-relaxed">
                             Ce document n'a pas encore été assigné. Les affectations apparaîtront dans cette interface professionnelle une fois créées par les responsables autorisés.
                         </p>
-                        <button class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors duration-200">
-                            Créer une Affectation
-                        </button>
                     </div>
                 </div>
             @endif
-
-            <!-- Professional Footer Actions -->
-            <div class="mt-12 pt-8 border-t border-slate-200">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-6">
-                        <div class="text-sm text-slate-600">
-                            <span class="font-medium">Dernière mise à jour:</span>
-                            <span class="text-slate-900 font-bold ml-1">{{ now()->format('d/m/Y H:i') }}</span>
-                        </div>
-                        <div class="w-1 h-4 bg-slate-300 rounded-full"></div>
-                        <div class="text-sm text-slate-600">
-                            <span class="font-medium">Système:</span>
-                            <span class="text-green-600 font-bold ml-1">Opérationnel</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
