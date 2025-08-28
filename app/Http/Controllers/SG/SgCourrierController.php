@@ -66,4 +66,20 @@ public function recusTraitement(): View
 
     return view('dashboards.sg.traitements.arrive', compact('courriers'));
 }
+public function cloturerCourrier(Request $request, $id)
+{
+    $courrier = Courrier::findOrFail($id);
+    
+
+   
+    // Mettre à jour le statut du courrier
+    $courrier->statut = 'cloture';
+    // $courrier->date_cloture = now(); // Décommentez cette ligne
+    $courrier->save();
+    
+    // Supprimez ou commentez le dd() qui bloque l'exécution
+    // dd($courrier);
+    
+    return redirect()->back()->with('success', 'Courrier clôturé avec succès.');
+}
 }
