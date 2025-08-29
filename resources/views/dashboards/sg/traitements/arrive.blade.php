@@ -174,6 +174,12 @@
             color: white;
         }
 
+        .filter-btn.active {
+            background: var(--primary-color) !important;
+            color: white !important;
+            border-color: var(--primary-color) !important;
+        }
+
         .filter-btn svg {
             width: 1rem;
             height: 1rem;
@@ -263,6 +269,11 @@
             color: var(--success-color);
             border-color: var(--success-color);
         }
+        .status-cloture {
+            background: rgba(139, 92, 246, 0.15);
+            color: #8b5cf6;
+            border-color: #8b5cf6;
+        }
 
         .status-warning {
             background: var(--warning-light);
@@ -332,13 +343,83 @@
             width: 0.75rem;
             height: 0.75rem;
         }
+        
+        .treatment-actions {
+    max-width: 380px; /* Largeur augmentée */
+    min-width: 250px; /* Largeur minimale */
+}
 
-        /* Action Column */
-        .action-cell {
-            text-align: center;
-            min-width: 120px;
-        }
+.action-item {
+    display: flex;
+    padding: 0.6rem;
+    margin-bottom: 0.6rem;
+    background: #f8fafc;
+    border-radius: 0.3rem;
+    border-left: 3px solid #3b82f6;
+}
 
+.action-number {
+    background: #3b82f6;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-right: 0.6rem;
+    flex-shrink: 0;
+}
+
+.action-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.action-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.action-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #374151;
+    word-break: break-word; /* Casse les mots longs */
+    overflow-wrap: break-word; /* Assurance pour casser les mots */
+    line-height: 1.4;
+}
+
+.action-date {
+    font-size: 0.75rem;
+    color: #6b7280;
+    align-self: flex-start;
+}
+
+/* Séparateur entre les actions */
+.action-item:not(:last-child) {
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 0.6rem;
+}
+.history-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3b82f6;
+    display: inline-block;
+}
+
+/* Adaptation pour les très longs textes */
+@media (min-width: 768px) {
+    .treatment-actions {
+        max-width: 450px; /* Encore plus large sur les grands écrans */
+    }
+}
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
@@ -424,26 +505,7 @@
             border-left: 4px solid var(--primary-color);
         }
 
-        .treatment-details {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .treatment-item {
-            background: white;
-            padding: 1rem;
-            border-radius: var(--border-radius-sm);
-            border-left: 3px solid var(--gray-300);
-        }
-
-        .treatment-item.completed {
-            border-left-color: var(--success-color);
-        }
-
-        .treatment-item.draft {
-            border-left-color: var(--warning-color);
-        }
-
+        
         /* Responsive Design */
         @media (max-width: 1024px) {
             .controls-bar {
@@ -501,6 +563,12 @@
                 background: transparent;
             }
         }
+
+        /* Animation keyframes */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
     </style>
 
     <!-- Page Header -->
@@ -537,28 +605,33 @@
             <!-- Controls Bar -->
             <div class="controls-bar">
                 <div class="search-container">
-                    <span class="search-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un courrier...">
+                    <form id="searchForm" method="GET" action="{{ url()->current() }}">
+                        <span class="search-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        <input type="text" class="search-input" id="searchInput" name="search" 
+                               value="{{ request('search', '') }}" placeholder="Rechercher un courrier...">
+                        <!-- Hidden input to preserve status filter -->
+                        <input type="hidden" id="statusFilter" name="status" value="{{ request('status', 'all') }}">
+                    </form>
                 </div>
                 
                 <div class="filter-controls">
-                    <button class="filter-btn" onclick="filterByStatus('all')">
+                    <button class="filter-btn {{ request('status', 'all') === 'all' ? 'active' : '' }}" onclick="filterByStatus('all')" data-status="all">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
                         </svg>
                         Tous
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('completed')">
+                    <button class="filter-btn {{ request('status') === 'completed' ? 'active' : '' }}" onclick="filterByStatus('completed')" data-status="completed">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
                         Complétés
                     </button>
-                    <button class="filter-btn" onclick="filterByStatus('pending')">
+                    <button class="filter-btn {{ request('status') === 'pending' ? 'active' : '' }}" onclick="filterByStatus('pending')" data-status="pending">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                         </svg>
@@ -577,6 +650,7 @@
                                 <th>Objet</th>
                                 <th>Statut Global</th>
                                 <th>Divisions/Services</th>
+                                <th>Actions</th>
                                 <th>Progression</th>
                                 <th>Action</th>
                             </tr>
@@ -613,7 +687,7 @@
                                     
                                     <td>
                                         @if($courrier->statut == 'cloture')
-                                            <div class="status-badge status-success">
+                                            <div class="status-badge status-cloture">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                                 </svg>
@@ -677,10 +751,27 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                     </svg>
-                                                    Voir tout
-                                                </button>
+
+                                                                                                    </button>
                                             </div>
                                         @endif
+                                    </td>
+
+                                    <td>
+<div class="treatment-actions">
+    <h5 class="history-title">Historique des actions:</h5>
+    @foreach($affectation->traitements as $index => $traitement)
+        <div class="action-item">
+            <div class="action-number">{{ $index + 1 }}</div>
+            <div class="action-content">
+                <div class="action-details">
+                    <div class="action-name">{{ ucfirst($traitement->action) }}</div>
+                    <div class="action-date">{{ $traitement->created_at->format('d/m/Y H:i') }}</div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
                                     </td>
                                     
                                     <td>
@@ -689,16 +780,16 @@
                                                 <div class="progress-fill" style="width: {{ $progressPercent }}%"></div>
                                             </div>
                                             <div class="progress-text">
-                                                {{ $completedDivisions }}/{{ $totalDivisions }} complété
+                                                {{ $completedDivisions }}/{{ $totalDivisions }} divisions traitées
                                             </div>
                                         </div>
                                     </td>
                                     
                                     <td class="action-cell">
                                         @if(auth()->user()->name == 'SG Responsable' && $courrier->statut != 'cloture' && $allDivisionsTreated)
-                                            <form action="{{ route('sg.courriers.cloturer', $courrier->id) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('sg.courriers.cloturer', $courrier->id) }}" method="POST" onsubmit="return confirmCloture(event)">
                                                 @csrf
-                                                <button type="submit" class="btn-primary" onclick="return confirm('Êtes-vous sûr de vouloir clôturer ce courrier? Cette action est irréversible.')">
+                                                <button type="submit" class="btn-primary">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                                     </svg>
@@ -722,66 +813,48 @@
                                         @endif
                                     </td>
                                 </tr>
-
-                                <!-- Expandable Details Row -->
+                                
+                                <!-- Expandable row for additional details -->
                                 <tr class="expandable-row" id="details-{{ $courrier->id }}">
                                     <td colspan="6">
                                         <div class="expandable-content">
-                                            <h4 style="margin-bottom: 1rem; color: var(--gray-800); font-weight: 600;">Détails des traitements</h4>
+                                            <h4 style="margin-bottom: 1rem; color: var(--gray-700);">Détails des traitements par division</h4>
                                             <div class="treatment-details">
                                                 @foreach($affectationsSG as $affectation)
-                                                    <div class="treatment-item {{ $affectation->traitements->isNotEmpty() && $affectation->traitements->every(fn($t) => $t->statut === 'valide') ? 'completed' : ($affectation->traitements->where('statut', 'brouillon')->isNotEmpty() ? 'draft' : '') }}">
-                                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-                                                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                                                <div style="width: 32px; height: 32px; background: var(--primary-color); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1rem; height: 1rem;">
-                                                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
-                                                                    </svg>
-                                                                </div>
-                                                                <div>
-                                                                    <div style="font-weight: 600; color: var(--gray-800);">{{ $affectation->affecteA->name }}</div>
-                                                                    <div style="font-size: 0.75rem; color: var(--gray-600);">Affecté le {{ $affectation->created_at->format('d/m/Y') }}</div>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                            @if($affectation->traitements->isNotEmpty())
-                                                                @php $latestTreatment = $affectation->traitements->last(); @endphp
-                                                                <div class="division-status {{ $latestTreatment->statut === 'valide' ? 'completed' : ($latestTreatment->statut === 'brouillon' ? 'pending' : 'untreated') }}">
-                                                                    @if($latestTreatment->statut === 'valide')
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                                                        </svg>
-                                                                        Validé
-                                                                    @elseif($latestTreatment->statut === 'brouillon')
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                                                        </svg>
-                                                                        Brouillon
-                                                                    @endif
-                                                                </div>
-                                                            @else
-                                                                <div class="division-status untreated">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                                                    </svg>
+                                                    @php
+                                                        $isCompleted = $affectation->traitements->isNotEmpty() && 
+                                                                     $affectation->traitements->every(fn($t) => $t->statut === 'valide');
+                                                        $hasDraft = $affectation->traitements->where('statut', 'brouillon')->isNotEmpty();
+                                                    @endphp
+                                                    
+                                                    <div class="treatment-item {{ $isCompleted ? 'completed' : ($hasDraft ? 'draft' : '') }}">
+                                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                                            <strong>{{ $affectation->affecteA->name }}</strong>
+                                                            <span class="division-status {{ $isCompleted ? 'completed' : ($hasDraft ? 'pending' : 'untreated') }}">
+                                                                @if($isCompleted)
+                                                                    Validé
+                                                                @elseif($hasDraft)
+                                                                    Brouillon
+                                                                @else
                                                                     Non traité
-                                                                </div>
-                                                            @endif
+                                                                @endif
+                                                            </span>
                                                         </div>
                                                         
                                                         @if($affectation->traitements->isNotEmpty())
-                                                            <div style="background: var(--gray-50); padding: 0.75rem; border-radius: var(--border-radius-sm); margin-top: 0.5rem;">
-                                                                <div style="font-size: 0.75rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; margin-bottom: 0.5rem;">Dernière Action</div>
-                                                                <div style="color: var(--gray-800); font-size: 0.875rem;">{{ $latestTreatment->action }}</div>
-                                                                <div style="font-size: 0.75rem; color: var(--gray-600); margin-top: 0.5rem;">
-                                                                    Traité le {{ $latestTreatment->updated_at->format('d/m/Y à H:i') }}
+                                                            @foreach($affectation->traitements as $traitement)
+                                                                <div style="margin-top: 0.5rem; padding: 0.5rem; background: var(--gray-100); border-radius: 4px;">
+                                                                    <div><strong>Action:</strong> {{ $traitement->action }}</div>
+                                                                    @if($traitement->commentaire)
+                                                                        <div><strong>Commentaire:</strong> {{ $traitement->commentaire }}</div>
+                                                                    @endif
+                                                                    <div><strong>Statut:</strong> {{ ucfirst($traitement->statut) }}</div>
+                                                                    <div><small>Dernière modification: {{ $traitement->updated_at->format('d/m/Y H:i') }}</small></div>
                                                                 </div>
-                                                            </div>
+                                                            @endforeach
                                                         @else
-                                                            <div style="background: var(--danger-light); padding: 0.75rem; border-radius: var(--border-radius-sm); margin-top: 0.5rem; text-align: center;">
-                                                                <div style="color: var(--danger-color); font-size: 0.875rem; font-weight: 500;">
-                                                                    Aucun traitement effectué
-                                                                </div>
+                                                            <div style="font-style: italic; color: var(--gray-600);">
+                                                                Aucun traitement effectué
                                                             </div>
                                                         @endif
                                                     </div>
@@ -804,130 +877,91 @@
     </div>
 
     <script>
-        // Search functionality
+        // Fonctionnalité de recherche avec délai
+        let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('.table-row');
-            
-            rows.forEach(row => {
-                const reference = row.querySelector('.reference-cell').textContent.toLowerCase();
-                const object = row.querySelector('.object-cell').textContent.toLowerCase();
-                
-                if (reference.includes(searchTerm) || object.includes(searchTerm)) {
-                    row.style.display = '';
-                    // Hide the corresponding expandable row if it's open
-                    const expandableRow = row.nextElementSibling;
-                    if (expandableRow && expandableRow.classList.contains('expandable-row') && expandableRow.classList.contains('show')) {
-                        expandableRow.style.display = '';
-                    }
-                } else {
-                    row.style.display = 'none';
-                    // Hide the corresponding expandable row
-                    const expandableRow = row.nextElementSibling;
-                    if (expandableRow && expandableRow.classList.contains('expandable-row')) {
-                        expandableRow.style.display = 'none';
-                    }
-                }
-            });
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                document.getElementById('searchForm').submit();
+            }, 500);
         });
 
-        // Filter functionality
+        // Filtrage par statut
         function filterByStatus(status) {
+            document.getElementById('statusFilter').value = status;
+            document.getElementById('searchForm').submit();
+        }
+
+        // Fonction pour afficher/masquer les détails
+        function toggleDetails(courrierId) {
+            const detailsRow = document.getElementById('details-' + courrierId);
+            detailsRow.classList.toggle('show');
+        }
+
+        // Fonction de confirmation pour la clôture
+        function confirmCloture(event) {
+            if (!confirm('Êtes-vous sûr de vouloir clôturer ce courrier? Cette action est irréversible.')) {
+                event.preventDefault();
+                return false;
+            }
+            
+            // Afficher un indicateur de chargement
+            const button = event.target.querySelector('button[type="submit"]') || event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="animate-spin" style="animation: spin 1s linear infinite;">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                </svg>
+                Traitement...
+            `;
+            button.disabled = true;
+            
+            return true;
+        }
+
+        // Filtrer les lignes du tableau en fonction du statut
+        function filterTableRows(status) {
             const rows = document.querySelectorAll('.table-row');
-            
-            // Update active filter button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.style.background = 'var(--gray-100)';
-                btn.style.color = 'var(--gray-700)';
-                btn.style.borderColor = 'var(--gray-200)';
-            });
-            
-            event.target.style.background = 'var(--primary-color)';
-            event.target.style.color = 'white';
-            event.target.style.borderColor = 'var(--primary-color)';
-            
             rows.forEach(row => {
                 const rowStatus = row.getAttribute('data-status');
-                
                 if (status === 'all' || rowStatus === status) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
-                    // Hide the corresponding expandable row
-                    const expandableRow = row.nextElementSibling;
-                    if (expandableRow && expandableRow.classList.contains('expandable-row')) {
-                        expandableRow.style.display = 'none';
-                        expandableRow.classList.remove('show');
-                    }
+                }
+            });
+            
+            // Mettre à jour les boutons de filtre
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-status') === status) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
                 }
             });
         }
 
-        // Toggle details functionality
-        function toggleDetails(courrierId) {
-            const detailsRow = document.getElementById('details-' + courrierId);
-            const isVisible = detailsRow.classList.contains('show');
-            
-            // Hide all other expanded details
-            document.querySelectorAll('.expandable-row.show').forEach(row => {
-                if (row !== detailsRow) {
-                    row.classList.remove('show');
-                }
-            });
-            
-            // Toggle current details
-            if (isVisible) {
-                detailsRow.classList.remove('show');
-            } else {
-                detailsRow.classList.add('show');
-            }
+        // Appliquer le filtre initial si présent dans l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const statusParam = urlParams.get('status');
+        if (statusParam) {
+            filterTableRows(statusParam);
         }
 
-        // Close expanded details when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.division-item') && !e.target.closest('.expandable-content')) {
-                document.querySelectorAll('.expandable-row.show').forEach(row => {
-                    row.classList.remove('show');
-                });
-            }
-        });
-
-        // Add loading state to action buttons
-        document.querySelectorAll('.btn-primary[type="submit"]').forEach(button => {
-            button.addEventListener('click', function(e) {
-                // Don't show loading if user cancels confirmation
-                setTimeout(() => {
-                    if (this.closest('form').checkValidity()) {
-                        this.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1rem; height: 1rem; animation: spin 1s linear infinite;">
-                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-                            </svg>
-                            Traitement...
-                        `;
-                        this.disabled = true;
-                    }
-                }, 100);
-            });
-        });
-
-        // Add spin animation
+        // Animation de spin pour les SVG
         const style = document.createElement('style');
         style.textContent = `
             @keyframes spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .animate-spin {
+                animation: spin 1s linear infinite;
             }
         `;
         document.head.appendChild(style);
 
-        // Initialize first filter button as active
-        document.addEventListener('DOMContentLoaded', function() {
-            const firstFilterBtn = document.querySelector('.filter-btn');
-            if (firstFilterBtn) {
-                firstFilterBtn.style.background = 'var(--primary-color)';
-                firstFilterBtn.style.color = 'white';
-                firstFilterBtn.style.borderColor = 'var(--primary-color)';
-            }
-        });
+        // Debug: Vérification que le JavaScript est chargé
+        console.log('Script de gestion des courriers chargé');
     </script>
 </x-app-layout>

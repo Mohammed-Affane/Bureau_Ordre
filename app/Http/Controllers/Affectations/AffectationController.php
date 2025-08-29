@@ -80,7 +80,7 @@ public function store(Request $request, $courrierId)
         // Store the appropriate instruction based on current user's role
         $instruction = '';
         if ($currentUserRole === 'cab' && $request->instruction_cab) {
-            $instruction = "CAB: " . $request->instruction_cab;
+            $instruction = "Gouverneur: " . $request->instruction_cab;
         } elseif ($currentUserRole === 'sg' && $request->instruction_sg) {
             $instruction = "SG: " . $request->instruction_sg;
         }
@@ -122,7 +122,7 @@ if ($currentUserRole === 'bo') {
     if (($currentUserRole === 'sg' && $status_affectation === 'a_div' )||($currentUserRole === 'cab' && $status_affectation === 'a_div')) {
         $courrier->update(['statut' => 'arriver']);
     }
-     elseif($currentUserRole === 'cab'||$request->instruction_cab) {
+     elseif($currentUserRole === 'cab' || $request->instruction_cab) {
         $courrier->update(['statut' => 'en_traitement']);
     }else{
         $courrier->update(['statut' => 'en_cours']);
