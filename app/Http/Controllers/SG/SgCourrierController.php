@@ -49,11 +49,15 @@ class SgCourrierController extends Controller
         ]);
     }
 
-     // Controller
-public function recusTraitement(): View
+
+public function recusTraitement(Request $request): View
 {
-    // Charger tous les courriers avec leurs affectations et traitements
-    $courriers = Courrier::whereHas('affectations', function ($query) {
+    // Get filter parameters from request
+    $statusFilter = $request->query('status', 'all');
+    $searchTerm = $request->query('search', '');
+    
+    // Base query
+    $query = Courrier::whereHas('affectations', function ($query) {
         // Filtrer uniquement les affectations vers une division
         $query->whereHas('affecteA.roles', function ($q) {
             $q->where('name', 'chef_division');
@@ -61,10 +65,41 @@ public function recusTraitement(): View
     })
     ->with(['affectations' => function($query) {
         $query->with(['traitements', 'affecteA', 'affectePar']);
-    }])
-    ->paginate(5);
+    }]);
+    
+    // Apply search filter
+    if (!empty($searchTerm)) {
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('reference_arrive', 'like', '%' . $searchTerm . '%')
+              ->orWhere('objet', 'like', '%' . $searchTerm . '%');
+        });
+    }
+    
+    // Apply status filter
+    if ($statusFilter !== 'all') {
+        if ($statusFilter === 'completed') {
+            // Filter for completed courriers (all divisions treated and validated)
+            $query->whereHas('affectations', function($q) {
+                $q->whereHas('traitements', function($t) {
+                    $t->where('statut', 'valide');
+                });
+            });
+        } elseif ($statusFilter === 'pending') {
+            // Filter for pending courriers (some divisions not treated or not validated)
+            $query->where(function($q) {
+                $q->whereDoesntHave('affectations.traitements')
+                  ->orWhereHas('affectations.traitements', function($t) {
+                      $t->where('statut', '!=', 'valide');
+                  });
+            });
+        }
+    }
+    
+    // Paginate results and preserve query parameters
+    $courriers = $query->paginate(5)->appends($request->query());
+    
+    return view('dashboards.sg.traitements.arrive', compact('courriers', 'statusFilter', 'searchTerm'));
 
-    return view('dashboards.sg.traitements.arrive', compact('courriers'));
 }
 public function cloturerCourrier(Request $request, $id)
 {
