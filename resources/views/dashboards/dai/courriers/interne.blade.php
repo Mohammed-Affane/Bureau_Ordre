@@ -43,14 +43,15 @@
                                           </div>
                                       </div>
                                   </div>
-                        
+                        @can('create', App\Models\Courrier::class)
                         <a href="{{ route('courriers.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Nouveau courrier</a>
+                        @endcan
                  </div>
         </div>
 
 
                      <!-- Search and Filter Section -->
-                    <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                    <div class="mb-6 bg-gray-300 p-4 rounded-lg">
                         <form method="GET" action="{{ route('dai.courriers.interne') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <!-- Search Input -->
@@ -95,10 +96,20 @@
                                         <option value="week" {{ request('date_range') == 'week' ? 'selected' : '' }}>Cette semaine</option>
                                         <option value="month" {{ request('date_range') == 'month' ? 'selected' : '' }}>Ce mois</option>
                                         <option value="year" {{ request('date_range') == 'year' ? 'selected' : '' }}>Cette année</option>
+                                        <option value="custom" {{ request('date_from') || request('date_to') ? 'selected' : '' }}>Personnalisée</option>
                                     </select>
                                 </div>
                             </div>
-                            
+                            <div id="custom_date_range" class="grid grid-cols-2 gap-4 mt-4" style="display: none;">
+                                <div>
+                                    <label for="date_from" class="block text-sm font-medium text-gray-700">De</label>
+                                    <input type="date" name="date_from" id="date_from" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="date_to" class="block text-sm font-medium text-gray-700">À</label>
+                                    <input type="date" name="date_to" id="date_to" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
                             <div class="mt-4 flex justify-end">
                                 <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -116,7 +127,7 @@
                     <!-- Courriers Table -->
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-200">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
@@ -202,4 +213,25 @@
             </div>
         </div>
     </div>
+            @push('scripts')
+    <script>
+        // Show/hide custom date range based on selection
+        document.getElementById('date_range').addEventListener('change', function() {
+            const customRange = document.getElementById('custom_date_range');
+            if (this.value === 'custom') {
+                customRange.style.display = 'grid';
+            } else {
+                customRange.style.display = 'none';
+                document.getElementById('date_from').value = '';
+                document.getElementById('date_to').value = '';
+            }
+        });
+
+        // Initialize date pickers if using flatpickr 
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr("#date_from", { dateFormat: "Y-m-d" });
+            flatpickr("#date_to", { dateFormat: "Y-m-d" });
+        }
+    </script>
+    @endpush
 </x-app-layout>

@@ -53,7 +53,7 @@
 
 
                      <!-- Search and Filter Section -->
-                    <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                    <div class="mb-6 bg-gray-300 p-4 rounded-lg">
                         <form method="GET" action="{{ route('dai.courriers.arrive') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <!-- Search Input -->
@@ -92,14 +92,31 @@
                                 
                                 <!-- Date Range Filter -->
                                 <div>
-                                    <label for="date_range" class="block text-sm font-medium text-gray-700">Période</label>
+                                   <label for="date_range" class="block text-sm font-medium text-gray-700">Période</label>
                                     <select name="date_range" id="date_range" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                         <option value="">Toutes les dates</option>
                                         <option value="today" {{ request('date_range') == 'today' ? 'selected' : '' }}>Aujourd'hui</option>
                                         <option value="week" {{ request('date_range') == 'week' ? 'selected' : '' }}>Cette semaine</option>
                                         <option value="month" {{ request('date_range') == 'month' ? 'selected' : '' }}>Ce mois</option>
                                         <option value="year" {{ request('date_range') == 'year' ? 'selected' : '' }}>Cette année</option>
+                                        <option value="custom" {{ request('date_from') || request('date_to') ? 'selected' : '' }}>Personnalisée</option>
                                     </select>
+                                </div>
+                            </div>
+
+                             <!-- Custom Date Range (hidden by default) -->
+                            <div id="custom_date_range" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4" style="{{ !(request('date_from') || request('date_to')) ? 'display: none;' : '' }}">
+                                <div>
+                                    <label for="date_from" class="block text-sm font-medium text-gray-700">Du</label>
+                                    <input type="date" name="date_from" id="date_from" 
+                                           value="{{ request('date_from') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="date_to" class="block text-sm font-medium text-gray-700">Au</label>
+                                    <input type="date" name="date_to" id="date_to" 
+                                           value="{{ request('date_to') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 </div>
                             </div>
                             
@@ -179,7 +196,9 @@
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">{{ $courrier->statut }}</span>
                                             @endswitch
                                         </td>
-                                      
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="{{ route('courriers.show', $courrier->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Voir</a>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -188,6 +207,7 @@
                                         </td>
                                     </tr>
                                 @endforelse
+
                             </tbody>
                         </table>
                     </div>
@@ -200,4 +220,26 @@
             </div>
         </div>
     </div>
+
+        @push('scripts')
+    <script>
+        // Show/hide custom date range based on selection
+        document.getElementById('date_range').addEventListener('change', function() {
+            const customRange = document.getElementById('custom_date_range');
+            if (this.value === 'custom') {
+                customRange.style.display = 'grid';
+            } else {
+                customRange.style.display = 'none';
+                document.getElementById('date_from').value = '';
+                document.getElementById('date_to').value = '';
+            }
+        });
+
+        // Initialize date pickers if using flatpickr 
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr("#date_from", { dateFormat: "Y-m-d" });
+            flatpickr("#date_to", { dateFormat: "Y-m-d" });
+        }
+    </script>
+    @endpush
 </x-app-layout>
