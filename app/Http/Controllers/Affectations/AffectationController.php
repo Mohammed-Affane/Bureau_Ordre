@@ -130,6 +130,9 @@ if ($currentUserRole === 'bo') {
 
     if($currentUserRole !== 'bo'){
         return redirect()->route(''.$currentUserRole.'.courriers.'.$courrier->type_courrier)
+
+
+
         ->with('success', 'Courrier affecté avec succès à ' . count($request->id_affecte_a_utilisateur) . ' utilisateur(s).');
     }else{
         return redirect()->route('courriers.'.$courrier->type_courrier)

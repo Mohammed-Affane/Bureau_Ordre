@@ -89,9 +89,11 @@ Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(func
 
 // DAI Routes
 Route::middleware(['auth', 'role:dai'])->prefix('dai')->name('dai.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.dai.index'))->name('dashboard');
+    Route::get('dashboard', [\App\Http\Controllers\DAI\DaiDashboardController::class, 'index'])->name('dashboard');
     Route::get('pending', fn () => view('dai.pending'))->name('pending');
     Route::get('closed', fn () => view('dai.closed'))->name('closed');
+    Route::get('courriers.interne',[\App\Http\Controllers\DAI\DaiCourrierController::class,'daiCourrierInterne'])->name('courriers.interne');
+    Route::get('courriers.arrive',[\App\Http\Controllers\DAI\DaiCourrierController::class,'daiCourrierArrive'])->name('courriers.arrive');
 });
 
 // SG Routes
