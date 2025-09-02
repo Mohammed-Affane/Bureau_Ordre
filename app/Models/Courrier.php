@@ -79,7 +79,6 @@ public function scopeCourrierByUserRole($query, $user = null)
                   $sub->whereNull('deleted_at'); // optionnel, si SoftDeletes
               });
         })->where('statut', 'en_traitement');
-
     }
 
     // CAB: courriers affectés au CAB
@@ -89,22 +88,28 @@ public function scopeCourrierByUserRole($query, $user = null)
               ->whereHas('AffecteA', function ($sub) {
                   $sub->whereNull('deleted_at');
               });
-
         })->where('statut', 'en_cours');
+    }
 
+    // DAI: courriers affectés à la DAI
+    if ($user->hasRole('dai')) {
+        return $query->whereHas('affectations', function ($q) use ($user) {
+            $q->where('statut_affectation', 'a_div')
+              ->where('id_affecte_a_utilisateur', $user->id) // doit être affecté à ce user DAI
+              ->whereHas('AffecteA', function ($sub) {
+                  $sub->whereNull('deleted_at');
+              });
+        })->where('statut', 'arriver');
     }
 
     // BO: si vous voulez que BO voie tout, ne filtrez pas
     if ($user->hasRole('bo')) {
         return $query;
-        // Si vous voulez restreindre : décommentez et adaptez
+        // Ou limiter : 
         // return $query->whereHas('affectations', fn($q) => $q->where('statut_affectation', 'a_cab'));
     }
 
-    // Chef de division (OPTION 2):
-    // Ici on ne dispose PAS d’un entite_id sur users.
-    // On filtre donc les courriers affectés à un utilisateur dont
-    // l’entité a pour responsable l’utilisateur courant (chef).
+    // Chef de division
     if ($user->hasRole('chef_division')) {
         return $query->whereHas('affectations', function ($q) use ($user) {
             $q->where('statut_affectation', 'a_div')
@@ -113,8 +118,7 @@ public function scopeCourrierByUserRole($query, $user = null)
                       $sub2->where('responsable_id', $user->id);
                   });
               });
-         })->where('statut', 'arriver');
-
+        })->where('statut', 'arriver');
     }
 
     return $query;

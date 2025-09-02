@@ -40,9 +40,11 @@ class AuthenticatedSessionController extends Controller
         } else if ($user->hasRole('chef_division')) {
             return redirect()->intended(route('division.dashboard', absolute: false));
         }
-        return redirect()->intended(route('dai.dashboard', absolute: false));
+        return redirect()->intended(route('dai.courriers.arrive', absolute: false));
     }
 
+
+        
     /**
      * Destroy an authenticated session.
      */
