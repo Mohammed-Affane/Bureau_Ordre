@@ -55,7 +55,7 @@
                  </div>
         </div>
                      <!-- Search and Filter Section -->
-                    <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                    <div class="mb-6 bg-gray-300 p-4 rounded-lg">
                         <form method="GET" action="{{ route('courriers.depart') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <!-- Search Input -->
@@ -145,7 +145,7 @@
                     @endif
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-200">
                                <tr>    
              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Départ</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Départ</th>

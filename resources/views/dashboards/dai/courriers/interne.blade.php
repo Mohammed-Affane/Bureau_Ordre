@@ -51,7 +51,7 @@
 
 
                      <!-- Search and Filter Section -->
-                    <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                    <div class="mb-6 bg-gray-300 p-4 rounded-lg">
                         <form method="GET" action="{{ route('dai.courriers.interne') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <!-- Search Input -->
@@ -110,9 +110,6 @@
                                     <input type="date" name="date_to" id="date_to" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 </div>
                             </div>
-                            <div>
-                                <label for="date_range" class="block text-sm font-medium text-gray-700">Période</label>
-                            </div>
                             <div class="mt-4 flex justify-end">
                                 <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -130,7 +127,7 @@
                     <!-- Courriers Table -->
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-200">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>

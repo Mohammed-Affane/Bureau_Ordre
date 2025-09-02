@@ -57,7 +57,7 @@
                     </div>
                                               </div>
                      <!-- Search and Filter Section -->
-                    <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                    <div class="mb-6 bg-gray-300 p-4 rounded-lg">
                         <form method="GET" action="{{ route('sg.courriers.interne') }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <!-- Search Input -->
