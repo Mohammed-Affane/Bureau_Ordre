@@ -49,8 +49,9 @@
                                           </div>
                                       </div>
                                   </div>
-
+                                  @can('create courrier')
                         <a href="{{ route('courriers.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Nouveau courrier</a>
+                        @endcan
                     </div>
                                               </div>
                      <!-- Search and Filter Section -->
@@ -144,18 +145,18 @@
                     @endif
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-300">
                                <tr>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Réception</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Visa</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Enregistrement</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr Pièces</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objet</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expéditeur</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fichier Scan</th>
-    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Référence Arrivée</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Date Réception</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Référence Visa</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Date Enregistrement</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Statut</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Nbr Pièces</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Objet</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Expéditeur</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Fichier Scan</th>
+    <th class="px-6 py-3 text-center text-xs font-medium text-black-900 uppercase tracking-wider">Actions</th>
 
 </tr>
 </thead>
