@@ -8,7 +8,7 @@
                         <div>
 
                             
-                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrive CAB</h1>
+                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrive SG</h1>
                             <p class="text-sm text-gray-500 mt-1">Tous les courriers enregistrés dans le bureau d'ordre</p>
                         </div>
                          {{-- Export Dropdown --}}
@@ -84,6 +84,7 @@
                                         <option value="arriver" {{ request('statut') == 'arriver' ? 'selected' : '' }}>Arrivé</option>
                                         <option value="cloture" {{ request('statut') == 'cloture' ? 'selected' : '' }}>Clôturé</option>
                                         <option value="archiver" {{ request('statut') == 'archiver' ? 'selected' : '' }}>Archivé</option>
+                                        <option value="en_traitement" {{ request('statut') == 'en_traitement' ? 'selected' : '' }}>En traitement</option>
                                     </select>
                                 </div>
                                 
@@ -152,7 +153,7 @@
 
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-300">
                                <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Référence Arrivée</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Réception</th>
@@ -185,6 +186,7 @@
                         'arriver'    => 'bg-green-100 text-green-800',
                         'cloture'    => 'bg-gray-100 text-gray-800',
                         'archiver'   => 'bg-purple-100 text-purple-800',
+                    'en_traitement'  => 'bg-orange-100 text-orange-800',
                     ];
                 @endphp
 

@@ -173,6 +173,7 @@
                         'arriver'    => 'bg-green-100 text-green-800',
                         'cloture'    => 'bg-gray-100 text-gray-800',
                         'archiver'   => 'bg-purple-100 text-purple-800',
+                        'en_traitement'  => 'bg-orange-100 text-orange-800',
                     ];
                 @endphp
 
