@@ -56,7 +56,7 @@
                         <a href="{{ route('courriers.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Nouveau courrier</a>
                         @endcan
                     </div>
-                        
+                                              </div>
                      <!-- Search and Filter Section -->
                     <div class="mb-6 bg-gray-300 p-4 rounded-lg">
                         <form method="GET" action="{{ route('cab.courriers.interne') }}">
@@ -80,6 +80,7 @@
                                         <option value="arriver" {{ request('statut') == 'arriver' ? 'selected' : '' }}>Arrivé</option>
                                         <option value="cloture" {{ request('statut') == 'cloture' ? 'selected' : '' }}>Clôturé</option>
                                         <option value="archiver" {{ request('statut') == 'archiver' ? 'selected' : '' }}>Archivé</option>
+                                        <option value="en_traitement" {{ request('statut') == 'en_traitement' ? 'selected' : '' }}>En traitement</option>
                                     </select>
                                 </div>
                                 
@@ -174,6 +175,7 @@
                         'arriver'    => 'bg-green-100 text-green-800',
                         'cloture'    => 'bg-gray-100 text-gray-800',
                         'archiver'   => 'bg-purple-100 text-purple-800',
+                        'en_traitement'  => 'bg-orange-100 text-orange-800',
                     ];
                 @endphp
 

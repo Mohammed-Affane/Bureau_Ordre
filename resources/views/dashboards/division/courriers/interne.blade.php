@@ -80,6 +80,7 @@
                                         <option value="arriver" {{ request('statut') == 'arriver' ? 'selected' : '' }}>Arrivé</option>
                                         <option value="cloture" {{ request('statut') == 'cloture' ? 'selected' : '' }}>Clôturé</option>
                                         <option value="archiver" {{ request('statut') == 'archiver' ? 'selected' : '' }}>Archivé</option>
+                                        <option value="en_traitement" {{ request('statut') == 'en_traitement' ? 'selected' : '' }}>En traitement</option>
                                     </select>
                                 </div>
                                 
@@ -176,6 +177,7 @@
                         'arriver'    => 'bg-green-100 text-green-800',
                         'cloture'    => 'bg-gray-100 text-gray-800',
                         'archiver'   => 'bg-purple-100 text-purple-800',
+                        'en_traitement'  => 'bg-orange-100 text-orange-800',
                     ];
                 @endphp
 
