@@ -16,6 +16,7 @@ use App\Http\Controllers\Exports\ExportCourrierController;
 use App\Http\Controllers\Division\DivisionCourrierController;
 use App\Http\Controllers\CAB\CabCourrierController;
 use App\Http\Controllers\SG\SgCourrierController;
+use App\Http\Controllers\CabDashboardController;
 
     Route::get('/', function () {
         return redirect()->route('login');
@@ -63,6 +64,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('roles', RoleController::class);
     Route::resource('entites', EntiteController::class);
     Route::resource('permissions', PermissionController::class);
+    Route::get('statistics', [AdminDashboardController::class, 'statistics'])->name('statistics');
 });
 
 // BO Routes
@@ -74,9 +76,18 @@ Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(functio
 
 // Cab Routes
 Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.cab.index'))->name('dashboard');
+    Route::get('dashboard', [CabDashboardController::class, 'index'])->name('dashboard');
     Route::get('courriers.interne',[CabCourrierController::class,'cabCourrierInterne'])->name('courriers.interne');
     Route::get('courriers.arrive',[CabCourrierController::class,'cabCourrierArrive'])->name('courriers.arrive');
+    // API endpoints for real-time updates
+    Route::get('/realtime-stats', [CabDashboardController::class, 'getRealtimeStats'])->name('realtime-stats');
+    
+    // Export functionality
+    Route::get('/export', [CabDashboardController::class, 'exportReport'])->name('export');
+    
+    // Additional dashboard filters and data endpoints
+    Route::get('/filter-data', [CabDashboardController::class, 'getFilteredData'])->name('filter-data');
+    Route::get('/department-details/{department}', [CabDashboardController::class, 'getDepartmentDetails'])->name('department-details');
 
 
 });
@@ -89,7 +100,7 @@ Route::middleware(['auth', 'role:dai'])->prefix('dai')->name('dai.')->group(func
 
 // SG Routes
 Route::middleware(['auth', 'role:sg'])->prefix('sg')->name('sg.')->group(function () {
-    Route::get('dashboard', fn () => view('dashboards.sg.index'))->name('dashboard');
+    Route::get('dashboard', [\App\Http\Controllers\SgDashboardController::class, 'index'])->name('dashboard');
     Route::get('courriers.interne',[SgCourrierController::class,'sgCourrierInterne'])->name('courriers.interne');
     Route::get('courriers.arrive',[SgCourrierController::class,'sgCourrierArrive'])->name('courriers.arrive');
 // Traitements
