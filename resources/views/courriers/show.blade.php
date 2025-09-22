@@ -3,12 +3,22 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
             <!-- Header -->
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900">Détails du courrier</h1>
-                    <p class="mt-1 text-gray-600">Référence: {{ $courrier->reference_arrive ?? 'N/A' }}</p>
+                    <div class="flex items-center mt-2">
+                        <p class="text-gray-600 mr-4">Référence: {{ $courrier->reference_arrive ?? 'N/A' }}</p>
+                        <span class="px-3 py-1 rounded-full text-xs font-medium 
+                            {{ $courrier->type_courrier === 'arrive' ? 'bg-blue-100 text-blue-800' : 
+                               ($courrier->type_courrier === 'depart' ? 'bg-green-100 text-green-800' : 
+                               ($courrier->type_courrier === 'visa' ? 'bg-purple-100 text-purple-800' : 
+                               ($courrier->type_courrier === 'decision' ? 'bg-yellow-100 text-yellow-800' : 
+                               'bg-gray-100 text-gray-800'))) }}">
+                            {{ ucfirst($courrier->type_courrier) }}
+                        </span>
+                    </div>
                 </div>
-                <div class="flex space-x-3">
+                <div class="flex space-x-3 mt-4 md:mt-0">
                     <!-- Retour -->
                     <a href="{{ url()->previous() }}" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -34,31 +44,56 @@
                 </div>
             </div>
 
-            <!-- Statut & Priorité -->
-            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex justify-between">
-                <div>
-                    <span class="font-semibold text-gray-700">Statut :</span>
-                    <span class="ml-2 px-3 py-1 rounded-full text-sm font-medium 
-                        {{ $courrier->statut === 'traité' ? 'bg-green-100 text-green-800' : 
-                           ($courrier->statut === 'en_cours' ? 'bg-yellow-100 text-yellow-800' : 
-                           'bg-yellow-100 text-yellow-800') }}">
-                        {{ ucfirst($courrier->statut ?? '-') }}
-                    </span>
+            <!-- Statut & Priorité Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full p-3 bg-blue-50 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Statut</h3>
+                            <span class="text-lg font-semibold 
+                                {{ $courrier->statut === 'traité' ? 'text-green-600' : 
+                                   ($courrier->statut === 'en_cours' ? 'text-yellow-600' : 
+                                   'text-yellow-600') }}">
+                                {{ ucfirst($courrier->statut ?? '-') }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <span class="font-semibold text-gray-700">Priorité :</span>
-                    <span class="ml-2 px-3 py-1 rounded-full text-sm font-medium 
-                        {{ $courrier->priorite === 'haute' ? 'bg-red-100 text-red-800' : 
-                           ($courrier->priorite === 'moyenne' ? 'bg-orange-100 text-orange-800' : 
-                           'bg-blue-100 text-blue-800') }}">
-                        {{ ucfirst($courrier->priorite ?? '-') }}
-                    </span>
+                
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+                    <div class="flex items-center">
+                        <div class="rounded-full p-3 
+                            {{ $courrier->priorite === 'haute' ? 'bg-red-50' : 
+                               ($courrier->priorite === 'moyenne' ? 'bg-orange-50' : 
+                               'bg-blue-50') }} mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 
+                                {{ $courrier->priorite === 'haute' ? 'text-red-600' : 
+                                   ($courrier->priorite === 'moyenne' ? 'text-orange-600' : 
+                                   'text-blue-600') }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Priorité</h3>
+                            <span class="text-lg font-semibold 
+                                {{ $courrier->priorite === 'haute' ? 'text-red-600' : 
+                                   ($courrier->priorite === 'moyenne' ? 'text-orange-600' : 
+                                   'text-blue-600') }}">
+                                {{ ucfirst($courrier->priorite ?? '-') }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Main Content -->
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                     <h3 class="text-lg font-semibold text-gray-900">Informations principales</h3>
                 </div>
 
@@ -67,27 +102,48 @@
                     <!-- Left Column -->
                     <div class="space-y-6">
                         <!-- Références -->
-                        @if(in_array($courrier->type_courrier, ['arrive','depart','decision']))
+                        @if(in_array($courrier->type_courrier, ['arrive','depart','decision','interne','visa']))
                         <div>
                             <h4 class="text-md font-bold text-gray-800 mb-3">Références</h4>
                             <dl class="space-y-3">
-                                <div class="flex justify-between"><dt class="text-gray-600">Arrivée :</dt><dd class="text-gray-900">{{ $courrier->reference_arrive ?? '-' }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Départ :</dt><dd class="text-gray-900">{{ $courrier->reference_depart ?? '-' }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Bureau d'ordre :</dt><dd class="text-gray-900">{{ $courrier->reference_bo ?? '-' }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Décision :</dt><dd class="text-gray-900">{{ $courrier->reference_dec ?? '-' }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Visa :</dt><dd class="text-gray-900">{{ $courrier->reference_visa ?? '-' }}</dd></div>
+                                @if($courrier->type_courrier === 'arrive' || $courrier->type_courrier === 'visa')
+                                <div class="flex justify-between"><dt class="text-gray-600">Arrivée :</dt><dd class="text-gray-900 font-medium">{{ $courrier->reference_arrive ?? '-' }}</dd></div>
+                                @endif
+                                
+                                @if($courrier->type_courrier === 'depart' || $courrier->type_courrier === 'interne')
+                                <div class="flex justify-between"><dt class="text-gray-600">Départ :</dt><dd class="text-gray-900 font-medium">{{ $courrier->reference_depart ?? '-' }}</dd></div>
+                                @endif
+                                @if($courrier->type_courrier === 'arrive')
+                                <div class="flex justify-between"><dt class="text-gray-600">Bureau d'ordre :</dt><dd class="text-gray-900 font-medium">{{ $courrier->reference_bo ?? '-' }}</dd></div>
+                                @endif
+                                
+                                @if($courrier->type_courrier === 'decision')
+                                <div class="flex justify-between"><dt class="text-gray-600">Décision :</dt><dd class="text-gray-900 font-medium">{{ $courrier->reference_dec ?? '-' }}</dd></div>
+                                @endif
+                                
+                                @if($courrier->type_courrier === 'visa')
+                                <div class="flex justify-between"><dt class="text-gray-600">Visa :</dt><dd class="text-gray-900 font-medium">{{ $courrier->reference_visa ?? '-' }}</dd></div>
+                                @endif
                             </dl>
                         </div>
                         @endif
 
                         <!-- Dates -->
                         <div>
-                            <h4 class="text-md font-semibold text-gray-800 mb-3">Dates</h4>
+                            <h4 class="text-md font-bold text-gray-800 mb-3">Dates</h4>
                             <dl class="space-y-3">
-                                <div class="flex justify-between"><dt class="text-gray-600">Réception :</dt><dd class="text-gray-900">{{ $courrier->date_reception ? \Carbon\Carbon::parse($courrier->date_reception)->format('d/m/Y') : '-' }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Départ :</dt><dd class="text-gray-900">{{ $courrier->date_depart ? \Carbon\Carbon::parse($courrier->date_depart)->format('d/m/Y') : '-' }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Enregistrement :</dt><dd class="text-gray-900">{{ $courrier->date_enregistrement ? \Carbon\Carbon::parse($courrier->date_enregistrement)->format('d/m/Y') : '-' }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Délais :</dt><dd class="text-gray-900">{{ $courrier->delais ? \Carbon\Carbon::parse($courrier->delais)->format('d/m/Y') : '-' }}</dd></div>
+                                @if($courrier->type_courrier === 'arrive' || $courrier->type_courrier === 'visa')
+                                <div class="flex justify-between"><dt class="text-gray-600">Réception :</dt><dd class="text-gray-900 font-medium">{{ $courrier->date_reception ? \Carbon\Carbon::parse($courrier->date_reception)->format('d/m/Y') : '-' }}</dd></div>
+                                @endif
+                                
+                                @if($courrier->type_courrier === 'depart' || $courrier->type_courrier === 'interne')
+                                <div class="flex justify-between"><dt class="text-gray-600">Départ :</dt><dd class="text-gray-900 font-medium">{{ $courrier->date_depart ? \Carbon\Carbon::parse($courrier->date_depart)->format('d/m/Y') : '-' }}</dd></div>
+                                @endif
+                                
+                                <div class="flex justify-between"><dt class="text-gray-600">Enregistrement :</dt><dd class="text-gray-900 font-medium">{{ $courrier->date_enregistrement ? \Carbon\Carbon::parse($courrier->date_enregistrement)->format('d/m/Y') : '-' }}</dd></div>
+                                
+                                <div class="flex justify-between"><dt class="text-gray-600">Délais :</dt><dd class="text-gray-900 font-medium">{{ $courrier->delais ? \Carbon\Carbon::parse($courrier->delais)->format('d/m/Y') : '-' }}</dd></div>
+                               
                             </dl>
                         </div>
                     </div>
@@ -96,21 +152,27 @@
                     <div class="space-y-6">
                         <!-- Correspondents -->
                         <div>
-                            <h4 class="text-md font-semibold text-gray-800 mb-3">Correspondants</h4>
+                            <h4 class="text-md font-bold text-gray-800 mb-3">Correspondants</h4>
                             <dl class="space-y-3">
+                                @if($courrier->type_courrier !== 'interne')
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Expéditeur :</dt>
-                                    <dd class="text-gray-900">{{ $courrier->expediteur->nom ?? '-' }}</dd>
+                                    <dd class="text-gray-900 font-medium">{{ $courrier->expediteur->nom ?? '-' }}</dd>
                                 </div>
+                                @endif
+                                
+                                @if($courrier->type_courrier !== 'interne')
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Entité expéditrice :</dt>
-                                    <dd class="text-gray-900">{{ $courrier->entiteExpediteur->nom ?? '-' }}</dd>
+                                    <dd class="text-gray-900 font-medium">{{ $courrier->entiteExpediteur->nom ?? '-' }}</dd>
                                 </div>
+                                @endif
+                                
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Destinataires :</dt>
                                     <dd>
                                         @if($courrier->courrierDestinatairePivot->count() > 0)
-                                            <a href="{{ route('courriers.destinataires', $courrier->id) }}" class="text-blue-600 hover:underline">Voir les destinataires</a>
+                                            <a href="{{ route('courriers.destinataires', $courrier->id) }}" class="text-blue-600 hover:underline font-medium">Voir les destinataires</a>
                                         @else
                                             <span class="text-gray-500">-</span>
                                         @endif
@@ -118,21 +180,21 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Agent en charge :</dt>
-                                    <dd class="text-gray-900">{{ $courrier->agent->name ?? '-' }}</dd>
+                                    <dd class="text-gray-900 font-medium">{{ $courrier->agent->name ?? '-' }}</dd>
                                 </div>
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Affectations :</dt>
-                                    <dd><a href="{{ route('courriers.affecte', $courrier->id) }}" class="text-blue-600 hover:underline">Voir les affectations</a></dd>
+                                    <dd><a href="{{ route('courriers.affecte', $courrier->id) }}" class="text-blue-600 hover:underline font-medium">Voir les affectations</a></dd>
                                 </div>
                             </dl>
                         </div>
 
                         <!-- Other Info -->
                         <div>
-                            <h4 class="text-md font-semibold text-gray-800 mb-3">Autres informations</h4>
+                            <h4 class="text-md font-bold text-gray-800 mb-3">Autres informations</h4>
                             <dl class="space-y-3">
-                                <div class="flex justify-between"><dt class="text-gray-600">Type :</dt><dd class="text-gray-900">{{ ucfirst($courrier->type_courrier ?? '-') }}</dd></div>
-                                <div class="flex justify-between"><dt class="text-gray-600">Nombre de pièces :</dt><dd class="text-gray-900">{{ $courrier->Nbr_piece ?? '-' }}</dd></div>
+                                <div class="flex justify-between"><dt class="text-gray-600">Type :</dt><dd class="text-gray-900 font-medium">{{ ucfirst($courrier->type_courrier ?? '-') }}</dd></div>
+                                <div class="flex justify-between"><dt class="text-gray-600">Nombre de pièces :</dt><dd class="text-gray-900 font-medium">{{ $courrier->Nbr_piece ?? '-' }}</dd></div>
                             </dl>
                         </div>
                     </div>

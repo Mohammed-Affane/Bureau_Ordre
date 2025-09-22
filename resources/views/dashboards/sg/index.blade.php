@@ -1,191 +1,455 @@
 <x-app-layout>
-    <x-slot name="title">Dashboard SG</x-slot>
+    <x-slot name="title">Secrétariat Général - Tableau de Bord</x-slot>
     <x-slot name="breadcrumbs">
         [['title' => 'Dashboard Secrétariat Général', 'url' => route('sg.dashboard')]]
     </x-slot>
 
-    <h2 class="text-2xl font-bold text-gray-900">Bienvenue Secrétariat Général</h2>
-    <p class="mt-2 text-gray-600">Affectez les courriers et suivez les divisions.</p>
+    @push('styles')
+    <style>
+        .dashboard-container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 { font-size: 2.5rem; font-weight: 700; color: #2d3748; margin-bottom: 10px; }
+        .header p { color: #718096; font-size: 1.1rem; }
+        .real-time-indicator {
+            display: inline-flex; align-items: center; gap: 8px; background: #10b981;
+            color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; margin-top: 15px;
+        }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px;
+            padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border-left: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden;
+        }
+        .metric-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); }
+        .metric-icon {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; font-size: 1.5rem; color: white; margin-bottom: 15px;
+        }
+        .metric-value { font-size: 2.5rem; font-weight: 700; margin-bottom: 5px; }
+        .metric-label { color: #64748b; font-size: 0.95rem; font-weight: 500; }
+        .metric-trend { display: flex; align-items: center; gap: 5px; font-size: 0.85rem; margin-top: 8px; }
+        
+        .card-blue { border-left-color: #3b82f6; }
+        .card-blue .metric-icon { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .card-blue .metric-value { color: #1e40af; }
+        
+        .card-green { border-left-color: #10b981; }
+        .card-green .metric-icon { background: linear-gradient(135deg, #10b981, #047857); }
+        .card-green .metric-value { color: #065f46; }
+        
+        .card-purple { border-left-color: #8b5cf6; }
+        .card-purple .metric-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .card-purple .metric-value { color: #6d28d9; }
+        
+        .card-red { border-left-color: #ef4444; }
+        .card-red .metric-icon { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .card-red .metric-value { color: #b91c1c; }
+        
+        .card-orange { border-left-color: #f59e0b; }
+        .card-orange .metric-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .card-orange .metric-value { color: #92400e; }
+        
+        .card-indigo { border-left-color: #6366f1; }
+        .card-indigo .metric-icon { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .card-indigo .metric-value { color: #3730a3; }
+        
+        .card-yellow { border-left-color: #eab308; }
+        .card-yellow .metric-icon { background: linear-gradient(135deg, #eab308, #ca8a04); }
+        .card-yellow .metric-value { color: #854d0e; }
+        
+        .card-gray { border-left-color: #6b7280; }
+        .card-gray .metric-icon { background: linear-gradient(135deg, #6b7280, #4b5563); }
+        .card-gray .metric-value { color: #374151; }
 
-            <!-- Stats SG -->
-            @php
-            $sgStats = [
-                ['title' => 'Courriers SG', 'value' => '15', 'icon' => 'document-text', 'color' => 'blue'],
-                ['title' => 'Administratif', 'value' => '8', 'icon' => 'clipboard-document', 'color' => 'green'],
-                ['title' => 'Coordination', 'value' => '5', 'icon' => 'users', 'color' => 'purple'],
-                ['title' => 'Archivés', 'value' => '42', 'icon' => 'archive-box', 'color' => 'gray']
-            ];
-        @endphp
-        @include('shared.stats-cards', ['stats' => $sgStats])
+        .performance-indicators { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px;
+            padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .kpi-value { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
+        .kpi-label { color: #6b7280; font-size: 0.9rem; }
+        
+        .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px;
+            padding: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 350px; /* Fixed height for charts */
+        }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .chart-title { font-size: 1.2rem; font-weight: 600; color: #1f2937; }
+        .chart-subtitle { color: #6b7280; font-size: 0.9rem; }
+        
+        .activities-section { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .activity-card {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px;
+            padding: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .courrier-item { display: flex; align-items: start; gap: 15px; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
+        .courrier-item:last-child { border-bottom: none; }
+        .courrier-priority { width: 8px; height: 60px; border-radius: 4px; flex-shrink: 0; }
+        .priority-urgent { background: #ef4444; }
+        .priority-normal { background: #10b981; }
+        .priority-confidentiel { background: #8b5cf6; }
+        .priority-reponse { background: #f59e0b; }
+        
+        .courrier-content { flex: 1; }
+        .courrier-ref { font-weight: 600; color: #1f2937; margin-bottom: 5px; }
+        .courrier-subject { color: #374151; font-size: 0.95rem; margin-bottom: 5px; }
+        .courrier-meta { display: flex; gap: 15px; font-size: 0.85rem; color: #6b7280; }
+        .courrier-actions { display: flex; flex-direction: column; gap: 8px; }
+        
+        .btn {
+            padding: 8px 16px; border-radius: 8px; border: none; font-size: 0.85rem;
+            font-weight: 500; cursor: pointer; transition: all 0.2s ease;
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-success:hover { background: #059669; }
+        .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #374151; }
+        .btn-outline:hover { background: #f9fafb; border-color: #9ca3af; }
+        
+        .trend-up { color: #059669; }
+        .trend-down { color: #dc2626; }
+        .trend-stable { color: #6b7280; }
+        
+        .expired-label {
+            background-color: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 1024px) {
+            .charts-grid, .activities-section { grid-template-columns: 1fr; }
+            .chart-card { height: 300px; }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .chart-card { height: 250px; }
+        }
+    </style>
+    @endpush
 
-        <!-- Répartition des types de courriers -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Types de Courriers Traités</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                @php
-                    $courierTypes = [
-                        ['type' => 'Administratif', 'count' => 25, 'color' => 'blue', 'icon' => 'document-text'],
-                        ['type' => 'RH', 'count' => 18, 'color' => 'green', 'icon' => 'users'],
-                        ['type' => 'Financier', 'count' => 12, 'color' => 'yellow', 'icon' => 'currency-dollar'],
-                        ['type' => 'Juridique', 'count' => 8, 'color' => 'purple', 'icon' => 'scale']
-                    ];
-                @endphp
-                
-                @foreach($courierTypes as $type)
-                    <div class="text-center p-4 bg-{{ $type['color'] }}-50 rounded-lg">
-                        <div class="mx-auto w-12 h-12 flex items-center justify-center bg-{{ $type['color'] }}-100 rounded-full mb-3">
-                            @include('components.icons.' . $type['icon'], ['class' => 'w-6 h-6 text-' . $type['color'] . '-600'])
-                        </div>
-                        <div class="text-2xl font-bold text-{{ $type['color'] }}-600 mb-1">{{ $type['count'] }}</div>
-                        <div class="text-sm text-{{ $type['color'] }}-800">{{ $type['type'] }}</div>
-                    </div>
-                @endforeach
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1><i class="fas fa-building" style="color: #3b82f6; margin-right: 15px;"></i>Secrétariat Général</h1>
+            <p>Tableau de Bord - Gestion des Courriers et Affectations</p>
+            <div class="real-time-indicator">
+                <i class="fas fa-circle pulse" style="font-size: 8px;"></i>
+                Données en temps réel - Dernière mise à jour: <span id="lastUpdate">{{ now()->format('H:i:s') }}</span>
             </div>
         </div>
 
-        <!-- Courriers en cours et workflow -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Main Metrics Grid -->
+        <div class="metrics-grid">
+            <!-- Volume Metrics -->
+            <div class="metric-card card-blue">
+                <div class="metric-icon"><i class="fas fa-mail-bulk"></i></div>
+                <div class="metric-value">{{ number_format($stats['total_courriers']) }}</div>
+                <div class="metric-label">Total Courriers</div>
+                <div class="metric-trend trend-stable">
+                    <i class="fas fa-minus"></i> Suivi en cours
+                </div>
+            </div>
+
+            <div class="metric-card card-green">
+                <div class="metric-icon"><i class="fas fa-inbox"></i></div>
+                <div class="metric-value">{{ number_format($stats['courriers_arrive']) }}</div>
+                <div class="metric-label">Courriers Arrivés</div>
+                <div class="metric-trend trend-stable">
+                    <i class="fas fa-minus"></i> Suivi en cours
+                </div>
+            </div>
+
+            <div class="metric-card card-purple">
+                <div class="metric-icon"><i class="fas fa-paper-plane"></i></div>
+                <div class="metric-value">{{ number_format($stats['courriers_depart']) }}</div>
+                <div class="metric-label">Courriers Départ</div>
+                <div class="metric-trend trend-stable">
+                    <i class="fas fa-minus"></i> Suivi en cours
+                </div>
+            </div>
+
+            <div class="metric-card card-indigo">
+                <div class="metric-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div class="metric-value">{{ number_format($stats['courriers_interne']) }}</div>
+                <div class="metric-label">Courriers Internes</div>
+                <div class="metric-trend trend-stable">
+                    <i class="fas fa-minus"></i> Suivi en cours
+                </div>
+            </div>
+
+            <div class="metric-card card-yellow">
+                <div class="metric-icon"><i class="fas fa-clock"></i></div>
+                <div class="metric-value">{{ number_format($stats['en_attente']) }}</div>
+                <div class="metric-label">En Attente</div>
+                <div class="metric-trend trend-stable">
+                    <i class="fas fa-minus"></i> À traiter
+                </div>
+            </div>
+
+            <div class="metric-card card-blue">
+                <div class="metric-icon"><i class="fas fa-clipboard-list"></i></div>
+                <div class="metric-value">{{ number_format($stats['en_traitement']) }}</div>
+                <div class="metric-label">En Traitement</div>
+                <div class="metric-trend trend-stable">
+                    <i class="fas fa-minus"></i> En cours
+                </div>
+            </div>
+
+            <div class="metric-card card-red">
+                <div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="metric-value">{{ number_format($stats['retard']) }}</div>
+                <div class="metric-label">En Retard</div>
+                <div class="metric-trend trend-down">
+                    <i class="fas fa-arrow-down"></i> Critique
+                </div>
+            </div>
+
+            <div class="metric-card card-gray">
+                <div class="metric-icon"><i class="fas fa-archive"></i></div>
+                <div class="metric-value">0</div>
+                <div class="metric-label">Archivés</div>
+                <div class="metric-trend trend-stable">
+                    <i class="fas fa-minus"></i> Stable
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div class="activities-section">
             <!-- Courriers en cours -->
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Courriers en Cours de Traitement</h3>
-                <div class="space-y-4">
-                    @for($i = 1; $i <= 4; $i++)
-                        <div class="border border-gray-200 rounded-lg p-4">
-                            <div class="flex items-start justify-between">
-                                <div class="flex-1">
-                                    <div class="flex items-center space-x-2 mb-2">
-                                        <span class="text-sm font-medium text-gray-900">SG-2024-{{ str_pad($i, 3, '0', STR_PAD_LEFT) }}</span>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium 
-                                            {{ $i <= 2 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
-                                            {{ $i <= 2 ? 'En cours' : 'Révision' }}
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-600 mb-1">
-                                        {{ ['Note de service', 'Procédure administrative', 'Circulaire interne', 'Rapport mensuel'][$i-1] }}
-                                    </p>
-                                    <p class="text-xs text-gray-500">
-                                        Assigné à: {{ ['M. Alami', 'Mme. Bennani', 'M. Cherif', 'Mme. Debbagh'][$i-1] }}
-                                    </p>
-                                    
-                                    <!-- Progress bar -->
-                                    <div class="mt-3">
-                                        <div class="flex justify-between text-xs text-gray-600 mb-1">
-                                            <span>Progression</span>
-                                            <span>{{ [25, 60, 80, 90][$i-1] }}%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-2">
-                                            <div class="bg-blue-600 h-2 rounded-full" style="width: {{ [25, 60, 80, 90][$i-1] }}%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <button class="text-sm text-indigo-600 hover:text-indigo-500 font-medium">
-                                        Suivre
-                                    </button>
-                                </div>
+            <div class="activity-card">
+                <div class="chart-header">
+                    <div>
+                        <h3 class="chart-title">Courriers en Cours de Traitement</h3>
+                        <p class="chart-subtitle">Courriers nécessitant un suivi</p>
+                    </div>
+                </div>
+                
+                @forelse($stats['recent_courriers'] ?? [] as $courrier)
+                    <div class="courrier-item">
+                        <div class="courrier-priority priority-{{ strtolower(str_replace(' ', '_', $courrier->priorite ?? 'normal')) }}"></div>
+                        <div class="courrier-content">
+                            <div class="courrier-ref">
+                                {{ $courrier->reference }}
+                                @if($courrier->priorite === 'urgent')
+                                    - <span style="color: #ef4444;">URGENT</span>
+                                @elseif($courrier->priorite === 'confidentiel')
+                                    - <span style="color: #8b5cf6;">CONFIDENTIEL</span>
+                                @endif
+                            </div>
+                            <div class="courrier-subject">{{ Str::limit($courrier->objet, 80) }}</div>
+                            <div class="courrier-meta">
+                                <span><i class="fas fa-user"></i> {{ $courrier->expediteur->nom ?? 'N/A' }}</span>
+                                <span><i class="fas fa-calendar"></i> Échéance: {{ $courrier->delais ? $courrier->delais->format('d/m/Y') : 'Non définie' }}</span>
+                                <span><i class="fas fa-clock"></i> Reçu {{ $courrier->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
-                    @endfor
-                </div>
+                        <div class="courrier-actions">
+                            <a href="{{ route('sg.courriers.show', $courrier->id) }}" class="btn btn-primary">Suivre</a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-4 text-gray-500">
+                        Aucun courrier en cours de traitement
+                    </div>
+                @endforelse
             </div>
-
-            <!-- Workflow et validations -->
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Validations en Attente</h3>
-                <div class="space-y-4">
-                    <div class="border-l-4 border-red-400 bg-red-50 p-4">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-red-800">
-                                    Validation urgente requise
-                                </h3>
-                                <div class="mt-2 text-sm text-red-700">
-                                    <p>3 documents en attente de signature depuis plus de 48h</p>
-                                </div>
-                                <div class="mt-4">
-                                    <button class="bg-red-100 px-3 py-1.5 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
-                                        Traiter maintenant
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="border-l-4 border-yellow-400 bg-yellow-50 p-4">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-yellow-800">
-                                    Révision en cours
-                                </h3>
-                                <div class="mt-2 text-sm text-yellow-700">
-                                    <p>2 procédures nécessitent une révision avant validation</p>
-                                </div>
-                                <div class="mt-4">
-                                    <button class="bg-yellow-100 px-3 py-1.5 rounded-md text-sm font-medium text-yellow-800 hover:bg-yellow-200">
-                                        Voir les détails
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="border-l-4 border-green-400 bg-green-50 p-4">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-green-800">
-                                    Validation terminée
-                                </h3>
-                                <div class="mt-2 text-sm text-green-700">
-                                    <p>1 document validé</p>
-                                </div>
-                                <div class="mt-4">
-                                    <button class="bg-green-100 px-3 py-1.5 rounded-md text-sm font-medium text-green-800 hover:bg-green-200">
-                                        Voir les détails
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+            
+            <!-- Validations en attente -->
+            <div class="activity-card">
+                <div class="chart-header">
+                    <div>
+                        <h3 class="chart-title">Validations en Attente</h3>
+                        <p class="chart-subtitle">Courriers nécessitant votre validation</p>
                     </div>
                 </div>
+                
+                @forelse($stats['validations'] ?? [] as $validation)
+                    <div class="courrier-item">
+                        <div class="courrier-priority priority-{{ strtolower(str_replace(' ', '_', $validation->priorite ?? 'normal')) }}"></div>
+                        <div class="courrier-content">
+                            <div class="courrier-ref">
+                                {{ $validation->reference }}
+                                @if($validation->priorite === 'urgent')
+                                    - <span style="color: #ef4444;">URGENT</span>
+                                @endif
+                            </div>
+                            <div class="courrier-subject">{{ Str::limit($validation->objet, 80) }}</div>
+                            <div class="courrier-meta">
+                                <span><i class="fas fa-user"></i> De: {{ $validation->user->name ?? 'N/A' }}</span>
+                                <span><i class="fas fa-clock"></i> {{ $validation->created_at->diffForHumans() }}</span>
+                            </div>
+                        </div>
+                        <div class="courrier-actions">
+                            <a href="{{ route('sg.courriers.show', $validation->id) }}" class="btn btn-primary">Valider</a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-4 text-gray-500">
+                        Aucune validation en attente
+                    </div>
+                @endforelse
             </div>
         </div>
-    </div>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3 class="chart-title">Évolution Mensuelle des Courriers</h3>
+                        <p class="chart-subtitle">Tendances sur les derniers mois</p>
+                    </div>
+                    <select style="padding: 8px 12px; border-radius: 8px; border: 1px solid #d1d5db;">
+                        <option>6 derniers mois</option>
+                        <option>12 derniers mois</option>
+                        <option>Cette année</option>
+                    </select>
+                </div>
+                <canvas id="monthlyActivityChart" height="250"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3 class="chart-title">Répartition par Type</h3>
+                        <p class="chart-subtitle">Distribution actuelle</p>
+                    </div>
+                </div>
+                <canvas id="typeChart" height="250"></canvas>
+            </div>
+        </div>
+
+        @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Graphique d'activité mensuelle
+                const ctxMonthly = document.getElementById('monthlyActivityChart').getContext('2d');
+                const monthlyData = @json($monthlyStats);
+
+                const labels = Object.keys(monthlyData);
+                const arrive = labels.map(m => monthlyData[m].arrive);
+                const depart = labels.map(m => monthlyData[m].depart);
+                const interne = labels.map(m => monthlyData[m].interne);
+
+                new Chart(ctxMonthly, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Courriers Arrivée',
+                                data: arrive,
+                                borderColor: '#10B981',
+                                backgroundColor: 'rgba(16,185,129,0.1)',
+                                borderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'Courriers Départ',
+                                data: depart,
+                                borderColor: '#6366F1',
+                                backgroundColor: 'rgba(99,102,241,0.1)',
+                                borderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'Courriers Internes',
+                                data: interne,
+                                borderColor: '#F59E0B',
+                                backgroundColor: 'rgba(245,158,11,0.1)',
+                                borderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { precision: 0 } }
+                        }
+                    }
+                });
+                
+                // Graphique de répartition par type
+                const ctxType = document.getElementById('typeChart').getContext('2d');
+                
+                // Utiliser les données existantes ou créer des données de démonstration
+                const typeData = {
+                    labels: ['Arrivée', 'Départ', 'Interne'],
+                    datasets: [{
+                        data: [
+                            {{ $stats['courriers_arrive'] }}, 
+                            {{ $stats['courriers_depart'] }}, 
+                            {{ $stats['courriers_interne'] }}
+                        ],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',  // vert
+                            'rgba(99, 102, 241, 0.8)',  // indigo
+                            'rgba(245, 158, 11, 0.8)'   // orange
+                        ],
+                        borderColor: [
+                            'rgb(16, 185, 129)',
+                            'rgb(99, 102, 241)',
+                            'rgb(245, 158, 11)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                
+                new Chart(ctxType, {
+                    type: 'doughnut',
+                    data: typeData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        },
+                        cutout: '70%'
+                    }
+                });
+            });
+        </script>
+        @endpush
+
             <!-- Recent Activity -->
-            <div class="bg-white shadow rounded-lg p-6 lg:col-span-2">
+            <div class="bg-white shadow rounded-lg p-6 lg:col-span-2 mt-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Activité Récente</h3>
                 <div class="space-y-4">
-                    @php
-                        $activities = [
-                            ['user' => 'Mme. Bennani', 'action' => 'a soumis un nouveau courrier administratif', 'time' => 'Il y a 2 heures', 'icon' => 'document-plus', 'color' => 'blue'],
-                            ['user' => 'M. Alami', 'action' => 'a validé la procédure RH #SG-2024-015', 'time' => 'Il y a 5 heures', 'icon' => 'check-circle', 'color' => 'green'],
-                            ['user' => 'M. Cherif', 'action' => 'a demandé des modifications sur le rapport financier', 'time' => 'Il y a 1 jour', 'icon' => 'exclamation-circle', 'color' => 'yellow'],
-                            ['user' => 'Mme. Debbagh', 'action' => 'a archivé 3 documents expirés', 'time' => 'Il y a 2 jours', 'icon' => 'archive-box-arrow-down', 'color' => 'purple'],
-                            ['user' => 'M. El Fassi', 'action' => 'a créé une nouvelle circulaire interne', 'time' => 'Il y a 3 jours', 'icon' => 'document-text', 'color' => 'indigo']
-                        ];
-                    @endphp
-                    
-                    @foreach($activities as $activity)
+                    @forelse($stats['activities'] ?? [] as $activity)
                         <div class="flex items-start">
                             <div class="flex-shrink-0 mt-1">
                                 <div class="bg-{{ $activity['color'] }}-100 p-2 rounded-full">
-                                    @include('components.icons.' . $activity['icon'], ['class' => 'w-5 h-5 text-' . $activity['color'] . '-600'])
+                                    <x-dynamic-component :component="'icons.' . $activity['icon']" class="w-5 h-5 text-{{ $activity['color'] }}-600" />
                                 </div>
                             </div>
                             <div class="ml-3 flex-1">
@@ -197,19 +461,22 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="text-center py-4 text-gray-500">
+                            Aucune activité récente
+                        </div>
+                    @endforelse
                 </div>
                 <div class="mt-6">
-                    <button class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    <a href="{{ route('sg.activities') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                         Voir toute l'activité →
-                    </button>
+                    </a>
                 </div>
             </div>
-
-            <!-- Calendar -->
-            <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Calendrier des Échéances</h3>
-                <div class="mb-4">
+                <!-- Calendrier des Échéances -->
+<div class="bg-white shadow rounded-lg p-6 mt-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Calendrier des Échéances</h3>
+    <div class="mb-4">
                     <div class="flex items-center justify-between">
                         <h4 class="text-base font-medium text-gray-900">Juillet 2024</h4>
                         <div class="flex space-x-2">
