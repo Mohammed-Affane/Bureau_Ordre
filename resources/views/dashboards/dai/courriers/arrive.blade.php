@@ -139,7 +139,10 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-300">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Référence</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Numero Courrier</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Courrier</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Numero BO</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Arrive</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Objet</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Expéditeur</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date de réception</th>
@@ -155,8 +158,18 @@
                                             {{ $courrier->reference_arrive }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500">
-                                            {{ Str::limit($courrier->objet, 50) }}
+                                            {{ $courrier->date_reception ? $courrier->date_reception->format('d/m/Y') : 'Non spécifiée' }}
                                         </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500">
+                                            {{ $courrier->reference_bo }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500">
+                                            {{ $courrier->date_enregistrement ? $courrier->date_enregistrement->format('d/m/Y') : 'Non spécifiée' }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500">
+                                            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+                                                {{ $courrier->objet }}
+                                            </td>
                                         <td class="px-6 py-4 text-sm text-gray-500">
                                             {{ $courrier->expediteur->nom ?? 'Non spécifié' }}
                                         </td>

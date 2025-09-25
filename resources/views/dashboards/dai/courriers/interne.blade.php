@@ -145,7 +145,9 @@
                                             {{ $courrier->reference_depart }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500">
-                                            {{ Str::limit($courrier->objet, 50) }}
+                                            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+                                                {{ $courrier->objet }}
+                                            </td>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500">
                                             {{ $courrier->entiteExpediteur->nom ?? 'Non spécifiée' }}

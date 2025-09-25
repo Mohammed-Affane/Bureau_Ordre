@@ -147,9 +147,9 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-300">
                                <tr>
-    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Référence Arrivée</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Date Réception</th>
-    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Référence Visa</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Numero Courrier</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Date Courrier</th>
+    <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Numero Visa</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Date Enregistrement</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Statut</th>
     <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Nbr Pièces</th>
@@ -186,7 +186,10 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
           
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
+            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+                {{ $courrier->objet }}
+            </td>
+
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
         
 
