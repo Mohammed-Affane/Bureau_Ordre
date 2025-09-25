@@ -406,11 +406,4 @@ protected function redirectBasedOnType($type)
 
     return view('courriers.affectations', compact('courrier'));
 }
-
-
-               
-                
-
-
-
 }

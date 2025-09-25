@@ -84,7 +84,7 @@
         <div>
             <div class="grid grid-cols-1 md:grid-cols gap-4">
                 @unless(auth()->user()->hasRole('cab'))
-                <div x-show="type === 'interne' || type === 'arrive' ">
+                <div x-show="type === 'interne' ">
                     <label>Destinataires internes</label>
                     <select id="destinataires" name="destinataires_entite[]" multiple  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                         @foreach($entites as $entite)
@@ -181,13 +181,13 @@
                         Référence d'arrivée
                     </label>
                     <input 
-                        type="number" 
+                        type="text" 
                         name="reference_arrive" 
                         id="reference_arrive" 
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
                         value="{{ old('reference_arrive', $courrier->reference_arrive) }}"
-                        min="1"
-                        step="1">
+                        pattern="[A-Za-z0-9\/\-\._]+"
+                        title="Only letters, numbers, /, -, _, and . are allowed">
                     @error('reference_arrive')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror

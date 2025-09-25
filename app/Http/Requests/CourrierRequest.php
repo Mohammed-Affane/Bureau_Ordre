@@ -25,14 +25,39 @@ class CourrierRequest extends FormRequest
         // Base rules for all users
         $rules = [
             'type_courrier' => ['required', 'string', Rule::in(['arrive', 'depart', 'visa', 'decision', 'interne'])],
-            'objet' => ['required', 'string', 'max:255'],
+            'objet' => ['required', 'string', 'max:255', 'regex:/^[\p{L}\p{N}\s\-_.,]+$/u'],
             'date_enregistrement' => ['required', 'date', 'before_or_equal:today'],
             'Nbr_piece' => ['required', 'integer', 'min:1', 'max:999'],
-            'reference_arrive' => ['nullable', 'integer', 'min:1'],
-            'reference_bo' => ['nullable', 'integer', 'min:1'],
-            'reference_visa' => ['nullable', 'integer', 'min:1'],
-            'reference_dec' => ['nullable', 'integer', 'min:1'],
-            'reference_depart' => ['nullable', 'integer', 'min:1'],
+            'reference_arrive' => ['nullable', 'string', 'max:50', 'regex:/^[A-Za-z0-9\/\-\._]+$/',
+                    Rule::unique('courriers', 'reference_arrive')
+                        ->ignore($this->route('courrier'))
+                        ->where(function ($query) {
+                            $query->whereYear('date_enregistrement', now()->year);
+                                })],
+            'reference_bo' => ['nullable', 'integer', 'min:1',
+                                   Rule::unique('courriers', 'reference_bo')
+                                    ->ignore($this->route('courrier'))
+                                    ->where(function ($query) {
+                            $query->whereYear('date_enregistrement', now()->year);
+                                })],
+            'reference_visa' => ['nullable', 'integer', 'min:1',
+                                    Rule::unique('courriers', 'reference_visa')
+                                    ->ignore($this->route('courrier'))
+                                    ->where(function ($query) {
+                            $query->whereYear('date_enregistrement', now()->year);
+                                })],
+            'reference_dec' => ['nullable', 'integer', 'min:1',
+                                    Rule::unique('courriers', 'reference_dec')
+                                    ->ignore($this->route('courrier'))
+                                    ->where(function ($query) {
+                            $query->whereYear('date_enregistrement', now()->year);
+                                })],
+            'reference_depart' => ['nullable', 'integer', 'min:1',
+                                    Rule::unique('courriers', 'reference_depart')
+                                    ->ignore($this->route('courrier'))
+                                    ->where(function ($query) {
+                            $query->whereYear('date_enregistrement', now()->year);
+                                })],
             'date_reception' => ['nullable', 'date', 'before_or_equal:today'],
             'date_depart' => ['nullable', 'date', 'before_or_equal:today'],
             'id_expediteur' => ['nullable', 'integer', 'exists:expediteurs,id'],
@@ -55,7 +80,7 @@ class CourrierRequest extends FormRequest
             'dest_CIN' => ['nullable', 'array'],
             'dest_CIN.*' => ['nullable', 'string', 'max:50'],
             'dest_telephone' => ['nullable', 'array'],
-            'dest_telephone.*' => ['nullable', 'string', 'max:20'],
+            'dest_telephone.*' => ['nullable', 'string', 'max:10'],
         ];
 
         // File is only required for new courriers (store action)
@@ -75,8 +100,10 @@ class CourrierRequest extends FormRequest
         return [
             'type_courrier.required' => 'Le type de courrier est obligatoire.',
             'type_courrier.in' => 'Le type de courrier sélectionné n\'est pas valide.',
+            'id_expediteur.required' => 'L\'expéditeur est obligatoire.',
             
             'objet.required' => 'L\'objet du courrier est obligatoire.',
+            'objet.string' => 'L\'objet du courrier doit être une chaîne de caractères.',
             'objet.max' => 'L\'objet ne peut pas dépasser 255 caractères.',
             
             'date_enregistrement.required' => 'La date d\'enregistrement est obligatoire.',
@@ -94,8 +121,8 @@ class CourrierRequest extends FormRequest
             'delais.after' => 'La date de délais doit être postérieure à la date d\'enregistrement.',
 
             
-            'reference_arrive.integer' => 'La référence d\'arrivée doit être un nombre entier.',
-            'reference_arrive.min' => 'La référence d\'arrivée doit être au moins 1.',
+            'reference_arrive.regex' => 'La référence d\'arrivée ne peut contenir que des caractères alphanumériques, /, -, _, et .',
+            'reference_arrive.max' => 'La référence d\'arrivée ne peut pas dépasser 50 caractères.',
             
             'reference_bo.integer' => 'La référence BO doit être un nombre entier.',
             'reference_bo.min' => 'La référence BO doit être au moins 1.',

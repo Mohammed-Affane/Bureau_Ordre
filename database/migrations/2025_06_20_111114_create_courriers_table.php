@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // BIGINT UNSIGNED PRIMARY KEY
 
             // Références (en integers si c’est bien ce que tu veux)
-            $table->unsignedBigInteger('reference_arrive')->nullable()->index();
+            $table->string('reference_arrive', 50)->nullable()->index(); // Allow alphanumeric reference numbers
             $table->unsignedBigInteger('reference_bo')->nullable()->index();
             $table->unsignedBigInteger('reference_visa')->nullable()->index();
             $table->unsignedBigInteger('reference_dec')->nullable()->index();

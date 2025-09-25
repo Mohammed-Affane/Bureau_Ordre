@@ -63,13 +63,13 @@ class CourriersSeeder extends Seeder
 
                 switch ($type) {
                     case 'arrive':
-                        $row['reference_arrive'] = $faker->numberBetween(1000, 9999);
+                        $row['reference_arrive'] = $faker->bothify('????-####'); // Alphanumeric reference
                         $row['reference_bo']     = $faker->numberBetween(1000, 9999);
                         $row['date_reception']   = $faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d');
                         break;
 
                     case 'visa':
-                        $row['reference_arrive'] = $faker->numberBetween(1000, 9999);
+                        $row['reference_arrive'] = $faker->bothify('????-####'); // Alphanumeric reference
                         $row['reference_visa']   = $faker->numberBetween(1000, 9999);
                         $row['date_reception']   = $faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d');
                         break;
