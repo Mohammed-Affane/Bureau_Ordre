@@ -22,7 +22,8 @@ trait CourrierFilterTrait
                         ->orWhere('reference_depart', 'like', '%'.request('search').'%')
                         ->orWhere('objet', 'like', '%'.request('search').'%')
                         ->orWhereHas('expediteur', function($q) {
-                            $q->where('nom', 'like', '%'.request('search').'%');
+                            $q->where('nom', 'like', '%'.request('search').'%')
+                            ->orWhere('CIN', 'like', '%'.request('search').'%');
                         });
                 });
             })

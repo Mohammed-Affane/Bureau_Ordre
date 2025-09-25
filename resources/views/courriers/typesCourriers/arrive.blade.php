@@ -200,7 +200,10 @@
 
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
            
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
+            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+                {{ $courrier->objet }}
+            </td>
+            
             
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
             

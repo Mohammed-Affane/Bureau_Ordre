@@ -121,7 +121,8 @@ public function exportPdf(Request $request, $type)
                     ->orWhere('reference_bo', 'like', '%'.$request->search.'%')
                     ->orWhere('objet', 'like', '%'.$request->search.'%')
                     ->orWhereHas('expediteur', function($q) use ($request) {
-                        $q->where('nom', 'like', '%'.$request->search.'%');
+                        $q->where('nom', 'like', '%'.$request->search.'%')
+                        ->orWhere('CIN', 'like', '%'.$request->search.'%');
                     });
             });
         }
