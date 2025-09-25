@@ -19,6 +19,9 @@
                 <option value="decision" :selected="type === 'decision'">decision</option>
                 <option value="interne" :selected="type === 'interne'">interne</option>
             </select>
+            @error('type_courrier')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Expéditeur -->
@@ -30,6 +33,9 @@
                     <option value="{{ $expediteur->id }}">{{ $expediteur->nom }}</option>
                 @endforeach
             </select>
+            @error('id_expediteur')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
 
             <button type="button" class="mt-2 text-indigo-600" x-on:click="showNewSenderForm = !showNewSenderForm">
                 Ajouter un nouvel expéditeur
@@ -115,17 +121,29 @@
             </button>
 
             <input type="text" :name="'dest_nom[]'" x-model="dest.nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm">
+            @error('dest_nom[]')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
             <select  name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-model="typesource">
                     <option value="">Sélectionner...</option>
                     <option value="citoyen">citoyen</option>
                     <option value="administration">administration</option>
                 </select>
             <input type="text" :name="'dest_adresse[]'" x-model="dest.adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm">
+            @error('dest_adresse[]')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
             <template x-if="typesource === 'citoyen'">
                     <input type="text" name="dest_CIN[]" 
                     placeholder="CIN" 
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"  >
+                    @error('dest_CIN[]')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
             </template>            <input type="text" :name="'dest_telephone[]'" x-model="dest.telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm">
+            @error('dest_telephone[]')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
     </template>
 </div>
@@ -152,7 +170,7 @@
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
                         value="{{ old('objet') }}" 
                         maxlength="255"
-                        required>
+                        >
                     @error('objet')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
@@ -162,14 +180,14 @@
                     <label for="reference_arrive" class="block font-medium text-gray-700 mb-1">
                         Référence d'arrivée
                     </label>
-                    <input 
-                        type="number" 
-                        name="reference_arrive" 
-                        id="reference_arrive" 
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
-                        value="{{ old('reference_arrive') }}"
-                        min="1"
-                        step="1">
+                        <input 
+                            type="text" 
+                            name="reference_arrive" 
+                            id="reference_arrive" 
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
+                            value="{{ old('reference_arrive') }}"
+                            pattern="[A-Za-z0-9\/\-\._]+"
+                            title="Only letters, numbers, /, -, _, and . are allowed">
                     @error('reference_arrive')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
