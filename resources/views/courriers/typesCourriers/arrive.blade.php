@@ -154,10 +154,10 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-300">
                                <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Référence Arrivée</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Réception</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Référence BO</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Enregistrement</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Numero Courrier</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Courrier</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Numero BO</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Arrive</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Statut</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Nbr Pièces</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Objet</th>
