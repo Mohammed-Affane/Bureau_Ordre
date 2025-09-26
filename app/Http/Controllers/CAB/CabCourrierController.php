@@ -22,6 +22,7 @@ class CabCourrierController extends Controller
                 $query->where('statut_affectation', 'a_cab');
             }]);
         $courriers =$this->applyCourrierFilters($query,'interne')
+            ->latest()
             ->paginate(10);
 
         return view('dashboards.cab.courriers.interne',[
@@ -41,6 +42,7 @@ class CabCourrierController extends Controller
                 $query->where('statut_affectation', 'a_cab');
             }]);
         $courriers =$this->applyCourrierFilters($query,'arrive')
+            ->latest()
             ->paginate(10);
 
         return view('dashboards.cab.courriers.arrive',[

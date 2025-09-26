@@ -108,6 +108,7 @@ public function divisionCourrierInterne(Request $request)
         $query->where('id_affecte_a_utilisateur', auth()->id());
     });
     $courriers = $this->applyCourrierFilters($query, 'interne')
+    ->latest()
     ->paginate(10);
     
     return view('dashboards.division.courriers.interne',[
@@ -122,6 +123,7 @@ public function divisionCourrierArrive(Request $request)
         $query->where('id_affecte_a_utilisateur', auth()->id());
     });
     $courriers = $this->applyCourrierFilters($query, 'arrive')
+    ->latest()
     ->paginate(10);
     return view('dashboards.division.courriers.arrive',[
         'courriers'=>$courriers,

@@ -23,6 +23,7 @@ class SgCourrierController extends Controller
                 $query->where('statut_affectation', 'a_sg');
             }]);
         $courriers =$this->applyCourrierFilters($query,'interne') 
+            ->latest()
             ->paginate(10);
 
         return view('dashboards.sg.courriers.interne',[
@@ -42,6 +43,7 @@ class SgCourrierController extends Controller
                 $query->where('statut_affectation', 'a_sg');
             }]);
         $courriers =$this->applyCourrierFilters($query,'arrive')
+            ->latest()
             ->paginate(10);
 
         return view('dashboards.sg.courriers.arrive',[
