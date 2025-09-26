@@ -28,6 +28,7 @@ class DaiCourrierController extends Controller
                 }]);
                 
         $courriers = $this->applyCourrierFilters($query, 'interne')
+            ->latest()
             ->paginate(10);
 
         return view('dashboards.dai.courriers.interne', [
@@ -50,6 +51,7 @@ class DaiCourrierController extends Controller
                 }]);
                 
         $courriers = $this->applyCourrierFilters($query, 'arrive')
+            ->latest()
             ->paginate(10);
 
         return view('dashboards.dai.courriers.arrive', [

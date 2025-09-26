@@ -25,12 +25,8 @@ class TypeCourrierController extends Controller
     {
         
         $query = $this->applyCourrierFilters(Courrier::query(), 'arrive');
-        $courriers = $query->paginate($this->perPage)->appends($request->all());
+        $courriers = $query->latest()->paginate($this->perPage)->appends($request->all());
 
-  
-
-        
-        
         return view('courriers.typesCourriers.arrive', compact('courriers'));
     }
 
@@ -40,7 +36,7 @@ class TypeCourrierController extends Controller
     public function courrierDepart(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'depart');
-        $courriers = $query->paginate($this->perPage)->appends($request->all());
+        $courriers = $query->latest()->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.depart', compact('courriers'));
     }
 
@@ -50,7 +46,7 @@ class TypeCourrierController extends Controller
     public function courrierInterne(Request $request)
     {
        $query = $this->applyCourrierFilters(Courrier::query(), 'interne');
-        $courriers = $query->paginate($this->perPage)->appends($request->all());
+        $courriers = $query->latest()->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.interne', compact('courriers'));
     }
 
@@ -60,7 +56,7 @@ class TypeCourrierController extends Controller
     public function courrierVisa(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'visa');
-        $courriers = $query->paginate($this->perPage)->appends($request->all());
+        $courriers = $query->latest()->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.visa', compact('courriers'));
     }
 
@@ -70,7 +66,7 @@ class TypeCourrierController extends Controller
     public function courrierDecision(Request $request)
     {
         $query = $this->applyCourrierFilters(Courrier::query(), 'decision');
-        $courriers = $query->paginate($this->perPage)->appends($request->all());
+        $courriers = $query->latest()->paginate($this->perPage)->appends($request->all());
         return view('courriers.typesCourriers.decision', compact('courriers'));
     }
 
