@@ -600,7 +600,7 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="main-container">
             <!-- Controls Bar -->
             <div class="controls-bar">
@@ -758,20 +758,20 @@
                                     </td>
 
                                     <td>
-<div class="treatment-actions">
-    <h5 class="history-title">Historique des actions:</h5>
-    @foreach($affectation->traitements as $index => $traitement)
-        <div class="action-item">
-            <div class="action-number">{{ $index + 1 }}</div>
-            <div class="action-content">
-                <div class="action-details">
-                    <div class="action-name">{{ ucfirst($traitement->action) }}</div>
-                    <div class="action-date">{{ $traitement->created_at->format('d/m/Y H:i') }}</div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-</div>
+                                        <div class="treatment-actions">
+                                            <h5 class="history-title">Historique des actions:</h5>
+                                            @foreach($affectation->traitements as $index => $traitement)
+                                                <div class="action-item">
+                                                    <div class="action-number">{{ $index + 1 }}</div>
+                                                    <div class="action-content">
+                                                        <div class="action-details">
+                                                            <div class="action-name">{{ ucfirst($traitement->action) }}</div>
+                                                            <div class="action-date">{{ $traitement->created_at->format('d/m/Y H:i') }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </td>
                                     
                                     <td>
