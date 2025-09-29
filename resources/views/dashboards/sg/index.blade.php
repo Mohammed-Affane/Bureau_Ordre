@@ -467,11 +467,6 @@
                         </div>
                     @endforelse
                 </div>
-                <div class="mt-6">
-                    <a href="{{ route('sg.activities') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                        Voir toute l'activité →
-                    </a>
-                </div>
             </div>
                 <!-- Calendrier des Échéances -->
 <div class="bg-white shadow rounded-lg p-6 mt-6">
