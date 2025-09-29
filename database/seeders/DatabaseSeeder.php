@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             UnifiedUserAndEntiteSeeder::class,
             CourriersSeeder::class,
+            ExpediteurSeeder::class,
         ]);
     }
 }

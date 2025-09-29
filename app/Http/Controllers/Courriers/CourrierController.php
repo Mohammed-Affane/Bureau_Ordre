@@ -40,7 +40,7 @@ class CourrierController extends Controller
     {
         return view('courriers.create', [
             'entites' => Entite::all(),
-            'expediteurs' => Expediteur::orderBy('nom')->get(['id', 'nom']),
+            'expediteurs' => Expediteur::orderBy('nom')->where('type_source','administration')->get(['id', 'nom']),
             'destinataires' => CourrierDestinataire::where('type_courrier', 'externe')
                                 ->where('type_source','administration')
                                 ->whereNotNull('nom') // Ensure they have a name

@@ -78,6 +78,7 @@
             @endif
 
             @if($showActions)
+                @if($userRole === 'admin'|| $userRole === 'bo'|| $userRole === 'cab' )
                 <a href="/courriers/{{ $courrier->id }}/edit" 
                    @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/edit`" 
                    class="flex items-center px-4 py-2 text-sm text-yellow-600 hover:bg-yellow-100" role="menuitem">
@@ -86,7 +87,7 @@
                     </svg>
                     Modifier
                 </a>
-                
+                @endif
                 <a href="/courriers/{{ $courrier->id }}/affectations" 
                    @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/affectations`" 
                    class="flex items-center px-4 py-2 text-sm text-green-600 hover:bg-green-100" role="menuitem">
@@ -95,7 +96,7 @@
                     </svg>
                     Affecter
                 </a>
-
+                @if($userRole === 'admin')
                 <button @click="open = false; deleteCourrier($el.closest('[data-courrier-id]').dataset.courrierId)" 
                         class="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem">
                     <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,6 +104,7 @@
                     </svg>
                     Supprimer
                 </button>
+                @endif
             @endif
         </div>
     </div>
