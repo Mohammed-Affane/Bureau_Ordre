@@ -99,7 +99,7 @@ public function scopeCourrierByUserRole($query, $user = null)
               ->whereHas('AffecteA', function ($sub) {
                   $sub->whereNull('deleted_at');
               });
-        })->where('statut', 'arriver');
+        })->where('statut', 'en_traitement');
     }
 
     // BO: si vous voulez que BO voie tout, ne filtrez pas
