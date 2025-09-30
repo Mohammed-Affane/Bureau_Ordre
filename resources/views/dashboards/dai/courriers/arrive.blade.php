@@ -145,7 +145,6 @@
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Arrive</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Objet</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Expéditeur</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date de réception</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Priorité</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Statut</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Actions</th>
@@ -166,15 +165,11 @@
                                         <td class="px-6 py-4 text-sm text-gray-500">
                                             {{ $courrier->date_enregistrement ? $courrier->date_enregistrement->format('d/m/Y') : 'Non spécifiée' }}
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">
                                             <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
                                                 {{ $courrier->objet }}
                                             </td>
                                         <td class="px-6 py-4 text-sm text-gray-500">
                                             {{ $courrier->expediteur->nom ?? 'Non spécifié' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $courrier->date_reception ? $courrier->date_reception->format('d/m/Y') : 'Non spécifiée' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @switch($courrier->priorite)
