@@ -74,22 +74,31 @@ Route::middleware(['auth', 'role:bo'])->prefix('bo')->name('bo.')->group(functio
 
 });
 
+
 // Cab Routes
 Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(function () {
+    // Dashboard principal
     Route::get('dashboard', [CabDashboardController::class, 'index'])->name('dashboard');
-    Route::get('courriers.interne',[CabCourrierController::class,'cabCourrierInterne'])->name('courriers.interne');
-    Route::get('courriers.arrive',[CabCourrierController::class,'cabCourrierArrive'])->name('courriers.arrive');
-    // API endpoints for real-time updates
-    Route::get('/realtime-stats', [CabDashboardController::class, 'getRealtimeStats'])->name('realtime-stats');
     
-    // Export functionality
-    Route::get('/export', [CabDashboardController::class, 'exportReport'])->name('export');
+    // API pour les données des graphiques
+    Route::get('chart-data', [CabDashboardController::class, 'getChartDataApi'])->name('chart-data');
     
-    // Additional dashboard filters and data endpoints
-    Route::get('/filter-data', [CabDashboardController::class, 'getFilteredData'])->name('filter-data');
-    Route::get('/department-details/{department}', [CabDashboardController::class, 'getDepartmentDetails'])->name('department-details');
-
-
+    // API pour les statistiques en temps réel
+    Route::get('realtime-stats', [CabDashboardController::class, 'getRealtimeStats'])->name('realtime-stats');
+    
+    // Export des rapports
+    Route::get('export', [CabDashboardController::class, 'exportReport'])->name('export');
+    
+    // Voir tous les courriers avec filtres
+    Route::get('courriers', [CabDashboardController::class, 'allCourriers'])->name('courriers.all');
+    
+    // Routes existantes pour les courriers par type
+    Route::get('courriers.interne', [CabCourrierController::class, 'cabCourrierInterne'])->name('courriers.interne');
+    Route::get('courriers.arrive', [CabCourrierController::class, 'cabCourrierArrive'])->name('courriers.arrive');
+    
+    // Filtres et données supplémentaires (optionnelles)
+    Route::get('filter-data', [CabDashboardController::class, 'getFilteredData'])->name('filter-data');
+    Route::get('department-details/{department}', [CabDashboardController::class, 'getDepartmentDetails'])->name('department-details');
 });
 
 // DAI Routes

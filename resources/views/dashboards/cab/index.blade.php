@@ -1,8 +1,5 @@
 <x-app-layout>
-    <x-slot name="title">Cabinet du Gouverneur - Tableau de Bord Exécutif</x-slot>
-    <x-slot name="breadcrumbs">
-        [['title' => 'Dashboard Cabinet', 'url' => route('cab.dashboard')]]
-    </x-slot>
+    <x-slot name="title">Dashboard Cabinet</x-slot>
 
     @push('styles')
     <style>
@@ -73,6 +70,7 @@
             <div class="text-3xl font-bold">{{ number_format($courriersRecusCeMois) }}</div>
             <div class="text-xs opacity-75 mt-2">{{ Carbon\Carbon::now()->translatedFormat('F Y') }}</div>
         </div>
+    </div>
 
         <div class="kpi-card success">
             <div class="text-sm font-semibold opacity-90 mb-2">Traités</div>
@@ -112,6 +110,8 @@
             <h3 class="text-lg font-semibold mb-4 text-gray-800">Évolution Mensuelle (12 mois)</h3>
             <canvas id="evolutionChart"></canvas>
         </div>
+    </div>
+</div>
 
         <!-- Stacked Bar: Priorité -->
         <div class="chart-container" style="height: 450px;">
@@ -201,6 +201,22 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    <!-- Enhanced Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Courriers -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Total Courriers</h3>
+            <i class="fas fa-mail-bulk text-blue-500 text-xl"></i>
+        </div>
+        <p class="text-3xl font-bold text-blue-600 mb-2">{{ number_format($stats['total_courriers']) }}</p>
+        <div class="flex items-center text-sm text-green-600">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span>{{ number_format((($stats['courriers_mois'] - $stats['courriers_semaine']) / max($stats['courriers_semaine'], 1)) * 100, 1) }}% ce mois</span>
+        </div>
+    </div>
 
         <!-- Courriers en Attente > 30 jours -->
         <div class="table-container">
@@ -242,6 +258,44 @@
             </div>
         </div>
     </div>
+
+    <!-- Courriers Départ -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Courriers Départ</h3>
+            <i class="fas fa-paper-plane text-purple-500 text-xl"></i>
+        </div>
+        <p class="text-3xl font-bold text-purple-600 mb-2">{{ number_format($stats['courriers_depart']) }}</p>
+        <div class="text-sm text-gray-600">
+            {{ number_format(($stats['courriers_depart'] / max($stats['total_courriers'], 1)) * 100, 1) }}% du total
+        </div>
+    </div>
+
+    <!-- Courriers Internes -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Courriers Internes</h3>
+            <i class="fas fa-exchange-alt text-orange-500 text-xl"></i>
+        </div>
+        <p class="text-3xl font-bold text-orange-600 mb-2">{{ number_format($stats['courriers_interne']) }}</p>
+        <div class="text-sm text-gray-600">
+            {{ number_format(($stats['courriers_interne'] / max($stats['total_courriers'], 1)) * 100, 1) }}% du total
+        </div>
+    </div>
+</div>
+
+<!-- Type Distribution Chart -->
+<div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Répartition par Type de Courrier</h3>
+        <a href="{{ route('cab.courriers.all') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            Voir tous les courriers <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+    </div>
+    <div class="h-64">
+        <canvas id="typeChart"></canvas>
+    </div>
+</div>
 
     @push('scripts')
     <script type="module">
@@ -319,8 +373,8 @@
                         beginAtZero: true
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Line Chart: Évolution Mensuelle
         const evolutionData = @json($evolutionMensuelle);
@@ -358,8 +412,8 @@
                         beginAtZero: true
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Bar Chart: Priorité
         const prioriteData = @json($prioriteCourriers);
