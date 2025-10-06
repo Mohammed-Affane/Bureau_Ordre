@@ -1,7 +1,11 @@
 import './bootstrap';
-
 import Alpine from 'alpinejs';
 
-window.Alpine = Alpine;
+import Chart from 'chart.js/auto';
 
+
+// Make Chart available globally
+window.Chart = Chart;
+
+window.Alpine = Alpine;
 Alpine.start();
