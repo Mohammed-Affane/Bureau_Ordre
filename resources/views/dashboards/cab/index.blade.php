@@ -76,7 +76,7 @@
 
         <div class="kpi-card success">
             <div class="text-sm font-semibold opacity-90 mb-2">Traités</div>
-            <div class="text-3xl font-bold">{{ number_format($courriersTraites) }}</div>
+            <div class="text-3xl font-bold">{{ number_format($courriersTraites) }}</div><!-- change this to  the number pof the courrier that have an instruction  --> 
             <div class="text-xs opacity-75 mt-2">Validés / Clôturés</div>
         </div>
 
@@ -159,7 +159,7 @@
             </div>
         </div>
     </div>
-
+<!--  add here les courrier avec une instruction de cab dans cette semaine -->
     <!-- Alerts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <!-- Courriers Urgents en Attente > 7 jours -->
@@ -199,6 +199,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{ $alertesUrgents->links() }}
             </div>
         </div>
 
@@ -239,6 +240,7 @@
                         @endforelse
                     </tbody>
                 </table>
+               <div class="mt-4" class="bg-green p-4 rounded-md shadow-md"> {{ $alertesRetard->links() }}</div>
             </div>
         </div>
     </div>
@@ -261,7 +263,7 @@
 
     // Create chart
     new Chart(document.getElementById('statutChart'), {
-        type: 'doughnut',
+        type: 'pie',
         data: {
             labels: Object.keys(filledStatutData).map(s => s.replace('_', ' ').toUpperCase()),
             datasets: [{

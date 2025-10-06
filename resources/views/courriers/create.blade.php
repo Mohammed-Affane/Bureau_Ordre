@@ -380,13 +380,13 @@
                 type="file" 
                 id="document_files" 
                 name="fichier_scan" 
-                accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.tiff,.webp"
+                accept=".pdf"
                 class="sr-only"
                 x-on:change="handleFileSelect($event)">
         </div>
         
         <p class="text-xs text-gray-500 mt-2">
-            PDF, JPG, PNG, GIF, BMP, TIFF, WebP (max 2MB)
+            PDF (max 2MB)
         </p>
     </div>
     
@@ -466,13 +466,7 @@ function documentUploadController() {
         
         processFile(file) {
             const validTypes = [
-                'application/pdf',
-                'image/jpeg',
-                'image/png',
-                'image/gif',
-                'image/bmp',
-                'image/tiff',
-                'image/webp'
+                'application/pdf'
             ];
             
             if (!validTypes.includes(file.type)) {

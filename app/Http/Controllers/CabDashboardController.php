@@ -120,16 +120,18 @@ class CabDashboardController extends Controller
         $alertesUrgents = Courrier::whereNotIn('statut', ['cloturé', 'archivé'])
             ->where('type_courrier', 'arrive')
             ->where('priorite', 'urgent')
-            ->whereDate('delais', '=', Carbon::now()->addDays(7)->toDateString())
+            ->whereDate('delais', '<=', Carbon::now()->addDays(7)->toDateString())
             ->with('expediteur')
-            ->get();
+            ->latest()
+            ->paginate(10);
         
         // Courriers with only 20 days left before deadline (excluding cloturé & archivé)
         $alertesRetard = Courrier::whereNotIn('statut', ['cloturé', 'archivé'])
             ->where('type_courrier', 'arrive')
             ->whereDate('delais', '=', Carbon::now()->addDays(20)->toDateString())
             ->with('expediteur')
-            ->get();
+            ->latest()
+            ->paginate(10);
 
         return view('dashboards.cab.index', compact(
             'totalCourriers',
