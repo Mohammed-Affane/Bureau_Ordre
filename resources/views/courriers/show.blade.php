@@ -161,23 +161,12 @@
                                 </div>
                                 @endif
                                 
-                                @if($courrier->type_courrier !== 'interne')
+                                @if($courrier->type_courrier == 'interne')
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Entité expéditrice :</dt>
                                     <dd class="text-gray-900 font-medium">{{ $courrier->entiteExpediteur->nom ?? '-' }}</dd>
                                 </div>
                                 @endif
-                                
-                                <div class="flex justify-between">
-                                    <dt class="text-gray-600">Destinataires :</dt>
-                                    <dd>
-                                        @if($courrier->courrierDestinatairePivot->count() > 0)
-                                            <a href="{{ route('courriers.destinataires', $courrier->id) }}" class="text-blue-600 hover:underline font-medium">Voir les destinataires</a>
-                                        @else
-                                            <span class="text-gray-500">-</span>
-                                        @endif
-                                    </dd>
-                                </div>
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Agent en charge :</dt>
                                     <dd class="text-gray-900 font-medium">{{ $courrier->agent->name ?? '-' }}</dd>

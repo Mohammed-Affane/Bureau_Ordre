@@ -85,9 +85,9 @@ class CourrierRequest extends FormRequest
 
         // File is only required for new courriers (store action)
         if ($this->isMethod('POST')) {
-            $rules['fichier_scan'] = ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'];
+            $rules['fichier_scan'] = ['required', 'file', 'mimes:pdf', 'max:2048'];
         } else {
-            $rules['fichier_scan'] = ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf,gif,bmp,tiff,webp', 'max:2048'];
+            $rules['fichier_scan'] = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
         }
 
         return $rules;
