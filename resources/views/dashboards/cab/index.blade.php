@@ -258,7 +258,7 @@
                         @endforelse
                     </tbody>
                 </table>
-                <div class="mt-4" class="bg-green p-4 rounded-md shadow-md"> {{ $alertesUrgents->links() }}</div>
+                
                 
             </div>
         </div>
@@ -300,7 +300,7 @@
                         @endforelse
                     </tbody>
                 </table>
-               <div class="mt-4" class="bg-green p-4 rounded-md shadow-md"> {{ $alertesRetard->links() }}</div>
+               
             </div>
         </div>
     </div>
