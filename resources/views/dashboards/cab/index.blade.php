@@ -75,8 +75,8 @@
         </div>
 
         <div class="kpi-card success">
-            <div class="text-sm font-semibold opacity-90 mb-2">Traités</div>
-            <div class="text-3xl font-bold">{{ number_format($courriersTraites) }}</div>
+            <div class="text-sm font-semibold opacity-90 mb-2">Courriers Avec Instruction Gouverneur</div>
+            <div class="text-3xl font-bold">{{ number_format($courriersTraites) }}</div><!-- change this to  the number pof the courrier that have an instruction  --> 
             <div class="text-xs opacity-75 mt-2">Validés / Clôturés</div>
         </div>
 
@@ -120,46 +120,105 @@
         </div>
     </div>
 
-    <!-- Tables and Alerts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Top 5 Expéditeurs -->
-        <div class="table-container">
-            <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Expéditeurs</h3>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Courriers Envoyés</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($topExpediteurs as $expediteur)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $expediteur->nom }}
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                                {{ ucfirst($expediteur->type_source ?? 'N/A') }}
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-right font-semibold text-blue-600">
-                                {{ number_format($expediteur->total_courriers) }}
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="3" class="px-4 py-6 text-center text-sm text-gray-500">
-                                Aucune donnée disponible
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+  <!-- Tables Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    
+    <!-- Top 5 Expéditeurs -->
+    <div class="table-container bg-white p-4 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Expéditeurs</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Courriers Envoyés</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($topExpediteurs as $expediteur)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $expediteur->nom }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($expediteur->type_source ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-right font-semibold text-blue-600">
+                            {{ number_format($expediteur->total_courriers) }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="3" class="px-4 py-6 text-center text-sm text-gray-500">
+                            Aucune donnée disponible
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 
+    <!-- Top 5 Courrier Arriver Avec Instruction -->
+    <div class="table-container bg-white p-4 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Courriers arrives Avec Instruction</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence BO</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr_piece</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">priorite</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Date Courrier</th>
+                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Arriver</th>
+                        
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($topCourrierInstructs as $CourrierInstructs)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $CourrierInstructs->reference_arrive }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->reference_bo ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->Nbr_piece ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->priorite ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->statut ?? 'N/A') }}
+                        </td>
+                         <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-semibold text-blue-600">
+                            {{ \Carbon\Carbon::parse($CourrierInstructs->date_reception)->format('d-m-Y') }}
+
+                        </td>
+            
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-semibold text-blue-600">
+                            {{ \Carbon\Carbon::parse($CourrierInstructs->date_enregistrement)->format('d-m-Y') }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="3" class="px-4 py-6 text-center text-sm text-gray-500">
+                            Aucune donnée disponible
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!--  add here les courrier avec une instruction de cab dans cette semaine -->
     <!-- Alerts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <!-- Courriers Urgents en Attente > 7 jours -->
@@ -199,6 +258,8 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="mt-4" class="bg-green p-4 rounded-md shadow-md"> {{ $alertesUrgents->links() }}</div>
+                
             </div>
         </div>
 
@@ -239,6 +300,7 @@
                         @endforelse
                     </tbody>
                 </table>
+               <div class="mt-4" class="bg-green p-4 rounded-md shadow-md"> {{ $alertesRetard->links() }}</div>
             </div>
         </div>
     </div>
@@ -261,7 +323,7 @@
 
     // Create chart
     new Chart(document.getElementById('statutChart'), {
-        type: 'doughnut',
+        type: 'pie',
         data: {
             labels: Object.keys(filledStatutData).map(s => s.replace('_', ' ').toUpperCase()),
             datasets: [{
