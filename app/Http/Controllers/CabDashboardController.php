@@ -25,8 +25,43 @@ class CabDashboardController extends Controller
             })
             ->count();
         
-        $courriersTraites = Courrier::whereIn('statut', ['cloturé'])->count();
+    $courriersTraites = Courrier::whereHas('affectations', function ($query) {
+    $query->whereNotNull('instruction')
+          ->where('instruction', 'like', 'Gouverneur%');
+})->count();
+
+
+
+ // Top 5 Courriers INSTRUCTS
+       $topCourrierInstructs = Courrier::select(
+        'courriers.id',
+        'courriers.reference_arrive',
+        'courriers.reference_bo',
+        'courriers.date_reception',
+        'courriers.date_enregistrement',
+        'courriers.Nbr_piece',
+        'courriers.priorite',
+        'courriers.statut',
         
+    )
+    ->join('affectations', 'courriers.id', '=', 'affectations.id_courrier')
+    ->whereNotNull('affectations.instruction')
+    ->where('affectations.instruction', 'like', 'Gouverneur%')
+    ->groupBy(
+        'courriers.id',
+        'courriers.reference_arrive',
+        'courriers.reference_bo',
+        'courriers.date_reception',
+        'courriers.date_depart',
+        'courriers.date_enregistrement',
+        'courriers.Nbr_piece',
+        'courriers.priorite',
+        'courriers.statut'
+    )
+    ->orderByDesc('courriers.created_at')
+    ->limit(5)
+    ->get();
+
         $courriersUrgentsEnAttente = Courrier::where('statut', 'en_attente')
             ->where('priorite', 'urgent')
             ->count();
@@ -145,7 +180,8 @@ class CabDashboardController extends Controller
             'prioriteCourriers',
             'topExpediteurs',
             'alertesUrgents',
-            'alertesRetard'
+            'alertesRetard',
+            'topCourrierInstructs'
         ));
     }
 }

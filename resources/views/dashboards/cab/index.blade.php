@@ -1,5 +1,8 @@
 <x-app-layout>
-    <x-slot name="title">Dashboard Cabinet</x-slot>
+    <x-slot name="title">Cabinet du Gouverneur - Tableau de Bord Exécutif</x-slot>
+    <x-slot name="breadcrumbs">
+        [['title' => 'Dashboard Cabinet', 'url' => route('cab.dashboard')]]
+    </x-slot>
 
     @push('styles')
     <style>
@@ -70,10 +73,9 @@
             <div class="text-3xl font-bold">{{ number_format($courriersRecusCeMois) }}</div>
             <div class="text-xs opacity-75 mt-2">{{ Carbon\Carbon::now()->translatedFormat('F Y') }}</div>
         </div>
-    </div>
 
         <div class="kpi-card success">
-            <div class="text-sm font-semibold opacity-90 mb-2">Traités</div>
+            <div class="text-sm font-semibold opacity-90 mb-2">Courriers Avec Instruction Gouverneur</div>
             <div class="text-3xl font-bold">{{ number_format($courriersTraites) }}</div><!-- change this to  the number pof the courrier that have an instruction  --> 
             <div class="text-xs opacity-75 mt-2">Validés / Clôturés</div>
         </div>
@@ -110,8 +112,6 @@
             <h3 class="text-lg font-semibold mb-4 text-gray-800">Évolution Mensuelle (12 mois)</h3>
             <canvas id="evolutionChart"></canvas>
         </div>
-    </div>
-</div>
 
         <!-- Stacked Bar: Priorité -->
         <div class="chart-container" style="height: 450px;">
@@ -120,45 +120,104 @@
         </div>
     </div>
 
-    <!-- Tables and Alerts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Top 5 Expéditeurs -->
-        <div class="table-container">
-            <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Expéditeurs</h3>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Courriers Envoyés</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($topExpediteurs as $expediteur)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $expediteur->nom }}
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                                {{ ucfirst($expediteur->type_source ?? 'N/A') }}
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-right font-semibold text-blue-600">
-                                {{ number_format($expediteur->total_courriers) }}
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="3" class="px-4 py-6 text-center text-sm text-gray-500">
-                                Aucune donnée disponible
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+  <!-- Tables Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    
+    <!-- Top 5 Expéditeurs -->
+    <div class="table-container bg-white p-4 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Expéditeurs</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Courriers Envoyés</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($topExpediteurs as $expediteur)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $expediteur->nom }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($expediteur->type_source ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-right font-semibold text-blue-600">
+                            {{ number_format($expediteur->total_courriers) }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="3" class="px-4 py-6 text-center text-sm text-gray-500">
+                            Aucune donnée disponible
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <!-- Top 5 Courrier Arriver Avec Instruction -->
+    <div class="table-container bg-white p-4 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Courriers arrives Avec Instruction</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence BO</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Nbr_piece</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">priorite</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Date Courrier</th>
+                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Arriver</th>
+                        
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($topCourrierInstructs as $CourrierInstructs)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $CourrierInstructs->reference_arrive }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->reference_bo ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->Nbr_piece ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->priorite ?? 'N/A') }}
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                            {{ ucfirst($CourrierInstructs->statut ?? 'N/A') }}
+                        </td>
+                         <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-semibold text-blue-600">
+                            {{ \Carbon\Carbon::parse($CourrierInstructs->date_reception)->format('d-m-Y') }}
+
+                        </td>
+            
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-semibold text-blue-600">
+                            {{ \Carbon\Carbon::parse($CourrierInstructs->date_enregistrement)->format('d-m-Y') }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="3" class="px-4 py-6 text-center text-sm text-gray-500">
+                            Aucune donnée disponible
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
 <!--  add here les courrier avec une instruction de cab dans cette semaine -->
     <!-- Alerts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -199,25 +258,10 @@
                         @endforelse
                     </tbody>
                 </table>
-                {{ $alertesUrgents->links() }}
+                <div class="mt-4" class="bg-green p-4 rounded-md shadow-md"> {{ $alertesUrgents->links() }}</div>
+                
             </div>
         </div>
-    </div>
-
-    <!-- Enhanced Metrics Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <!-- Total Courriers -->
-    <div class="bg-white rounded-xl shadow-sm p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-900">Total Courriers</h3>
-            <i class="fas fa-mail-bulk text-blue-500 text-xl"></i>
-        </div>
-        <p class="text-3xl font-bold text-blue-600 mb-2">{{ number_format($stats['total_courriers']) }}</p>
-        <div class="flex items-center text-sm text-green-600">
-            <i class="fas fa-arrow-up mr-1"></i>
-            <span>{{ number_format((($stats['courriers_mois'] - $stats['courriers_semaine']) / max($stats['courriers_semaine'], 1)) * 100, 1) }}% ce mois</span>
-        </div>
-    </div>
 
         <!-- Courriers en Attente > 30 jours -->
         <div class="table-container">
@@ -260,44 +304,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Courriers Départ -->
-    <div class="bg-white rounded-xl shadow-sm p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-900">Courriers Départ</h3>
-            <i class="fas fa-paper-plane text-purple-500 text-xl"></i>
-        </div>
-        <p class="text-3xl font-bold text-purple-600 mb-2">{{ number_format($stats['courriers_depart']) }}</p>
-        <div class="text-sm text-gray-600">
-            {{ number_format(($stats['courriers_depart'] / max($stats['total_courriers'], 1)) * 100, 1) }}% du total
-        </div>
-    </div>
-
-    <!-- Courriers Internes -->
-    <div class="bg-white rounded-xl shadow-sm p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-900">Courriers Internes</h3>
-            <i class="fas fa-exchange-alt text-orange-500 text-xl"></i>
-        </div>
-        <p class="text-3xl font-bold text-orange-600 mb-2">{{ number_format($stats['courriers_interne']) }}</p>
-        <div class="text-sm text-gray-600">
-            {{ number_format(($stats['courriers_interne'] / max($stats['total_courriers'], 1)) * 100, 1) }}% du total
-        </div>
-    </div>
-</div>
-
-<!-- Type Distribution Chart -->
-<div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">Répartition par Type de Courrier</h3>
-        <a href="{{ route('cab.courriers.all') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-            Voir tous les courriers <i class="fas fa-arrow-right ml-1"></i>
-        </a>
-    </div>
-    <div class="h-64">
-        <canvas id="typeChart"></canvas>
-    </div>
-</div>
 
     @push('scripts')
     <script type="module">
@@ -375,8 +381,8 @@
                         beginAtZero: true
                     }
                 }
-            });
-        }
+            }
+        });
 
         // Line Chart: Évolution Mensuelle
         const evolutionData = @json($evolutionMensuelle);
@@ -414,8 +420,8 @@
                         beginAtZero: true
                     }
                 }
-            });
-        }
+            }
+        });
 
         // Bar Chart: Priorité
         const prioriteData = @json($prioriteCourriers);
