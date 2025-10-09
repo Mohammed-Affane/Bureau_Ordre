@@ -199,7 +199,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
             
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
+            <td class="px-6 py-4 max-w-xs truncate">{{ $courrier->expediteur->nom ?? '-' }}</td>
                  @php  
 
     $courrierInstruct = $courrier->affectations

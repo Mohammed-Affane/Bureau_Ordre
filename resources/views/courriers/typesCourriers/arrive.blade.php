@@ -205,9 +205,11 @@
             </td>
             
             
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
-            
-         
+          <td class="px-6 py-4 w-[100px] truncate text-xs" 
+            title="{{ $courrier->expediteur->nom ?? 'Non spécifié' }}">
+            {{ $courrier->expediteur->nom ?? 'Non spécifié' }}
+        </td>
+
             <td class="px-6 py-4 whitespace-nowrap">
                 @if($courrier->fichier_scan)
                     @php

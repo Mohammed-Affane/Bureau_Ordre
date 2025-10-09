@@ -90,7 +90,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->type_courrier }}</td>                                             
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->objet }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
+            <td class="px-6 py-4 max-w-xs truncate">{{ $courrier->expediteur->nom ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                @foreach ($courrier->courrierDestinatairePivot as $dest)
                @if ($dest->entite)
