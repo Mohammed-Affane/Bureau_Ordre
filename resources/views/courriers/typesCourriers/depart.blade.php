@@ -162,7 +162,7 @@
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
         <tr>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_depart }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_depart->format() }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_depart->format('d/m/Y') }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
