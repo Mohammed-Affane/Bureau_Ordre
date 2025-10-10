@@ -277,7 +277,8 @@
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
                         value="{{ old('reference_bo') }}"
                         min="1"
-                        step="1">
+                        step="1"
+                        >
                     @error('reference_bo')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
@@ -292,9 +293,9 @@
                         name="date_depart" 
                         id="date_reception" 
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
-                        value="{{ old('date_reception') }}"
+                        value="{{ old('date_depart') }}"
                         max="{{ date('Y-m-d') }}">
-                    @error('date_reception')
+                    @error('date_depart')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
                 </div>
