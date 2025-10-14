@@ -171,15 +171,11 @@
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
-        
-   
-
-          
         <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception->format('d/m/Y') }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception ? $courrier->date_reception->format('d/m/Y'):'Non spécifié' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_bo }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement ? $courrier->date_enregistrement->format('d/m/Y'):'Non spécifié' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 @php
                     $statusClasses = [

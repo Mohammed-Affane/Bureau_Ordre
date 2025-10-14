@@ -191,7 +191,7 @@
             <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
                 {{ $courrier->objet }}
             </td>
-             <td class="px-6 py-4 max-w-xs truncate">{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
+             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
             
            
             
