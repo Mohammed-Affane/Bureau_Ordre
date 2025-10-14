@@ -41,7 +41,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('courriers.visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa');
     Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision');
     Route::get('courriers.search', [TypeCourrierController::class, 'searchCourrier'])->name('courriers.search');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
     Route::get('/courriers/{courrier}/affectations', [AffectationController::class, 'create'])->name('affectations.create');
     Route::post('/courriers/{courrier}/affectations', [AffectationController::class, 'store'])->name('affectations.store');

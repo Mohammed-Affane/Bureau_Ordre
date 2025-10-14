@@ -168,7 +168,7 @@
                                             <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
                                                 {{ $courrier->objet }}
                                             </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">
+                                        <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->expediteur->nom ?? 'Non spécifié' }}">
                                             {{ $courrier->expediteur->nom ?? 'Non spécifié' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">

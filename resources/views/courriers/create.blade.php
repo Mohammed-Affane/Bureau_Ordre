@@ -74,16 +74,24 @@
             <div class="grid grid-cols-1 md:grid-cols gap-4">
                 <div x-show="type === 'interne'">
                     <label>Destinataires internes</label>
-                    <select id="destinataires" name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                    <select id="destinataires_internes" name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                         @foreach($entites as $entite)
                             <option value="{{ $entite->id }}">{{ $entite->nom }}</option>
                         @endforeach
                     </select>
                 </div>
+                <div class="flex justify-between gap-4" x-show="type ==='interne'">
+                    <button
+                        type="button"
+                        onclick="resetSelectint()"
+                        class="px-4 py-2  text-red-600 font-semibold rounded hover:bg-red-200 transition">
+                        Réinitialiser la sélection
+                    </button>
+                </div>
                 <div x-show="type === 'depart' || type === 'decision' || type === 'interne' || type === 'visa'">
                  <div x-data="{ manualDestinataires: [] }">
     <label>Destinataires externes</label>
-    <select id="destinataires" name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+    <select id="destinataires_externes" name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
         @foreach($destinataires as $destinataire)
         
             <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
@@ -95,7 +103,7 @@
     <!-- Réinitialiser button -->
     <button
         type="button"
-        onclick="resetSelect()"
+        onclick="resetSelectext()"
         class="px-4 py-2  text-red-600 font-semibold rounded hover:bg-red-200 transition">
         Réinitialiser la sélection
     </button>
@@ -518,8 +526,12 @@ function documentUploadController() {
         }
     };
 }
-function resetSelect() {
-        const select = document.getElementById('destinataires');
+    function resetSelectext() {
+            const select = document.getElementById('destinataires_externes');
+            Array.from(select.options).forEach(option => option.selected = false);
+        }
+    function resetSelectint() {
+        const select = document.getElementById('destinataires_internes');
         Array.from(select.options).forEach(option => option.selected = false);
     }
 </script>

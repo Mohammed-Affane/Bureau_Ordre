@@ -40,20 +40,35 @@ class CourrierRequest extends FormRequest
 
             // Références (validées plus bas conditionnellement)
             'reference_arrive' => ['nullable', 'string', 'max:50', 'regex:/^[A-Za-z0-9\/\-\._]+$/',
-                Rule::unique('courriers', 'reference_arrive')->ignore($this->route('courrier'))
-            ],
+                Rule::unique('courriers', 'reference_arrive')
+                        ->ignore($this->route('courrier'))
+                        ->where(function ($query) {
+                            $query->whereYear('date_enregistrement', now()->year);
+                                })],
             'reference_bo' => ['nullable', 'integer', 'min:1',
-                Rule::unique('courriers', 'reference_bo')->ignore($this->route('courrier'))
-            ],
+                Rule::unique('courriers', 'reference_bo')
+                        ->ignore($this->route('courrier'))
+                        ->where(function($query){
+                            $query->whereYear('date_enregistrement',now()->year);
+                                })],
             'reference_visa' => ['nullable', 'integer', 'min:1',
-                Rule::unique('courriers', 'reference_visa')->ignore($this->route('courrier'))
-            ],
+                Rule::unique('courriers', 'reference_visa')
+                        ->ignore($this->route('courrier'))
+                        ->where(function($query){
+                            $query->whereYear('date_enregistrement',now()->year);
+                                })],
             'reference_dec' => ['nullable', 'integer', 'min:1',
-                Rule::unique('courriers', 'reference_dec')->ignore($this->route('courrier'))
-            ],
+                Rule::unique('courriers', 'reference_dec')
+                        ->ignore($this->route('courrier'))
+                        ->where(function($query){
+                            $query->whereYear('date_enregistrement',now()->year);
+                                })],
             'reference_depart' => ['nullable', 'integer', 'min:1',
-                Rule::unique('courriers', 'reference_depart')->ignore($this->route('courrier'))
-            ],
+                Rule::unique('courriers', 'reference_depart')
+                        ->ignore($this->route('courrier'))
+                        ->where(function($query){
+                            $query->whereYear('date_enregistrement',now()->year);
+                                })],
         ];
 
         return $rules;

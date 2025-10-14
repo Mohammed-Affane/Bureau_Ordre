@@ -97,56 +97,43 @@ public function store(CourrierRequest $request): RedirectResponse
 
         $courrier = Courrier::create($courrierData);
 
-    // 4. Handle INTERNAL recipients (entites)
-    if ($request->has('destinataires_entite')) {
-        $destinataireIds = [];
-        
-        foreach ($request->destinataires_entite as $entiteId) {
-            $entite = Entite::find($entiteId);
-            
-            // Use firstOrCreate to avoid duplicates
-            $destinataire = CourrierDestinataire::firstOrCreate(
-                [
-                    'entite_id' => $entiteId,
-                    'type_courrier' => 'interne'
-                ],
-                [
-                    'nom' => $entite->nom ?? 'Entité inconnue',
-                ]
-            );
-            
-            $destinataireIds[] = $destinataire->id;
-        }
-        
-        $courrier->courrierDestinatairePivot()->attach($destinataireIds);
-    }
+        // 4. Handle all recipients (internal + external + manual)
+        $allDestinataireIds = [];
 
-        // 5. Handle EXISTING external recipients
+        // 4.1 Internal recipients (entites)
+        if ($request->has('destinataires_entite')) {
+            foreach ($request->destinataires_entite as $entiteId) {
+                $entite = Entite::find($entiteId);
+                $destinataire = CourrierDestinataire::firstOrCreate(
+                    [
+                        'entite_id' => $entiteId,
+                        'type_courrier' => 'interne'
+                    ],
+                    [
+                        'nom' => $entite->nom ?? 'Entité inconnue',
+                    ]
+                );
+                $allDestinataireIds[] = $destinataire->id;
+            }
+        }
+
+        // 4.2 Existing external recipients (from list)
         if ($request->has('destinataires_externe')) {
-            $destinataireIds = [];
-            
             foreach ($request->destinataires_externe as $existingDestId) {
                 $destinataire = CourrierDestinataire::where('id', $existingDestId)
                     ->where('type_courrier', 'externe')
                     ->first();
-                    
                 if ($destinataire) {
-                    $destinataireIds[] = $existingDestId;
+                    $allDestinataireIds[] = $existingDestId;
                 }
-            }
-            
-            if (!empty($destinataireIds)) {
-                $courrier->courrierDestinatairePivot()->attach($destinataireIds);
             }
         }
 
-        // 6. Handle MANUALLY ADDED external recipients
+        // 4.3 Manually added external recipients
         if ($request->has('dest_nom')) {
-            $newDestinataires = [];
-            
             foreach ($request->dest_nom as $index => $nom) {
                 if (!empty($nom)) {
-                    $newDestinataires[] = CourrierDestinataire::create([
+                    $newDest = CourrierDestinataire::create([
                         'nom'            => $nom,
                         'type_source'    => $request->dest_type_source[$index] ?? null,
                         'adresse'        => $request->dest_adresse[$index] ?? null,
@@ -154,13 +141,13 @@ public function store(CourrierRequest $request): RedirectResponse
                         'telephone'      => $request->dest_telephone[$index] ?? null,
                         'type_courrier'  => 'externe',
                     ]);
+                    $allDestinataireIds[] = $newDest->id;
                 }
             }
-            
-            $courrier->courrierDestinatairePivot()->attach(
-                collect($newDestinataires)->pluck('id')
-            );
         }
+
+        // ✅ Attach all destinataires at once (avoid duplicates)
+        $courrier->courrierDestinatairePivot()->syncWithoutDetaching(array_unique($allDestinataireIds));
 
         DB::commit();
 
