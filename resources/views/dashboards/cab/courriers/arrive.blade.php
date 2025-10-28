@@ -199,7 +199,11 @@
             <td class="px-6 py-4 max-w-xs truncate" dir='auto' title="{{ $courrier->objet }}">
                 {{ $courrier->objet }}
             </td>
+<<<<<<< HEAD
             <td class="px-6 py-4 max-w-xs truncate" dir='auto' >{{ $courrier->expediteur->nom ?? '-' }}</td>
+=======
+            <td class="px-6 py-4 max-w-xs truncate">{{ $courrier->expediteur->nom ?? '-' }}</td>
+>>>>>>> 79f579bb65188200a6ab2fdc5e306afbbcef960c
             
              <td class="px-6 py-4 whitespace-nowrap">
     @if($courrier->fichier_scan)
