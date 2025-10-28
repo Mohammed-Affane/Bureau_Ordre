@@ -145,11 +145,11 @@
                                             {{ $courrier->reference_depart }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500">
-                                            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+                                            <td class="px-6 py-4 max-w-xs truncate" dir='auto' title="{{ $courrier->objet }}">
                                                 {{ $courrier->objet }}
                                             </td>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">
+                                        <td class="px-6 py-4 max-w-xs truncate" dir='auto'>
                                             {{ $courrier->entiteExpediteur->nom ?? 'Non spécifiée' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

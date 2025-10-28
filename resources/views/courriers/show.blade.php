@@ -154,19 +154,21 @@
                         <div>
                             <h4 class="text-md font-bold text-gray-800 mb-3">Correspondants</h4>
                             <dl class="space-y-3">
-                                @if($courrier->type_courrier !== 'interne')
+
+                             @if($courrier->type_courrier == 'arrive' || $courrier->type_courrier == 'visa')
                                 <div class="flex justify-between">
-                                    <dt class="text-gray-600">Expéditeur :</dt>
+                                    <dt class="text-gray-600">Expediteur :</dt>
                                     <dd class="text-gray-900 font-medium">{{ $courrier->expediteur->nom ?? '-' }}</dd>
                                 </div>
-                                @endif
-                                
-                                @if($courrier->type_courrier == 'interne')
+                                @else
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Entité expéditrice :</dt>
                                     <dd class="text-gray-900 font-medium">{{ $courrier->entiteExpediteur->nom ?? '-' }}</dd>
                                 </div>
+
                                 @endif
+                                
+                                
                                 <div class="flex justify-between">
                                     <dt class="text-gray-600">Agent en charge :</dt>
                                     <dd class="text-gray-900 font-medium">{{ $courrier->agent->name ?? '-' }}</dd>

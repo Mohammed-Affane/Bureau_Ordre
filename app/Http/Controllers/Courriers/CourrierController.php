@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 
 class CourrierController extends Controller
 {
-
+    
 
     public function index(): View
     {

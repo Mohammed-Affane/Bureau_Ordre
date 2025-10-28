@@ -1,4 +1,3 @@
-
 <x-app-layout>
     <div class="py-8">
         <div class="w-full px-4 sm:px-6 lg:px-8">
@@ -189,19 +188,25 @@
                 @endphp
 
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClasses[$courrier->statut] ?? 'bg-gray-100 text-gray-800' }}">
-                    {{ ucfirst(str_replace('_', ' ', $courrier->statut)) }}
+                    {{ $courrier->statut==='arriver' ? ucfirst(str_replace('_', ' ',    'arrivé'))
+                        :
+                        ucfirst(str_replace('_', ' ',    $courrier->statut)) }}
                 </span>
             </td>
             
 
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
            
-            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+            <td class="px-6 py-4 max-w-xs truncate" dir='auto' title="{{ $courrier->objet }}">
                 {{ $courrier->objet }}
             </td>
             
             
+<<<<<<< HEAD
+          <td dir='auto' class="px-6 py-4 max-w-xs truncate" 
+=======
           <td class="px-6 py-4 w-[100px] truncate text-xs" 
+>>>>>>> 79f579bb65188200a6ab2fdc5e306afbbcef960c
             title="{{ $courrier->expediteur->nom ?? 'Non spécifié' }}">
             {{ $courrier->expediteur->nom ?? 'Non spécifié' }}
         </td>

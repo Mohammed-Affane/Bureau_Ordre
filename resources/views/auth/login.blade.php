@@ -107,7 +107,7 @@
                         </div>
                     </div>
 
-                    <!-- Remember Me & Forgot Password -->
+                    <!-- Remember Me & Forgot Password
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <input 
@@ -123,7 +123,7 @@
                         <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:text-blue-500 transition-colors duration-200">
                             Mot de passe oublié ?
                         </a>
-                    </div>
+                    </div> -->
 
                     <!-- Login Button -->
                     <div>
@@ -151,28 +151,9 @@
                             <span class="px-2 bg-white text-gray-500">Nouveau sur la plateforme ?</span>
                         </div>
                     </div>
-
-                    <div class="mt-6">
-                        <a 
-                            href="{{ route('register') }}" 
-                            class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-                        >
-                            Demander l'accès au système
-                        </a>
-                    </div>
                 </div>
             </div>
 
-            <!-- Footer -->
-            <div class="text-center text-sm text-gray-500 space-y-2">
-                <p>© 2024 Système de Gestion de Courrier. Tous droits réservés.</p>
-                <p>
-                    Besoin d'aide ? 
-                    <a href="#" class="text-blue-600 hover:text-blue-500 transition-colors duration-200">
-                        Contacter le support IT
-                    </a>
-                </p>
-            </div>
         </div>
     </div>
 

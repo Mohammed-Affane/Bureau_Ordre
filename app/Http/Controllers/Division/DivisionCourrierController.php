@@ -153,7 +153,8 @@ public function storeTraitement(Request $request, Traitement $Traitement,Affecta
     $Traitement->id_affectation = $affectation->id;
     $Traitement->save();
 
-    return redirect()->route('division.courriers.arrive')
+    return $affectation->courrier->type_courrier=='arrive'?redirect()->route('division.courriers.arrive')
+        ->with('success', 'Traitement du courrier enregistré avec succès.'):redirect()->route('division.courriers.interne')
         ->with('success', 'Traitement du courrier enregistré avec succès.');
 }
 

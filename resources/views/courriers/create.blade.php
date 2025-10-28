@@ -11,7 +11,7 @@
         <!-- Type de courrier -->
         <div class="form-group">
             <label for="type_courrier" class="block font-medium text-gray-700 mb-1">Type de courrier</label>
-            <select name="type_courrier" id="type_courrier" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-on:change="updateType">
+            <select name="type_courrier" id="type_courrier" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-on:change="updateType" x-model="type">
                 <option value="">Choisir...</option>
                 <option value="arrive" :selected="type === 'arrive'">Arrivé</option>
                 <option value="depart" :selected="type === 'depart'">Départ</option>
@@ -186,7 +186,7 @@
                 
                 <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
                     <label for="reference_arrive" class="block font-medium text-gray-700 mb-1">
-                        Référence d'arrivée
+                        Numero Courrier
                     </label>
                         <input 
                             type="text" 
@@ -253,7 +253,7 @@
                 </div>
 
                 <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
-                    <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de réception</label>
+                    <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de Courrier</label>
                     <input 
                         type="date" 
                         name="date_reception" 
@@ -268,7 +268,7 @@
                 
                 <div class="form-group"  x-show="type === 'arrive'">
                     <label for="reference_bo" class="block font-medium text-gray-700 mb-1">
-                        Référence BO
+                        Numero Arrivée
                     </label>
                     <input 
                         type="number" 
@@ -302,7 +302,13 @@
 
                 <div class="form-group">
                     <label for="date_enregistrement" class="block font-medium text-gray-700 mb-1">
-                        Date d'enregistrement <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                   <span x-text="type === 'arrive' ? 'Date Arrivee' : 'Date Enregistrement'"></span>
+ 
+
+                    
+
+                       
+                    <span class="text-red-500" aria-label="Champ obligatoire">*</span>
                     </label>
                     <input 
                         type="date" 

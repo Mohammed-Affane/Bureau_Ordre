@@ -22,7 +22,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+ public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
@@ -42,7 +42,6 @@ class AuthenticatedSessionController extends Controller
         }
         return redirect()->intended(route('dai.courriers.arrive', absolute: false));
     }
-
 
         
     /**

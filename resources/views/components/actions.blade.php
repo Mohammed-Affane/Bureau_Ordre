@@ -88,6 +88,8 @@
                     Modifier
                 </a>
                 @endif
+            
+                @if($courrier->type_courrier==='arrive'||$courrier->type_courrier==='interne'||$courrier->type_courrier==='visa')
                 <a href="/courriers/{{ $courrier->id }}/affectations" 
                    @click.prevent="open = false; window.location.href = `/courriers/${$el.closest('[data-courrier-id]').dataset.courrierId}/affectations`" 
                    class="flex items-center px-4 py-2 text-sm text-green-600 hover:bg-green-100" role="menuitem">
@@ -96,6 +98,7 @@
                     </svg>
                     Affecter
                 </a>
+                @endif
                 @if($userRole === 'admin')
                 <button @click="open = false; deleteCourrier($el.closest('[data-courrier-id]').dataset.courrierId)" 
                         class="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem">

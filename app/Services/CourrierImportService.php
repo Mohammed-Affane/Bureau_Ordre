@@ -87,52 +87,24 @@ class CourrierImportService
         return !empty($cleaned) ? (int)$cleaned : null;
     }
 
-   private function parseDate($excelDate)
-    {
-        if (empty($excelDate)) {
-            return null;
-        }
-
-        try {
-            // If already a DateTime
-            if ($excelDate instanceof \DateTime) {
-                return $excelDate->format('Y-m-d');
-            }
-
-            // If numeric (Excel serial)
-            if (is_numeric($excelDate)) {
-                // Try Windows 1900 first
-                Date::setExcelCalendar(Date::CALENDAR_WINDOWS_1900);
-                $dateObj = Date::excelToDateTimeObject($excelDate);
-                
-                // If year is unreasonable (too far in future), try Mac 1904
-                if ($dateObj->format('Y') > (date('Y') + 1)) {
-                    Date::setExcelCalendar(Date::CALENDAR_MAC_1904);
-                    $dateObj = Date::excelToDateTimeObject($excelDate);
-                }
-                
-                return $dateObj->format('Y-m-d');
-            }
-
-            // If string, parse normally
-            $datePart = explode(' ', trim($excelDate))[0];
-            $formats = ['Y-m-d', 'd/m/Y', 'm/d/Y', 'd-m-Y', 'm-d-Y'];
-
-            foreach ($formats as $format) {
-                $date = \DateTime::createFromFormat($format, $datePart);
-                if ($date !== false) {
-                    return $date->format('Y-m-d');
-                }
-            }
-
-            $timestamp = strtotime($excelDate);
-            return $timestamp ? date('Y-m-d', $timestamp) : null;
-
-        } catch (\Exception $e) {
-            \Log::warning("Failed to parse date: {$excelDate}");
-            return null;
-        }
-    }
+  
+    private function parseDate($excelDate) {
+         if (empty($excelDate)) {
+             return null;
+             }
+        try { // If already a DateTime 
+    if ($excelDate instanceof \DateTime)
+         { 
+            return $excelDate->format('Y-m-d');
+         }
+          // If numeric (Excel serial)
+      if (is_numeric($excelDate)) 
+        { // Try Windows 1900 first
+       Date::setExcelCalendar(Date::CALENDAR_WINDOWS_1900);
+        $dateObj = Date::excelToDateTimeObject($excelDate); // If year is unreasonable (too far in future), try Mac 1904 
+       if ($dateObj->format('Y') > (date('Y') + 1))
+         { Date::setExcelCalendar(Date::CALENDAR_MAC_1904); $dateObj = Date::excelToDateTimeObject($excelDate); } return $dateObj->format('Y-m-d'); } // If string, parse normally 
+       $datePart = explode(' ', trim($excelDate))[0]; $formats = ['Y-m-d', 'd/m/Y', 'm/d/Y', 'd-m-Y', 'm-d-Y']; foreach ($formats as $format) { $date = \DateTime::createFromFormat($format, $datePart); if ($date !== false) { return $date->format('Y-m-d'); } } $timestamp = strtotime($excelDate); return $timestamp ? date('Y-m-d', $timestamp) : null; } catch (\Exception $e) { \Log::warning("Failed to parse date: {$excelDate}"); return null; } }
 
     private function getOrCreateExpediteur($name)
     {
@@ -141,20 +113,15 @@ class CourrierImportService
         }
 
         $normalizedName = trim(mb_strtolower($name));
-
-        // Try to find matching expediteur even if name is part of "French | Arabic"
         $expediteur = Expediteur::whereRaw('LOWER(TRIM(nom)) = ?', [$normalizedName])
-            ->orWhereRaw('LOWER(TRIM(nom)) LIKE ?', ["%{$normalizedName}%"])
-            ->first();
+        ->OrWhereRaw('LOWER(TRIM(nom)) LIKE ?', ["%{$normalizedName}%"])->first();
 
         if (!$expediteur) {
-            // Optional: Clean capitalization for new entries
-            $cleanName = ucwords($normalizedName, " \t\r\n\f\v-");
-
+            $clearName=ucwords($normalizedName," \t\r\n\f\v-");
             $expediteur = Expediteur::create([
-                'nom' => $cleanName,
+                'nom' => $clearName,
                 'type_source' => $this->determineExpediteurType($name),
-                'adresse' =>   null,
+                'adresse' => null,
                 'telephone' => null,
                 'email' => null,
             ]);
@@ -186,6 +153,7 @@ class CourrierImportService
     private function determineExpediteurType($name)
     {
         $name = strtolower($name);
+        
         return $name === 'مواطن' ? 'citoyen' : 'administration';
     }
 }
