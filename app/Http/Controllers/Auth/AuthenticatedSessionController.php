@@ -22,7 +22,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+ public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
@@ -38,11 +38,10 @@ class AuthenticatedSessionController extends Controller
         } else if ($user->hasRole('sg')) {
             return redirect()->intended(route('sg.dashboard', absolute: false));
         } else if ($user->hasRole('chef_division')) {
-            return redirect()->intended(route('division.dashboard', absolute: false));
+            return redirect()->intended(route('division.courriers.arrive', absolute: false));
         }
         return redirect()->intended(route('dai.courriers.arrive', absolute: false));
     }
-
 
         
     /**

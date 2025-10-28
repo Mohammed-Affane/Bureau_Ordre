@@ -151,7 +151,6 @@
              <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Référence Départ</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Date Départ</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Date Enregistrement</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Statut</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Nbr Pièces</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Objet</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Expéditeur</th>
@@ -165,30 +164,13 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_depart }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_depart->format('d/m/Y') }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-                @php
-                    $statusClasses = [
-                        'en_attente' => 'bg-yellow-100 text-yellow-800',
-                        'en_cours'   => 'bg-blue-100 text-blue-800',
-                        'arriver'    => 'bg-green-100 text-green-800',
-                        'cloture'    => 'bg-gray-100 text-gray-800',
-                        'archiver'   => 'bg-purple-100 text-purple-800',
-                        'en_traitement'  => 'bg-orange-100 text-orange-800',
-                    ];
-                @endphp
-
-                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClasses[$courrier->statut] ?? 'bg-gray-100 text-gray-800' }}">
-                    {{ ucfirst(str_replace('_', ' ', $courrier->statut)) }}
-                </span>
-            </td>
-            
             
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
           
-            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+            <td class="px-6 py-4 max-w-xs truncate" dir='auto' title="{{ $courrier->objet }}">
                 {{ $courrier->objet }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
+            <td class="px-6 py-4 max-w-xs truncate" dir='auto'>{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
             
                     
             <td class="px-6 py-4 whitespace-nowrap">

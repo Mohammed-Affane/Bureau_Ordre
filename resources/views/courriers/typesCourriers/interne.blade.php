@@ -183,13 +183,13 @@
                 </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
-                        <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+            <td class="px-6 py-4 max-w-xs truncate" dir='auto' title="{{ $courrier->objet }}">
                 {{ $courrier->objet }}
             </td>
 
 
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
+            <td class="px-6 py-4 max-w-xs truncate" dir='auto'>{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
            
             
                        <td class="px-6 py-4 whitespace-nowrap">

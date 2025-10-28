@@ -11,7 +11,7 @@
         <!-- Type de courrier -->
         <div class="form-group">
             <label for="type_courrier" class="block font-medium text-gray-700 mb-1">Type de courrier</label>
-            <select name="type_courrier" id="type_courrier" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-on:change="updateType">
+            <select name="type_courrier" id="type_courrier" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-on:change="updateType" x-model="type">
                 <option value="">Choisir...</option>
                 <option value="arrive" :selected="type === 'arrive'">Arrivé</option>
                 <option value="depart" :selected="type === 'depart'">Départ</option>
@@ -74,16 +74,24 @@
             <div class="grid grid-cols-1 md:grid-cols gap-4">
                 <div x-show="type === 'interne'">
                     <label>Destinataires internes</label>
-                    <select id="destinataires" name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                    <select id="destinataires_internes" name="destinataires_entite[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
                         @foreach($entites as $entite)
                             <option value="{{ $entite->id }}">{{ $entite->nom }}</option>
                         @endforeach
                     </select>
                 </div>
+                <div class="flex justify-between gap-4" x-show="type ==='interne'">
+                    <button
+                        type="button"
+                        onclick="resetSelectint()"
+                        class="px-4 py-2  text-red-600 font-semibold rounded hover:bg-red-200 transition">
+                        Réinitialiser la sélection
+                    </button>
+                </div>
                 <div x-show="type === 'depart' || type === 'decision' || type === 'interne' || type === 'visa'">
                  <div x-data="{ manualDestinataires: [] }">
     <label>Destinataires externes</label>
-    <select id="destinataires" name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+    <select id="destinataires_externes" name="destinataires_externe[]" multiple class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
         @foreach($destinataires as $destinataire)
         
             <option value="{{ $destinataire->id }}">{{ $destinataire->nom }}</option>
@@ -95,7 +103,7 @@
     <!-- Réinitialiser button -->
     <button
         type="button"
-        onclick="resetSelect()"
+        onclick="resetSelectext()"
         class="px-4 py-2  text-red-600 font-semibold rounded hover:bg-red-200 transition">
         Réinitialiser la sélection
     </button>
@@ -178,7 +186,7 @@
                 
                 <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
                     <label for="reference_arrive" class="block font-medium text-gray-700 mb-1">
-                        Référence d'arrivée
+                        Numero Courrier
                     </label>
                         <input 
                             type="text" 
@@ -245,7 +253,7 @@
                 </div>
 
                 <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
-                    <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de réception</label>
+                    <label for="date_reception" class="block font-medium text-gray-700 mb-1">Date de Courrier</label>
                     <input 
                         type="date" 
                         name="date_reception" 
@@ -260,7 +268,7 @@
                 
                 <div class="form-group"  x-show="type === 'arrive'">
                     <label for="reference_bo" class="block font-medium text-gray-700 mb-1">
-                        Référence BO
+                        Numero Arrivée
                     </label>
                     <input 
                         type="number" 
@@ -269,7 +277,8 @@
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
                         value="{{ old('reference_bo') }}"
                         min="1"
-                        step="1">
+                        step="1"
+                        >
                     @error('reference_bo')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
@@ -284,16 +293,22 @@
                         name="date_depart" 
                         id="date_reception" 
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
-                        value="{{ old('date_reception') }}"
+                        value="{{ old('date_depart') }}"
                         max="{{ date('Y-m-d') }}">
-                    @error('date_reception')
+                    @error('date_depart')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="date_enregistrement" class="block font-medium text-gray-700 mb-1">
-                        Date d'enregistrement <span class="text-red-500" aria-label="Champ obligatoire">*</span>
+                   <span x-text="type === 'arrive' ? 'Date Arrivee' : 'Date Enregistrement'"></span>
+ 
+
+                    
+
+                       
+                    <span class="text-red-500" aria-label="Champ obligatoire">*</span>
                     </label>
                     <input 
                         type="date" 
@@ -517,8 +532,12 @@ function documentUploadController() {
         }
     };
 }
-function resetSelect() {
-        const select = document.getElementById('destinataires');
+    function resetSelectext() {
+            const select = document.getElementById('destinataires_externes');
+            Array.from(select.options).forEach(option => option.selected = false);
+        }
+    function resetSelectint() {
+        const select = document.getElementById('destinataires_internes');
         Array.from(select.options).forEach(option => option.selected = false);
     }
 </script>

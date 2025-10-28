@@ -1,4 +1,3 @@
-
 <x-app-layout>
     <div class="py-8">
         <div class="w-full px-4 sm:px-6 lg:px-8">
@@ -171,15 +170,11 @@
 </thead>
 <tbody class="bg-white divide-y divide-gray-200">
     @forelse($courriers as $courrier)
-        
-   
-
-          
         <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_arrive }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception->format('d/m/Y') }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_reception ? $courrier->date_reception->format('d/m/Y'):'Non spécifié' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->reference_bo }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement->format('d/m/Y') }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->date_enregistrement ? $courrier->date_enregistrement->format('d/m/Y'):'Non spécifié' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 @php
                     $statusClasses = [
@@ -193,21 +188,25 @@
                 @endphp
 
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClasses[$courrier->statut] ?? 'bg-gray-100 text-gray-800' }}">
-                    {{ ucfirst(str_replace('_', ' ', $courrier->statut)) }}
+                    {{ $courrier->statut==='arriver' ? ucfirst(str_replace('_', ' ',    'arrivé'))
+                        :
+                        ucfirst(str_replace('_', ' ',    $courrier->statut)) }}
                 </span>
             </td>
             
 
             <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->Nbr_piece }}</td>
            
-            <td class="px-6 py-4 max-w-xs truncate" title="{{ $courrier->objet }}">
+            <td class="px-6 py-4 max-w-xs truncate" dir='auto' title="{{ $courrier->objet }}">
                 {{ $courrier->objet }}
             </td>
             
             
-            <td class="px-6 py-4 whitespace-nowrap">{{ $courrier->expediteur->nom ?? '-' }}</td>
-            
-         
+          <td dir='auto' class="px-6 py-4 max-w-xs truncate" 
+            title="{{ $courrier->expediteur->nom ?? 'Non spécifié' }}">
+            {{ $courrier->expediteur->nom ?? 'Non spécifié' }}
+        </td>
+
             <td class="px-6 py-4 whitespace-nowrap">
                 @if($courrier->fichier_scan)
                     @php

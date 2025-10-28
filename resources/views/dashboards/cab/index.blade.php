@@ -307,8 +307,6 @@
 
     @push('scripts')
     <script type="module">
-
-
     // Backend data
     const statutData = @json($repartitionStatut);
     console.log(statutData);

@@ -43,16 +43,13 @@
                                 case 'bo':
                                     $menuItems = [
                                         ['name' => 'Nouveau Courrier', 'route' => 'courriers.create', 'icon' => 'plus'],
-                                        ['name' => 'Courriers', 'route' => 'courriers.index', 'icon' => 'inbox', 'submenu' => [
-                                            ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
-                                            ['name' => 'Départs', 'route' => 'courriers.depart'],
-                                            ['name' => 'Internes', 'route' => 'courriers.interne'],
-                                            ['name' => 'Visas', 'route' => 'courriers.visa'],
-                                            ['name' => 'Décisions', 'route' => 'courriers.decision'],
-                                        ]
-                                    ],
-                                        ['name' => 'Historique', 'route' => 'bo.history', 'icon' => 'clock'],
-                                    ];
+                                        ['name' => 'Courriers Arrives', 'route' => 'courriers.arrive', 'icon' => 'inbox'],
+                                        ['name' => 'Courriers Départ', 'route' => 'courriers.depart', 'icon' => 'inbox'],
+                                        ['name' => 'Courriers Internes', 'route' => 'courriers.interne', 'icon' => 'inbox'],
+                                        ['name' => 'Courriers Décisions', 'route' => 'courriers.decision', 'icon' => 'inbox'],
+                                        ['name' => 'Courriers Visas', 'route' => 'courriers.visa', 'icon' => 'inbox']
+                                        
+                                    ];  
                                     break;
                                 case 'cab':
                                     $menuItems = [
