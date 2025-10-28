@@ -19,7 +19,7 @@ use App\Http\Controllers\SG\SgCourrierController;
 use App\Http\Controllers\CabDashboardController;
 
     Route::get('/', function () {
-        return redirect()->route('login');
+        return view('welcome');
     });
 
 Route::middleware(['auth'])->group(function () {

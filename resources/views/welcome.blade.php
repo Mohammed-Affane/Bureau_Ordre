@@ -75,39 +75,41 @@
                                     @if(auth()->user()->hasRole('admin'))
                                         <a href="{{ url('/admin/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Admin Dashboard</a>
                                     @elseif(auth()->user()->hasRole('bo'))
-                                        <a href="{{ url('/bo/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">BO Dashboard</a>
+                                        <a href="{{ url('/courriers') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">BO Dashboard</a>
                                     @elseif(auth()->user()->hasRole('cab'))
                                         <a href="{{ url('/cab/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Cabinet</a>
                                     @elseif(auth()->user()->hasRole('sg'))
                                         <a href="{{ url('/sg/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Secrétariat Général</a>
                                     @elseif(auth()->user()->hasRole('chef_division'))
-                                        <a href="{{ url('/division/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Chef Division</a>
+                                        <a href="{{ url('division/courriers.arrive') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Chef Division</a>
                                     @elseif(auth()->user()->hasRole('dai'))
-                                        <a href="{{ url('/dai/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">DAI</a>
+                                        <a href="{{ url('/dai/courriers.arrive') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">DAI</a>
                                     @else
                                         <span class="text-sm text-blue-600">Role not assigned</span>
                                     @endif
                                 </div>
                                 
-                
-                            @else
-                                @if (Route::has('register'))
-                                    <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/>
-                                        </svg>
-                                        S'inscrire
-                                    </a>
-                                @endif
                             @endauth
                         @endif
                 <div class="flex items-center space-x-4">
-                    <a href="{{route('login')}}" class="group inline-flex items-center px-6 py-3 rounded-lg text-sm font-semibold text-indigo-600 hover:text-white border-2 border-indigo-600 hover:bg-indigo-600 transition-all duration-300 transform hover:scale-105">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                        Se connecter
-                    </a>
+                        @auth
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="group inline-flex items-center px-6 py-3 rounded-lg text-sm font-semibold text-red-600 hover:text-white border-2 border-red-600 hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M6 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L12.414 9H20a1 1 0 110 2h-7.586l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Se déconnecter
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{route('login')}}" class="group inline-flex items-center px-6 py-3 rounded-lg text-sm font-semibold text-indigo-600 hover:text-white border-2 border-indigo-600 hover:bg-indigo-600 transition-all duration-300 transform hover:scale-105">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Se connecter
+                            </a>
+                        @endauth
                     
                     {{-- <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
                         Demander l'accès

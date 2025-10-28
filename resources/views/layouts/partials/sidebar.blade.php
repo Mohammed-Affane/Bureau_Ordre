@@ -51,7 +51,6 @@
                                             ['name' => 'Décisions', 'route' => 'courriers.decision'],
                                         ]
                                     ],
-                                        ['name' => 'Historique', 'route' => 'bo.history', 'icon' => 'clock'],
                                     ];
                                     break;
                                 case 'cab':

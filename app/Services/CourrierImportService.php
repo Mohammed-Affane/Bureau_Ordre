@@ -141,13 +141,20 @@ class CourrierImportService
         }
 
         $normalizedName = trim(mb_strtolower($name));
-        $expediteur = Expediteur::whereRaw('LOWER(TRIM(nom)) = ?', [$normalizedName])->first();
+
+        // Try to find matching expediteur even if name is part of "French | Arabic"
+        $expediteur = Expediteur::whereRaw('LOWER(TRIM(nom)) = ?', [$normalizedName])
+            ->orWhereRaw('LOWER(TRIM(nom)) LIKE ?', ["%{$normalizedName}%"])
+            ->first();
 
         if (!$expediteur) {
+            // Optional: Clean capitalization for new entries
+            $cleanName = ucwords($normalizedName, " \t\r\n\f\v-");
+
             $expediteur = Expediteur::create([
-                'nom' => ucwords($normalizedName),
-                'type' => $this->determineExpediteurType($name),
-                'adresse' => null,
+                'nom' => $cleanName,
+                'type_source' => $this->determineExpediteurType($name),
+                'adresse' =>   null,
                 'telephone' => null,
                 'email' => null,
             ]);
@@ -155,6 +162,7 @@ class CourrierImportService
 
         return $expediteur->id;
     }
+
 
     private function getOrCreateEntite($name)
     {
