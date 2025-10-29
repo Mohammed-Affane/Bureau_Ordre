@@ -79,11 +79,7 @@
                                     @if(auth()->user()->hasRole('admin'))
                                         <a href="{{ url('/admin/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Admin Dashboard</a>
                                     @elseif(auth()->user()->hasRole('bo'))
-<<<<<<< HEAD
-                                        <a href="{{ url('/courriers') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">BO Dashboard</a>
-=======
                                         <a href="{{ url('/courriers.arrive') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">BO Dashboard</a>
->>>>>>> 7e83adcc57e82f8f1329296a348b78a0cd654d00
                                     @elseif(auth()->user()->hasRole('cab'))
                                         <a href="{{ url('/cab/dashboard') }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-red-500 transition">Cabinet</a>
                                     @elseif(auth()->user()->hasRole('sg'))

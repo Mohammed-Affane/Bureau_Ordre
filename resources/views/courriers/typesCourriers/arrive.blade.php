@@ -202,11 +202,7 @@
             </td>
             
             
-<<<<<<< HEAD
           <td dir='auto' class="px-6 py-4 max-w-xs truncate" 
-=======
-          <td class="px-6 py-4 w-[100px] truncate text-xs" 
->>>>>>> 79f579bb65188200a6ab2fdc5e306afbbcef960c
             title="{{ $courrier->expediteur->nom ?? 'Non spécifié' }}">
             {{ $courrier->expediteur->nom ?? 'Non spécifié' }}
         </td>
