@@ -20,15 +20,18 @@ class CabDashboardController extends Controller
         
         $courriersRecusCeMois = Courrier::whereYear('date_reception', Carbon::now()->year)
             ->whereMonth('date_reception', Carbon::now()->month)
+            ->where('type_courrier', 'arrive')
             ->whereHas('affectations', function($query) {
                 $query->where('statut_affectation', 'a_cab');
             })
             ->count();
         
-    $courriersTraites = Courrier::whereHas('affectations', function ($query) {
-    $query->whereNotNull('instruction')
-          ->where('instruction', 'like', 'Gouverneur%');
-})->count();
+        $courriersTraites = Courrier::where('type_courrier', 'arrive')
+        ->whereHas('affectations', function ($query) {
+        $query->whereNotNull('instruction')
+            ->where('instruction', 'like', 'Gouverneur%');
+            })
+            ->count();
 
 
 
@@ -46,22 +49,12 @@ class CabDashboardController extends Controller
     )
     ->join('affectations', 'courriers.id', '=', 'affectations.id_courrier')
     ->whereNotNull('affectations.instruction')
+    ->where('type_courrier', 'arrive')
     ->where('affectations.instruction', 'like', 'Gouverneur%')
-    ->groupBy(
-        'courriers.id',
-        'courriers.reference_arrive',
-        'courriers.reference_bo',
-        'courriers.date_reception',
-        'courriers.date_depart',
-        'courriers.date_enregistrement',
-        'courriers.Nbr_piece',
-        'courriers.priorite',
-        'courriers.statut'
-    )
     ->orderByDesc('courriers.created_at')
     ->limit(5)
     ->get();
-
+/* dd($topCourrierInstructs); */
 
 
         // 2. Charts Data
@@ -87,7 +80,8 @@ class CabDashboardController extends Controller
             
             $recus = Courrier::whereYear('date_reception', $date->year)
                 ->whereMonth('date_reception', $date->month)
-                ->where('statut','en_attente')
+                ->where('statut','en_cours')
+                ->where('type_courrier','arrive')
                 ->count();
             
             $traites = Courrier::whereHas('affectations.traitements', function($query) use ($date) {
