@@ -61,7 +61,7 @@
     @endpush
 
     <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div class="kpi-card primary">
             <div class="text-sm font-semibold opacity-90 mb-2">Total Courriers</div>
             <div class="text-3xl font-bold">{{ number_format($totalCourriers) }}</div>
@@ -77,19 +77,6 @@
         <div class="kpi-card success">
             <div class="text-sm font-semibold opacity-90 mb-2">Courriers Avec Instruction Gouverneur</div>
             <div class="text-3xl font-bold">{{ number_format($courriersTraites) }}</div><!-- change this to  the number pof the courrier that have an instruction  --> 
-            <div class="text-xs opacity-75 mt-2">Validés / Clôturés</div>
-        </div>
-
-        <div class="kpi-card warning">
-            <div class="text-sm font-semibold opacity-90 mb-2">Urgents en Attente</div>
-            <div class="text-3xl font-bold">{{ number_format($courriersUrgentsEnAttente) }}</div>
-            <div class="text-xs opacity-75 mt-2">Action requise</div>
-        </div>
-
-        <div class="kpi-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-            <div class="text-sm font-semibold opacity-90 mb-2">Taux de Traitement</div>
-            <div class="text-3xl font-bold">{{ $tauxTraitement }}%</div>
-            <div class="text-xs opacity-75 mt-2">Performance globale</div>
         </div>
     </div>
 
@@ -97,7 +84,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <!-- Pie Chart: Répartition par Statut -->
         <div class="chart-container">
-            <h3 class="text-lg font-semibold mb-4 text-gray-800">Répartition des Courriers par Statut</h3>
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Répartition des Courriers arrive par Statut</h3>
             <canvas id="statutChart"></canvas>
         </div>
 

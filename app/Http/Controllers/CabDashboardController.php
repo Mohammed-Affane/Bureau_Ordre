@@ -62,13 +62,7 @@ class CabDashboardController extends Controller
     ->limit(5)
     ->get();
 
-        $courriersUrgentsEnAttente = Courrier::where('statut', 'en_attente')
-            ->where('priorite', 'urgent')
-            ->count();
-        
-        $tauxTraitement = $totalCourriers > 0 
-            ? round(($courriersTraites / $totalCourriers) * 100, 2) 
-            : 0;
+
 
         // 2. Charts Data
         
@@ -170,8 +164,6 @@ class CabDashboardController extends Controller
             'totalCourriers',
             'courriersRecusCeMois',
             'courriersTraites',
-            'courriersUrgentsEnAttente',
-            'tauxTraitement',
             'repartitionStatut',
             'courriersParType',
             'evolutionMensuelle',
