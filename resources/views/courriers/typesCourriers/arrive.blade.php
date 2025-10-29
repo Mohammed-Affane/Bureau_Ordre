@@ -7,7 +7,7 @@
                         <div>
 
                             
-                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrive</h1>
+                            <h1 class="text-2xl font-semibold text-gray-900">Liste des courriers Arrivé</h1>
                             <p class="text-sm text-gray-500 mt-1">Tous les courriers enregistrés dans le bureau d'ordre</p>
                         </div>
                          {{-- Export Dropdown --}}
@@ -156,7 +156,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-black-900 uppercase tracking-wider">Numero Courrier</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Courrier</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Numero BO</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Arrive</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Arrivé</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Statut</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Nbr Pièces</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Objet</th>

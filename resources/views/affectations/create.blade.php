@@ -195,7 +195,7 @@
                             @if($showCabInstruction)
                                 <div>
                                     <label for="instruction_cab" class="block text-sm font-extrabold text-slate-700 uppercase tracking-wide mb-2">
-                                        Instruction CAB
+                                        Instruction Gouverneur
                                     </label>
                                     <textarea name="instruction_cab" id="instruction_cab" rows="3"
                                               class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-0 transition-all duration-200 hover:border-gray-300 shadow-sm resize-none"
