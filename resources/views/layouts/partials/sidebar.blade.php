@@ -43,8 +43,8 @@
                                 case 'bo':
                                     $menuItems = [
                                         ['name' => 'Nouveau Courrier', 'route' => 'courriers.create', 'icon' => 'plus'],
-                                        ['name' => 'Courriers Arrives', 'route' => 'courriers.arrive', 'icon' => 'inbox'],
-                                        ['name' => 'Courriers Départ', 'route' => 'courriers.depart', 'icon' => 'inbox'],
+                                        ['name' => 'Courriers Arrivés', 'route' => 'courriers.arrive', 'icon' => 'inbox'],
+                                        ['name' => 'Courriers Départs', 'route' => 'courriers.depart', 'icon' => 'inbox'],
                                         ['name' => 'Courriers Internes', 'route' => 'courriers.interne', 'icon' => 'inbox'],
                                         ['name' => 'Courriers Décisions', 'route' => 'courriers.decision', 'icon' => 'inbox'],
                                         ['name' => 'Courriers Visas', 'route' => 'courriers.visa', 'icon' => 'inbox']

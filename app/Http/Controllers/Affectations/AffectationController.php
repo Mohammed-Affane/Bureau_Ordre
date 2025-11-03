@@ -29,12 +29,14 @@ class AffectationController extends Controller
         $assignableRoles = $this->getAssignableRoles($currentUserRole);
         $users = User::whereHas('roles', function($q) use ($assignableRoles) {
             $q->whereIn('name', $assignableRoles);
-        })->get();
+            
+        })->where('name', 'NOT LIKE', '%/%')->get();
 
         // Determine which instruction field to show based on current user's role
         $showCabInstruction = $currentUserRole === 'cab';
         $showSgInstruction = $currentUserRole === 'sg';
 
+        
         return view('affectations.create', compact(
             'courrier',
             'users',
