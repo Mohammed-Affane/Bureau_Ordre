@@ -29,10 +29,16 @@ class UnifiedUserAndEntiteSeeder extends Seeder
 
         // Create BO user
         $boUser = User::firstOrCreate(
-            ['email' => 'bo@example.com'],
+            ['email' => 'user_bo@example.com'],
             ['name' => 'BO User', 'password' => Hash::make('password')]
         );
         $boUser->assignRole($boRole);
+
+        $boUser2 = User::firstOrCreate(
+            ['email' => 'halima_bo@gmail.com'],
+            ['name' => 'BO User 2', 'password' => Hash::make('password')]
+        );
+        $boUser2->assignRole($boRole);
 
         // Create CABINET
         $cabinetUser = User::firstOrCreate(
