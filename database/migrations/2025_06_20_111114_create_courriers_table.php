@@ -16,7 +16,7 @@ return new class extends Migration
 
             // Références (en integers si c’est bien ce que tu veux)
             $table->string('reference_arrive', 50)->nullable()->index(); // Allow alphanumeric reference numbers
-            $table->unsignedBigInteger('reference_bo')->nullable()->index();
+            $table->string('reference_bo',50)->nullable()->index();
             $table->unsignedBigInteger('reference_visa')->nullable()->index();
             $table->unsignedBigInteger('reference_dec')->nullable()->index();
             $table->unsignedBigInteger('reference_depart')->nullable()->index();

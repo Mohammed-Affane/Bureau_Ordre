@@ -61,7 +61,7 @@
     @endpush
 
     <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div class="kpi-card primary">
             <div class="text-sm font-semibold opacity-90 mb-2">Total Courriers</div>
             <div class="text-3xl font-bold">{{ number_format($totalCourriers) }}</div>
@@ -69,27 +69,14 @@
         </div>
 
         <div class="kpi-card info">
-            <div class="text-sm font-semibold opacity-90 mb-2">Reçus ce Mois</div>
+            <div class="text-sm font-semibold opacity-90 mb-2">Courriers Arrives Reçus ce Mois</div>
             <div class="text-3xl font-bold">{{ number_format($courriersRecusCeMois) }}</div>
             <div class="text-xs opacity-75 mt-2">{{ Carbon\Carbon::now()->translatedFormat('F Y') }}</div>
         </div>
 
         <div class="kpi-card success">
-            <div class="text-sm font-semibold opacity-90 mb-2">Courriers Avec Instruction Gouverneur</div>
+            <div class="text-sm font-semibold opacity-90 mb-2">Courriers Arrives Avec Instruction Gouverneur</div>
             <div class="text-3xl font-bold">{{ number_format($courriersTraites) }}</div><!-- change this to  the number pof the courrier that have an instruction  --> 
-            <div class="text-xs opacity-75 mt-2">Validés / Clôturés</div>
-        </div>
-
-        <div class="kpi-card warning">
-            <div class="text-sm font-semibold opacity-90 mb-2">Urgents en Attente</div>
-            <div class="text-3xl font-bold">{{ number_format($courriersUrgentsEnAttente) }}</div>
-            <div class="text-xs opacity-75 mt-2">Action requise</div>
-        </div>
-
-        <div class="kpi-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-            <div class="text-sm font-semibold opacity-90 mb-2">Taux de Traitement</div>
-            <div class="text-3xl font-bold">{{ $tauxTraitement }}%</div>
-            <div class="text-xs opacity-75 mt-2">Performance globale</div>
         </div>
     </div>
 
@@ -97,7 +84,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <!-- Pie Chart: Répartition par Statut -->
         <div class="chart-container">
-            <h3 class="text-lg font-semibold mb-4 text-gray-800">Répartition des Courriers par Statut</h3>
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Répartition des Courriers arrive par Statut</h3>
             <canvas id="statutChart"></canvas>
         </div>
 
@@ -109,7 +96,7 @@
 
         <!-- Line Chart: Évolution Mensuelle -->
         <div class="chart-container" style="height: 450px;">
-            <h3 class="text-lg font-semibold mb-4 text-gray-800">Évolution Mensuelle (12 mois)</h3>
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Évolution Mensuelle Des Courriers Arrive (12 mois)</h3>
             <canvas id="evolutionChart"></canvas>
         </div>
 
@@ -165,7 +152,7 @@
         <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Courriers arrives Avec Instruction</h3>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-50">d
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence BO</th>

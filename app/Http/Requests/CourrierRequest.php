@@ -45,7 +45,7 @@ class CourrierRequest extends FormRequest
                         ->where(function ($query) {
                             $query->whereYear('date_enregistrement', now()->year);
                                 })],
-            'reference_bo' => ['nullable', 'integer', 'min:1',
+            'reference_bo' => ['nullable', 'string', 'max:50',
                 Rule::unique('courriers', 'reference_bo')
                         ->ignore($this->route('courrier'))
                         ->where(function($query){

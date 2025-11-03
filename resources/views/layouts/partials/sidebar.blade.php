@@ -55,7 +55,7 @@
                                     $menuItems = [
                                         ['name' => 'Dashboard', 'route' => 'cab.dashboard', 'icon' => 'home'],
                                         ['name'=>'Mes Courrier internes','route'=>'cab.courriers.interne','icon'=>'inbox'],
-                                        ['name'=>'Mes Courrier arrives','route'=>'cab.courriers.arrive','icon'=>'inbox'],
+                                        ['name'=>'Mes Courrier arrivés','route'=>'cab.courriers.arrive','icon'=>'inbox'],
                                         ['name'=>'Courriers','route'=>'courriers.index','icon'=>'inbox','submenu'=>[
                                             ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
                                             ['name' => 'Départs', 'route' => 'courriers.depart'],
@@ -75,7 +75,7 @@
                                     $menuItems = [
                                         ['name' => 'Dashboard', 'route' => 'sg.dashboard', 'icon' => 'home'],
                                         ['name'=>'Mes Courrier internes','route'=>'sg.courriers.interne','icon'=>'inbox'],
-                                        ['name'=>'Mes Courrier arrives','route'=>'sg.courriers.arrive','icon'=>'inbox'],
+                                        ['name'=>'Mes Courrier arrivés','route'=>'sg.courriers.arrive','icon'=>'inbox'],
                                         ['name'=>'Courriers','route'=>'courriers.index','icon'=>'inbox','submenu'=>[
                                             ['name' => 'Arrivés', 'route' => 'courriers.arrive'],
                                             ['name' => 'Départs', 'route' => 'courriers.depart'],
@@ -91,7 +91,7 @@
                                 default: // Chef de division
                                     $menuItems = [
                                         ['name'=>'Mes Courrier internes','route'=>'division.courriers.interne','icon'=>'inbox'],
-                                        ['name'=>'Mes Courrier arrives','route'=>'division.courriers.arrive','icon'=>'inbox'],
+                                        ['name'=>'Mes Courrier arrivés','route'=>'division.courriers.arrive','icon'=>'inbox'],
                                     ];
                             }
                         @endphp

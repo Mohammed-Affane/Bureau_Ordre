@@ -148,7 +148,7 @@
                     @endif
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-300">
                                <tr>
         <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Référence Départ</th>
         <th class="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Date Départ</th>
@@ -190,11 +190,7 @@
                 {{ $courrier->objet }}
             </td>
           
-<<<<<<< HEAD
             <td class="px-6 py-4 max-w-xs truncate" dir='auto'>{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
-=======
-            <td class="px-6 py-4 max-w-xs truncate">{{ $courrier->entiteExpediteur->nom ?? '-' }}</td>
->>>>>>> 79f579bb65188200a6ab2fdc5e306afbbcef960c
 
     <td class="px-6 py-4 whitespace-nowrap">
     @if($courrier->fichier_scan)

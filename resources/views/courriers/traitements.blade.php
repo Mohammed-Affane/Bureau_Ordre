@@ -18,11 +18,11 @@
                             </tr>
                             <tr>
                                 <th class="px-4 py-2 text-sm font-medium text-gray-600">Expéditeur</th>
-                                <td class="px-4 py-2 text-gray-700">{{ $affectation->courrier->expediteur->name ?? '-' }}</td>
+                                <td class="px-4 py-2 text-gray-700">{{ $affectation->courrier->expediteur->nom ?? '-' }}</td>
                             </tr>
                             <tr class="bg-gray-50">
                                 <th class="px-4 py-2 text-sm font-medium text-gray-600">Date d'arrivée</th>
-                                <td class="px-4 py-2 text-gray-700">{{ $affectation->courrier->date_arrive ?? '-' }}</td>
+                                <td class="px-4 py-2 text-gray-700"> {{ $affectation->courrier->date_reception ? $affectation->courrier->date_reception->format('d/m/Y') : '-' }} </td>
                             </tr>
                             <tr>
                                 <th class="px-4 py-2 text-sm font-medium text-gray-600">Priorité</th>

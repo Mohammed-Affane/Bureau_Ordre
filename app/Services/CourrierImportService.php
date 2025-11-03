@@ -87,7 +87,6 @@ class CourrierImportService
         return !empty($cleaned) ? (int)$cleaned : null;
     }
 
-<<<<<<< HEAD
   
     private function parseDate($excelDate) {
          if (empty($excelDate)) {
@@ -106,54 +105,6 @@ class CourrierImportService
        if ($dateObj->format('Y') > (date('Y') + 1))
          { Date::setExcelCalendar(Date::CALENDAR_MAC_1904); $dateObj = Date::excelToDateTimeObject($excelDate); } return $dateObj->format('Y-m-d'); } // If string, parse normally 
        $datePart = explode(' ', trim($excelDate))[0]; $formats = ['Y-m-d', 'd/m/Y', 'm/d/Y', 'd-m-Y', 'm-d-Y']; foreach ($formats as $format) { $date = \DateTime::createFromFormat($format, $datePart); if ($date !== false) { return $date->format('Y-m-d'); } } $timestamp = strtotime($excelDate); return $timestamp ? date('Y-m-d', $timestamp) : null; } catch (\Exception $e) { \Log::warning("Failed to parse date: {$excelDate}"); return null; } }
-=======
-   private function parseDate($excelDate)
-    {
-        if (empty($excelDate)) {
-            return null;
-        }
-
-        try {
-            // If already a DateTime
-            if ($excelDate instanceof \DateTime) {
-                return $excelDate->format('Y-m-d');
-            }
-
-            // If numeric (Excel serial)
-            if (is_numeric($excelDate)) {
-                // Try Windows 1900 first
-                Date::setExcelCalendar(Date::CALENDAR_WINDOWS_1900);
-                $dateObj = Date::excelToDateTimeObject($excelDate);
-                
-                // If year is unreasonable (too far in future), try Mac 1904
-                if ($dateObj->format('Y') > (date('Y') + 1)) {
-                    Date::setExcelCalendar(Date::CALENDAR_MAC_1904);
-                    $dateObj = Date::excelToDateTimeObject($excelDate);
-                }
-                
-                return $dateObj->format('Y-m-d');
-            }
-
-            // If string, parse normally
-            $datePart = explode(' ', trim($excelDate))[0];
-            $formats = ['Y-m-d', 'd/m/Y', 'm/d/Y', 'd-m-Y', 'm-d-Y'];
-
-            foreach ($formats as $format) {
-                $date = \DateTime::createFromFormat($format, $datePart);
-                if ($date !== false) {
-                    return $date->format('Y-m-d');
-                }
-            }
-
-            $timestamp = strtotime($excelDate);
-            return $timestamp ? date('Y-m-d', $timestamp) : null;
-
-        } catch (\Exception $e) {
-            \Log::warning("Failed to parse date: {$excelDate}");
-            return null;
-        }
-    }
->>>>>>> 79f579bb65188200a6ab2fdc5e306afbbcef960c
 
     private function getOrCreateExpediteur($name)
     {
@@ -162,7 +113,6 @@ class CourrierImportService
         }
 
         $normalizedName = trim(mb_strtolower($name));
-<<<<<<< HEAD
         $expediteur = Expediteur::whereRaw('LOWER(TRIM(nom)) = ?', [$normalizedName])
         ->OrWhereRaw('LOWER(TRIM(nom)) LIKE ?', ["%{$normalizedName}%"])->first();
 
@@ -171,14 +121,6 @@ class CourrierImportService
             $expediteur = Expediteur::create([
                 'nom' => $clearName,
                 'type_source' => $this->determineExpediteurType($name),
-=======
-        $expediteur = Expediteur::whereRaw('LOWER(TRIM(nom)) = ?', [$normalizedName])->first();
-
-        if (!$expediteur) {
-            $expediteur = Expediteur::create([
-                'nom' => ucwords($normalizedName),
-                'type' => $this->determineExpediteurType($name),
->>>>>>> 79f579bb65188200a6ab2fdc5e306afbbcef960c
                 'adresse' => null,
                 'telephone' => null,
                 'email' => null,
@@ -187,6 +129,7 @@ class CourrierImportService
 
         return $expediteur->id;
     }
+
 
     private function getOrCreateEntite($name)
     {
@@ -210,10 +153,7 @@ class CourrierImportService
     private function determineExpediteurType($name)
     {
         $name = strtolower($name);
-<<<<<<< HEAD
         
-=======
->>>>>>> 79f579bb65188200a6ab2fdc5e306afbbcef960c
         return $name === 'مواطن' ? 'citoyen' : 'administration';
     }
 }

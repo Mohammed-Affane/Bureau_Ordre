@@ -7,117 +7,169 @@ use App\Models\Affectation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Expediteur;
 
 class SgDashboardController extends Controller
 {
-    public function index()
+   public function index()
     {
-        // Statistiques des courriers pour le SG
-        $stats = [
-            'total_courriers' => Courrier::whereHas('affectations', function($query) {
-                $query->where('statut_affectation', 'a_sg');
-            })->count(),
-            'courriers_arrive' => Courrier::where('type_courrier', 'arrive')
-                ->whereHas('affectations', function($query) {
-                    $query->where('statut_affectation', 'a_sg');
-                })->count(),
-            'courriers_depart' => Courrier::where('type_courrier', 'depart')
-                ->whereHas('affectations', function($query) {
-                    $query->where('statut_affectation', 'a_sg');
-                })->count(),
-            'courriers_interne' => Courrier::where('type_courrier', 'interne')
-                ->whereHas('affectations', function($query) {
-                    $query->where('statut_affectation', 'a_sg');
-                })->count(),
-            'en_attente' => Courrier::where('statut', 'en_attente')
-                ->whereHas('affectations', function($query) {
-                    $query->where('statut_affectation', 'a_sg');
-                })->count(),
-            'en_traitement' => Courrier::where('statut', 'en_traitement')
-                ->whereHas('affectations', function($query) {
-                    $query->where('statut_affectation', 'a_sg');
-                })->count(),
-            'retard' => Courrier::whereDate('delais', '<', Carbon::now())
-                ->whereNotIn('statut', ['cloture', 'archiver'])
-                ->whereHas('affectations', function($query) {
-                    $query->where('statut_affectation', 'a_sg');
-                })->count(),
-        ];
-
-        // Statistiques par priorité
-        $prioritesStats = Courrier::select('priorite', DB::raw('count(*) as total'))
+        // 1. KPI Cards
+        $totalCourriers = Courrier::count();
+        
+        $courriersRecusCeMois = Courrier::whereYear('date_reception', Carbon::now()->year)
+            ->whereMonth('date_reception', Carbon::now()->month)
             ->whereHas('affectations', function($query) {
-                $query->where('statut_affectation', 'a_sg');
+                $query->where('statut_affectation', 'a_cab');
             })
+            ->count();
+        
+    $courriersTraites = Courrier::whereHas('affectations', function ($query) {
+    $query->whereNotNull('instruction')
+          ->where('instruction', 'like', 'Gouverneur%');
+})->count();
+
+
+
+ // Top 5 Courriers INSTRUCTS
+       $topCourrierInstructs = Courrier::select(
+        'courriers.id',
+        'courriers.reference_arrive',
+        'courriers.reference_bo',
+        'courriers.date_reception',
+        'courriers.date_enregistrement',
+        'courriers.Nbr_piece',
+        'courriers.priorite',
+        'courriers.statut',
+        
+    )
+    ->join('affectations', 'courriers.id', '=', 'affectations.id_courrier')
+    ->whereNotNull('affectations.instruction')
+    ->where('affectations.instruction', 'like', 'Gouverneur%')
+    ->groupBy(
+        'courriers.id',
+        'courriers.reference_arrive',
+        'courriers.reference_bo',
+        'courriers.date_reception',
+        'courriers.date_depart',
+        'courriers.date_enregistrement',
+        'courriers.Nbr_piece',
+        'courriers.priorite',
+        'courriers.statut'
+    )
+    ->orderByDesc('courriers.created_at')
+    ->limit(5)
+    ->get();
+
+
+
+        // 2. Charts Data
+        
+        // Pie Chart: Répartition par statut
+        $repartitionStatut = Courrier::select('statut', DB::raw('count(*) as total'))
+            ->groupBy('statut')
+            ->pluck('total', 'statut')
+            ->toArray();
+
+        // Bar Chart: Courriers par type
+        $courriersParType = Courrier::select('type_courrier', DB::raw('count(*) as total'))
+            ->groupBy('type_courrier')
+            ->pluck('total', 'type_courrier')
+            ->toArray();
+        
+        // Line Chart: Évolution mensuelle (12 derniers mois)
+        $evolutionMensuelle = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $month = $date->format('Y-m');
+            $monthLabel = $date->translatedFormat('M Y');
+            
+            $recus = Courrier::whereYear('date_reception', $date->year)
+                ->whereMonth('date_reception', $date->month)
+                ->where('statut','en_attente')
+                ->count();
+            
+            $traites = Courrier::whereHas('affectations.traitements', function($query) use ($date) {
+                    $query->where('statut','valide');
+                })
+                ->whereYear('date_reception', $date->year)
+                ->whereMonth('date_reception', $date->month)
+                ->where('statut','cloture')
+                ->count();
+               
+
+            $evolutionMensuelle[] = [
+                'month' => $monthLabel,
+                'recus' => $recus,
+                'traites' => $traites
+            ];
+        }
+        
+        // Stacked Bar: Priorité des courriers
+        $prioriteCourriers = Courrier::select('priorite', DB::raw('count(*) as total'))
             ->groupBy('priorite')
-            ->get()
             ->pluck('total', 'priorite')
             ->toArray();
 
-        // Courriers récents
-        $recentCourriers = Courrier::with(['expediteur', 'entiteExpediteur'])
-            ->whereHas('affectations', function($query) {
-                $query->where('statut_affectation', 'a_sg');
-            })
-            ->orderBy('created_at', 'desc')
-            ->take(10)
+        // 3. Tables
+        
+        
+        // Top 5 Expéditeurs
+        $topExpediteurs = Expediteur::select(
+                'expediteurs.id',
+                'expediteurs.nom',
+                'expediteurs.type_source',
+                'expediteurs.CIN',
+                'expediteurs.adresse',
+                'expediteurs.telephone',
+                'expediteurs.created_at',
+                'expediteurs.updated_at',
+                DB::raw('count(courriers.id) as total_courriers')
+            )
+            ->join('courriers', 'courriers.id_expediteur', '=', 'expediteurs.id')
+            ->groupBy(
+                'expediteurs.id',
+                'expediteurs.nom',
+                'expediteurs.type_source',
+                'expediteurs.CIN',
+                'expediteurs.adresse',
+                'expediteurs.telephone',
+                'expediteurs.created_at',
+                'expediteurs.updated_at'
+            )
+            ->orderByDesc('total_courriers')
+            ->limit(5)
             ->get();
+        
 
-        // Statistiques mensuelles pour graphiques
-        $monthlyStats = $this->getMonthlyStats();
+        // 4. Alertes
+        
+        // Courriers with only 7 days left before deadline (excluding cloturé & archivé)
+        $alertesUrgents = Courrier::whereNotIn('statut', ['cloturé', 'archivé'])
+            ->where('type_courrier', 'arrive')
+            ->where('priorite', 'urgent')
+            ->whereDate('delais', '<=', Carbon::now()->addDays(7)->toDateString())
+            ->with('expediteur')
+            ->get();
+        
+        // Courriers with only 20 days left before deadline (excluding cloturé & archivé)
+        $alertesRetard = Courrier::whereNotIn('statut', ['cloturé', 'archivé'])
+            ->where('type_courrier', 'arrive')
+            ->whereDate('delais', '=', Carbon::now()->addDays(20)->toDateString())
+            ->with('expediteur')
+            ->get();
 
         return view('dashboards.sg.index', compact(
-            'stats', 
-            'prioritesStats', 
-            'recentCourriers', 
-            'monthlyStats'
+            'totalCourriers',
+            'courriersRecusCeMois',
+            'courriersTraites',
+            'repartitionStatut',
+            'courriersParType',
+            'evolutionMensuelle',
+            'prioriteCourriers',
+            'topExpediteurs',
+            'alertesUrgents',
+            'alertesRetard',
+            'topCourrierInstructs'
         ));
-    }
-
-    private function getMonthlyStats()
-    {
-        $startDate = Carbon::now()->subMonths(5)->startOfMonth();
-        $endDate = Carbon::now()->endOfMonth();
-
-        $monthlyData = Courrier::select(
-                DB::raw('YEAR(courriers.created_at) as year'),
-                DB::raw('MONTH(courriers.created_at) as month'),
-                DB::raw('COUNT(*) as total'),
-                DB::raw('SUM(CASE WHEN courriers.type_courrier = "arrive" THEN 1 ELSE 0 END) as arrive'),
-                DB::raw('SUM(CASE WHEN courriers.type_courrier = "depart" THEN 1 ELSE 0 END) as depart'),
-                DB::raw('SUM(CASE WHEN courriers.type_courrier = "interne" THEN 1 ELSE 0 END) as interne')
-            )
-            ->join('affectations', 'courriers.id', '=', 'affectations.id_courrier')
-            ->where('affectations.statut_affectation', 'a_sg')
-            ->where('courriers.created_at', '>=', $startDate)
-            ->where('courriers.created_at', '<=', $endDate)
-            ->groupBy('year', 'month')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->get();
-
-        $formattedData = [];
-        $currentDate = $startDate->copy();
-        
-        while ($currentDate <= $endDate) {
-            $year = $currentDate->year;
-            $month = $currentDate->month;
-            $monthName = $currentDate->format('M Y');
-            
-            $monthData = $monthlyData->first(function ($item) use ($year, $month) {
-                return $item->year == $year && $item->month == $month;
-            });
-            
-            $formattedData[$monthName] = [
-                'total' => $monthData ? $monthData->total : 0,
-                'arrive' => $monthData ? $monthData->arrive : 0,
-                'depart' => $monthData ? $monthData->depart : 0,
-                'interne' => $monthData ? $monthData->interne : 0,
-            ];
-            
-            $currentDate->addMonth();
-        }
-        
-        return $formattedData;
     }
 }
