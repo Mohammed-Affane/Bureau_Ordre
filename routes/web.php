@@ -96,6 +96,9 @@ Route::middleware(['auth', 'role:cab'])->prefix('cab')->name('cab.')->group(func
     // Filtres et données supplémentaires (optionnelles)
     Route::get('filter-data', [CabDashboardController::class, 'getFilteredData'])->name('filter-data');
     Route::get('department-details/{department}', [CabDashboardController::class, 'getDepartmentDetails'])->name('department-details');
+
+    // Traitements For cab sidebar
+    Route::get('traitements.arrive', [SgCourrierController::class, 'recusTraitement'])->name('traitements.arrive');
 });
 
 // DAI Routes
