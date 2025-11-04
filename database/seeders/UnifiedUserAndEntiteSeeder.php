@@ -33,10 +33,10 @@ class UnifiedUserAndEntiteSeeder extends Seeder
             ['name' => 'BO User', 'password' => Hash::make('password')]
         );
         $boUser->assignRole($boRole);
-
+        // Create second BO user for Ministere de l'Interieur Courriers
         $boUser2 = User::firstOrCreate(
-            ['email' => 'halima_bo@gmail.com'],
-            ['name' => 'BO User 2', 'password' => Hash::make('password')]
+            ['email' => 'halimaBo_cab@gmail.com'],
+            ['name' => 'Halima', 'password' => Hash::make('password')]
         );
         $boUser2->assignRole($boRole);
 
