@@ -6,28 +6,41 @@
         if (auth()->check()) {
             $email = auth()->user()->email ?? '';
             // Special exact mapping requested by the user
-            if ($email === 'halima_bo@gmail.com') {
+            if ($email === 'halimaBo_cab@gmail.com') {
                 $prefix = 'cab\\';
             } elseif (str_contains($email, '_bo')) {
                 $prefix = 'bo\\';
-            } elseif (str_contains($email, '_sj')) {
-                $prefix = 'sj\\';
+            } elseif (str_contains($email, '_sjc')) {
+                $prefix = 'sjc\\';
+            }elseif(str_contains($email, '_trans')){
+                $prefix = 'trans\\';
+            }elseif (str_contains($email,'_indh')) {
+                $prefix = 'indh\\';
+            }elseif(str_contains($email,'_dai')) {
+                $prefix = 'dai\\';
             }
         }
     @endphp
     <form method="POST" action="{{ route('courriers.store') }}" enctype="multipart/form-data" x-data="{ type: '{{ old('type_courrier', '') }}', showNewSenderForm: false, updateType(e) { this.type = e.target.value; } }">
         @csrf
         <!-- Type de courrier -->
+        @php
+            $currentEmail = auth()->check() ? (auth()->user()->email ?? '') : '';
+            $allowBoSelect = str_contains($currentEmail, '_bo');
+        @endphp
         <div class="form-group">
             <label for="type_courrier" class="block font-medium text-gray-700 mb-1">Type de courrier</label>
             <select name="type_courrier" id="type_courrier" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-on:change="updateType" x-model="type">
                 <option value="">Choisir...</option>
                 <option value="arrive" :selected="type === 'arrive'">Arrivé</option>
-                <option value="depart" :selected="type === 'depart'">Départ</option>
-                <option value="visa" :selected="type === 'visa'">Visa</option>
-                <option value="decision" :selected="type === 'decision'">decision</option>
-                <option value="interne" :selected="type === 'interne'">interne</option>
+                <option value="depart" :selected="type === 'depart'" @if(!$allowBoSelect) disabled @endif>Départ</option>
+                <option value="visa" :selected="type === 'visa'" @if(!$allowBoSelect) disabled @endif>Visa</option>
+                <option value="decision" :selected="type === 'decision'" @if(!$allowBoSelect) disabled @endif>decision</option>
+                <option value="interne" :selected="type === 'interne'" @if(!$allowBoSelect) disabled @endif>interne</option>
             </select>
+            @if(!$allowBoSelect)
+                <p class="text-xs text-gray-500 mt-1">Votre compte n'autorise que le type « Arrivé ».</p>
+            @endif
             @error('type_courrier')
                 <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
