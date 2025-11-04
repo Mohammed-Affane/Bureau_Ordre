@@ -63,6 +63,7 @@
                                             ['name' => 'Visas', 'route' => 'courriers.visa'],
                                             ['name' => 'Décisions', 'route' => 'courriers.decision'],
                                         ]],
+                                        ['name'=>'Traitements','route'=>'cab.traitements.arrive','icon'=>'inbox'],
                                     ];
                                     break;
                                 case 'dai':
