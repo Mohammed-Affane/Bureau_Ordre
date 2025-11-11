@@ -96,7 +96,6 @@ public function store(CourrierRequest $request): RedirectResponse
         ];
 
         $courrier = Courrier::create($courrierData);
-
         // 4. Handle all recipients (internal + external + manual)
         $allDestinataireIds = [];
 
@@ -148,9 +147,15 @@ public function store(CourrierRequest $request): RedirectResponse
 
         // ✅ Attach all destinataires at once (avoid duplicates)
         $courrier->courrierDestinatairePivot()->syncWithoutDetaching(array_unique($allDestinataireIds));
-
+       
         DB::commit();
 
+        $cabinet = User::role('cab')->first();
+        /* dd($cabinet); */
+        $cabinet->notify(new \App\Notifications\NewCourrierNotification($courrier));
+    
+
+/*         dd($cabinet->notify(new \App\Notifications\NewCourrierNotification($courrier))); */
         return redirect()->route("courriers.{$request->type_courrier}")
                ->with('success', 'Courrier créé avec succès.');
 

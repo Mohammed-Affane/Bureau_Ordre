@@ -18,6 +18,10 @@ use App\Http\Controllers\CAB\CabCourrierController;
 use App\Http\Controllers\SG\SgCourrierController;
 use App\Http\Controllers\CabDashboardController;
 
+//test notification
+use App\Notifications\NewCourrierNotification;
+use App\Models\Courrier;
+
     Route::get('/', function () {
         return view('welcome');
     });
@@ -130,5 +134,34 @@ Route::middleware(['auth', 'role:chef_division'])->prefix('division')->name('div
     Route::post('/affectations/{affectation}/traiterstore', [DivisionCourrierController::class, 'storeTraitement'])
          ->name('affectations.traitement.store');
 });
+
+// Test Notification Routes
+
+Route::get('/test-notification', function () {
+    $user = auth()->user();
+    
+    // Get or create a test courrier
+    $courrier = Courrier::first() ?? Courrier::create([
+        'reference' => 'TEST-' . rand(1000, 9999),
+        'user_id' => $user->id,
+        // Add other required fields
+    ]);
+    
+    // Send notification
+    $user->notify(new NewCourrierNotification($courrier));
+    
+    return 'Notification sent! Check your dashboard.';
+})->middleware('auth');
+
+
+Route::get('/user/notifications', function () {
+    return auth()->user()->notifications->map(function($n) {
+        return [
+            'id' => $n->id,
+            'message' => $n->data['message'] ?? '',
+            'courrier_id' => $n->data['courrier_id'] ?? '',
+        ];
+    });
+})->middleware('auth');
 
 require __DIR__.'/auth.php';
