@@ -7,7 +7,20 @@
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900">Détails du courrier</h1>
                     <div class="flex items-center mt-2">
-                        <p class="text-gray-600 mr-4">Référence: {{ $courrier->reference_arrive ?? 'N/A' }}</p>
+                                                <p class="text-gray-600 mr-4">
+                            Référence:
+                            {{
+                                match($courrier->type_courrier) {
+                                    'arrive' => $courrier->reference_arrive ?? '',
+                                    'depart' => $courrier->reference_depart ?? '',
+                                    'interne' => $courrier->reference_depart ?? '',
+                                    'visa' => $courrier->reference_visa ?? '',
+                                    'decision' => $courrier->reference_dec ?? '',
+                                    default => '',
+                                }
+                            }}
+                        </p>
+
                         <span class="px-3 py-1 rounded-full text-xs font-medium 
                             {{ $courrier->type_courrier === 'arrive' ? 'bg-blue-100 text-blue-800' : 
                                ($courrier->type_courrier === 'depart' ? 'bg-green-100 text-green-800' : 
