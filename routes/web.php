@@ -28,18 +28,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('courriers.store',[CourrierController::class,'store'])->name('courriers.store')->middleware('role:bo'); 
     
 //-------affectation route 
-
     Route::get('/courriers/{courrier}/destinataires', [CourrierController::class, 'showDestinataires'])
     ->name('courriers.destinataires');
 
     Route::get('/courriers/{courrier}/affecte', [CourrierController::class, 'showAffectations'])
     ->name('courriers.affecte');
 
-    Route::get('courriers.arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive')->middleware('role:bo|cab|sg');
-    Route::get('courriers.depart', [TypeCourrierController::class, 'courrierDepart'])->name('courriers.depart')->middleware('role:bo|cab|sg');
-    Route::get('courriers.interne', [TypeCourrierController::class, 'courrierInterne'])->name('courriers.interne')->middleware('role:bo|cab|sg');
-    Route::get('courriers.visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa')->middleware('role:bo|cab|sg');
-    Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision')->middleware('role:bo|cab|sg');
+    Route::get('courriers.arrive', [TypeCourrierController::class, 'courrierArrivee'])->name('courriers.arrive')->middleware('role:bo|cab|sg|admin');
+    Route::get('courriers.depart', [TypeCourrierController::class, 'courrierDepart'])->name('courriers.depart')->middleware('role:bo|cab|sg|admin');
+    Route::get('courriers.interne', [TypeCourrierController::class, 'courrierInterne'])->name('courriers.interne')->middleware('role:bo|cab|sg|admin');
+    Route::get('courriers.visa', [TypeCourrierController::class, 'courrierVisa'])->name('courriers.visa')->middleware('role:bo|cab|sg|admin');
+    Route::get('courriers.decision', [TypeCourrierController::class, 'courrierDecision'])->name('courriers.decision')->middleware('role:bo|cab|sg|admin');
     Route::get('courriers.search', [TypeCourrierController::class, 'searchCourrier'])->name('courriers.search');
 
     Route::get('/courriers/{courrier}/affectations', [AffectationController::class, 'create'])->name('affectations.create');

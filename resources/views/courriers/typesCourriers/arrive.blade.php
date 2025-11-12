@@ -201,7 +201,7 @@
                 {{ $courrier->objet }}
             </td>
             
-
+            
           <td dir='auto' class="px-6 py-4 max-w-xs truncate" 
             title="{{ $courrier->expediteur->nom ?? 'Non spécifié' }}">
             {{ $courrier->expediteur->nom ?? 'Non spécifié' }}

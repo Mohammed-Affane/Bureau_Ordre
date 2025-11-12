@@ -2,6 +2,21 @@
 
 <x-app-layout>
     <h2 class="text-2xl font-bold text-gray-900 mb-6">Créer un nouveau courrier</h2>
+    {{-- Global error and flash display --}}
+    @if(session('error'))
+        <div class="mb-4 rounded bg-red-100 text-red-800 px-4 py-2">
+            {{ session('error') }}
+        </div>
+    @endif
+    @if($errors->any())
+        <div class="mb-4 rounded bg-yellow-100 text-yellow-800 px-4 py-2">
+            <ul class="list-disc list-inside">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     @php
         // Determine prefix based on user's email (simple, easy to adjust)
         $prefix = '';
@@ -122,6 +137,9 @@
         @endforeach
 
     </select>
+    @error('destinataires')
+        <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+    @enderror
 
     <div class="flex justify-between gap-4">
     <!-- Réinitialiser button -->
@@ -153,7 +171,7 @@
             </button>
 
             <input type="text" :name="'dest_nom[]'" x-model="dest.nom" placeholder="Nom" class="block w-full rounded-md border-gray-300 shadow-sm">
-            @error('dest_nom[]')
+            @error('dest_nom.*')
                 <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
             <select  name="dest_type_source[]" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-model="typesource">
@@ -162,18 +180,18 @@
                     <option value="administration">administration</option>
                 </select>
             <input type="text" :name="'dest_adresse[]'" x-model="dest.adresse" placeholder="Adresse" class="block w-full rounded-md border-gray-300 shadow-sm">
-            @error('dest_adresse[]')
+            @error('dest_adresse.*')
                 <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
             <template x-if="typesource === 'citoyen'">
                     <input type="text" name="dest_CIN[]" 
                     placeholder="CIN" 
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"  >
-                    @error('dest_CIN[]')
+                    @error('dest_CIN.*')
                         <p class="text-red-500 text-sm">{{ $message }}</p>
                     @enderror
             </template>            <input type="text" :name="'dest_telephone[]'" x-model="dest.telephone" placeholder="Téléphone" class="block w-full rounded-md border-gray-300 shadow-sm">
-            @error('dest_telephone[]')
+            @error('dest_telephone.*')
                 <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
@@ -290,7 +308,8 @@
                     @enderror
                 </div>
                 
-                <div class="form-group"  x-show="type === 'arrive'">
+                <template x-if="type === 'arrive'">
+                <div class="form-group">
                     <label for="reference_bo" class="block font-medium text-gray-700 mb-1">
                         Numero Arrivée
                     </label>
@@ -312,6 +331,7 @@
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
                 </div>
+                </template>
                 
 
                 
@@ -364,7 +384,6 @@
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
                         value="{{ old('Nbr_piece', 1) }}" 
                         min="1" 
-                        max="999"
                         step="1"
                         required>
                     @error('Nbr_piece')
