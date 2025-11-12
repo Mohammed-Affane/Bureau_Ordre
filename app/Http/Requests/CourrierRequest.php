@@ -73,19 +73,30 @@ class CourrierRequest extends FormRequest
 
         return $rules;
     }
+  
 
+
+    
     public function messages(): array
-    {
-        return [
-            'type_courrier.required' => 'Le type de courrier est obligatoire.',
-            'objet.required' => 'L\'objet du courrier est obligatoire.',
-            'date_enregistrement.required' => 'La date d\'enregistrement est obligatoire.',
-            'Nbr_piece.required' => 'Le nombre de pièces est obligatoire.',
-            'fichier_scan.required' => 'Le fichier scanné est obligatoire lors de la création.',
-            'fichier_scan.mimes' => 'Le fichier scanné doit être un PDF.',
-            'fichier_scan.max' => 'Le fichier scanné ne peut pas dépasser 2 Mo.',
-        ];
-    }
+{
+    return [
+        'reference_bo.unique' => 'Cette référence BO existe déjà pour cette année.',
+        'reference_arrive.unique' => 'Cette référence d\'arrivée existe déjà pour cette année.',
+        'reference_visa.unique' => 'Cette référence visa existe déjà pour cette année.',
+        'reference_dec.unique' => 'Cette référence décision existe déjà pour cette année.',
+        'reference_depart.unique' => 'Cette référence de départ existe déjà pour cette année.',
+
+        // tes messages existants
+        'type_courrier.required' => 'Le type de courrier est obligatoire.',
+        'objet.required' => 'L\'objet du courrier est obligatoire.',
+        'date_enregistrement.required' => 'La date d\'enregistrement est obligatoire.',
+        'Nbr_piece.required' => 'Le nombre de pièces est obligatoire.',
+        'fichier_scan.required' => 'Le fichier scanné est obligatoire lors de la création.',
+        'fichier_scan.mimes' => 'Le fichier scanné doit être un PDF.',
+        'fichier_scan.max' => 'Le fichier scanné ne peut pas dépasser 2 Mo.',
+    ];
+}
+
 
     public function withValidator($validator): void
     {
@@ -170,4 +181,10 @@ class CourrierRequest extends FormRequest
             'exp_CIN' => trim($this->input('exp_CIN', '')),
         ]);
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+{
+    throw new \Illuminate\Validation\ValidationException($validator);
+}
+
 }
