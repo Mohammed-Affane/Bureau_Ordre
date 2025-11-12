@@ -82,7 +82,21 @@
             <div x-show="showNewSenderForm" class="mt-4 space-y-2 bg-indigo-500 p-4 rounded-md shadow-md" x-data="{ typesource: '' }" >
                 <input type="text" name="exp_nom" placeholder="Nom" 
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
-                <select  name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-model="typesource" x-on:change="const ra = document.getElementById('reference_arrive'); if (ra && typesource === 'citoyen') { ra.value = 'citoyen' }">
+                                <select  name="exp_type_source" placeholder="Type de source" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" x-model="typesource"     x-on:change="
+        const ra = document.getElementById('reference_arrive');
+    
+            if (ra && typesource === 'citoyen') {
+                ra.value = 'citoyen';
+                ra.disabled = true;
+                
+            } else {
+                if (ra) {
+                    ra.value = '';
+                    ra.disabled = false;
+                }
+            }
+        "
+>
                     <option value="">Sélectionner...</option>
                     <option value="citoyen">citoyen</option>
                     <option value="administration">administration</option>
