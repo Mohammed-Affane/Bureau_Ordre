@@ -1,5 +1,3 @@
-
-
 <x-app-layout>
     <h2 class="text-2xl font-bold text-gray-900 mb-6">Créer un nouveau courrier</h2>
     {{-- Global error and flash display --}}
@@ -89,12 +87,12 @@
     
             if (ra && typesource === 'citoyen') {
                 ra.value = 'citoyen';
-                ra.disabled = true;
+                ra.readOnly  = true;
                 
             } else {
                 if (ra) {
                     ra.value = '';
-                    ra.disabled = false;
+                    ra.readOnly = false;
                 }
             }
         "
