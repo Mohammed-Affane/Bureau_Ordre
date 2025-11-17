@@ -49,10 +49,7 @@ class CourrierRequest extends FormRequest
 
             // === Références (avec unicité annuelle) ===
             'reference_arrive' => [
-                'nullable', 'string', 'max:50', 'regex:/^[A-Za-z0-9\/\-\._]+$/',
-                Rule::unique('courriers', 'reference_arrive')
-                    ->ignore($this->route('courrier'))
-                    ->where(fn($q) => $q->whereYear('date_enregistrement', now()->year))
+                'nullable', 'string', 'max:50', 'regex:/^[A-Za-z0-9\/\-\._]+$/'
             ],
             'reference_bo' => [
                 'nullable', 'string', 'max:50',
