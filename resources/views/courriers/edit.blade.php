@@ -178,7 +178,7 @@
                 
                 <div class="form-group"  x-show="type === 'arrive' || type === 'visa'">
                     <label for="reference_arrive" class="block font-medium text-gray-700 mb-1">
-                        Référence d'arrivée
+                        Référence Courrier
                     </label>
                     <input 
                         type="text" 
@@ -244,18 +244,42 @@
                     @enderror
                 </div>
                 
-                <div class="form-group"  x-show="type === 'arrive'">
+               <div class="form-group"  x-show="type === 'arrive'">
                     <label for="reference_bo" class="block font-medium text-gray-700 mb-1">
-                        Référence BO
+                        Numero Arrivée
                     </label>
+                    @php 
+                        // Determine prefix based on user's email
+                        $editPrefix = '';
+                        if (auth()->check()) {
+                            $email = auth()->user()->email ?? '';
+                            if (str_contains($email, '_cab')) {
+                                $editPrefix = 'cab\\';
+                            } elseif (str_contains($email, '_bo')) {
+                                $editPrefix = 'bo\\';
+                            } elseif (str_contains($email, '_sjc')) {
+                                $editPrefix = 'sjc\\';
+                            } elseif(str_contains($email, '_trans')) {
+                                $editPrefix = 'trans\\';
+                            } elseif (str_contains($email,'_indh')) {
+                                $editPrefix = 'indh\\';
+                            } elseif(str_contains($email,'_dai')) {
+                                $editPrefix = 'dai\\';
+                            }
+                        }
+                    @endphp
                     <input 
-                        type="number" 
+                        type="text" 
                         name="reference_bo" 
                         id="reference_bo" 
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" 
                         value="{{ old('reference_bo', $courrier->reference_bo) }}"
-                        min="1"
-                        step="1">
+                        data-prefix="{{ $editPrefix }}"
+                        oninput="ensurePrefix(this)"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"
+                        placeholder="Ex: cab\\1234">
+                    @if($editPrefix)
+                        <p class="text-xs text-gray-500 mt-1">Préfixe requis: <strong>{{ $editPrefix }}</strong>. Seuls des chiffres sont autorisés après le préfixe.</p>
+                    @endif
                     @error('reference_bo')
                         <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                     @enderror
@@ -536,4 +560,24 @@ function resetSelect() {
     const select = document.getElementById('destinataires');
     Array.from(select.options).forEach(option => option.selected = false);
 }
+ // Ensure the reference input starts with the required prefix and only digits follow
+    function ensurePrefix(el) {
+        if (!el) return;
+        const prefix = el.dataset.prefix || '';
+        if (!prefix) return; // no enforcement if no prefix
+        let val = el.value || '';
+        // If empty, set prefix
+        if (!val || val === '') {
+            el.value = prefix;
+            return;
+        }
+        // If user pasted something with a backslash, strip everything up to it
+        const idx = val.indexOf('\\');
+        if (idx !== -1) {
+            val = val.slice(idx + 1);
+        }
+        // Keep only digits for the suffix
+        const digits = val.replace(/[^0-9]/g, '');
+        el.value = prefix + digits;
+    }
 </script>
