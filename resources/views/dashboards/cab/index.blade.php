@@ -152,7 +152,7 @@
         <h3 class="text-lg font-semibold mb-4 text-gray-800">Top 5 Courriers arrives Avec Instruction</h3>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">d
+                <thead class="bg-gray-50">
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence Arrivée</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence BO</th>

@@ -21,7 +21,7 @@
         if (auth()->check()) {
             $email = auth()->user()->email ?? '';
             // Special exact mapping requested by the user
-            if ($email === 'halimaBo_cab@gmail.com') {
+            if (str_contains($email, '_cab')) {
                 $prefix = 'cab\\';
             } elseif (str_contains($email, '_bo')) {
                 $prefix = 'bo\\';

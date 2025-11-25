@@ -14,16 +14,18 @@ trait CourrierFilterTrait
         return $query->with(['expediteur', 'agent','affectations'])
             ->where('type_courrier', $typeCourrier)
             ->when(request('search'), function($q) {
-                $q->where(function($query) {
-                    $query->where('reference_arrive', 'like', '%'.request('search').'%')
-                        ->orWhere('reference_bo', 'like', '%'.request('search').'%')
-                        ->orWhere('reference_visa', 'like', '%'.request('search').'%')
-                        ->orWhere('reference_dec', 'like', '%'.request('search').'%')
-                        ->orWhere('reference_depart', 'like', '%'.request('search').'%')
-                        ->orWhere('objet', 'like', '%'.request('search').'%')
-                        ->orWhereHas('expediteur', function($q) {
-                            $q->where('nom', 'like', '%'.request('search').'%')
-                            ->orWhere('CIN', 'like', '%'.request('search').'%');
+                 $search = request('search');
+                 $search = addcslashes($search, '\\%_');
+                $q->where(function($query) use ($search) {
+                    $query->where('reference_arrive', 'like', '%'.$search.'%')
+                        ->orWhere('reference_bo', 'like', '%'.$search.'%')
+                        ->orWhere('reference_visa', 'like', '%'.$search.'%')
+                        ->orWhere('reference_dec', 'like', '%'.$search.'%')
+                        ->orWhere('reference_depart', 'like', '%'.$search.'%')
+                        ->orWhere('objet', 'like', '%'.$search.'%')
+                        ->orWhereHas('expediteur', function($q) use ($search) {
+                            $q->where('nom', 'like', '%'.$search.'%')
+                            ->orWhere('CIN', 'like', '%'.$search.'%');
                         });
                 });
             })
